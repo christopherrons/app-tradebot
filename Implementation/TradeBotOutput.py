@@ -1,13 +1,12 @@
 from tabulate import tabulate
 import logging
 
-logging.basicConfig(filename="../logs/tradeBotLogs.log",
+logging.basicConfig(filename="logs/tradeBotLogs.log",
                     filemode="a",
                     level=logging.DEBUG)
 logger = logging.getLogger()
 
 
-# We should add logging to this class so we can check the files
 class TradeBotOutput:
 
     def __init__(self, trade_bot_cache):
