@@ -10,12 +10,18 @@
 # TODO: Get bit and ask via api
 # TODO: Run simulation
 # TODO: Setup trading via api
+# TODO: Create trading logs
 # TODO: Check options on hwo to setup accounts
 # TODO: Live run
+# TODO: Add relevant visualisations
+# TODO: Add database storage
+# TODO: Optimize with threading
+
 from argparse import ArgumentParser
 import sys
 from TradebotUtils import TradeBotUtils
-from CryptoTradeBot import CryptoTradeBot
+from SimulationTradeBot import SimulationTradeBot
+from LiveTradeBot import LiveTradeBot
 
 
 def main(argv):
@@ -31,23 +37,39 @@ def main(argv):
     arg_parser.add_argument('--is_not_simulation',
                             help='Flag if the trading is not simulated based on the trading strategy',
                             default=False, action='store_true')
-    arg_parser.add_argument('--print_interval', default=1, help='Specify the interval for data printing and logging [min]', type=float)
+    arg_parser.add_argument('--is_reset_logs',
+                            help='Flag to reset logs at start of run',
+                            default=False, action='store_true')
+    arg_parser.add_argument('--print_interval', default=1,
+                            help='Specify the interval for current information data printing and logging [min]', type=float)
 
     args = arg_parser.parse_args()
 
     TradeBotUtils.live_run_checker(args.is_not_simulation)
 
     try:
-        crypto_trade_bot = CryptoTradeBot(
-            initial_value=args.initial_value,
-            account_bid_price=args.account_bid_price,
-            interest=args.interest,
-            bitstamp_token=TradeBotUtils.get_bitstamp_token(),
-            run_time_minutes=args.run_time_minutes,
-            is_reinvesting_profits=args.is_reinvesting_profits,
-            is_not_simulation=args.is_not_simulation,
-            print_interval=args.print_interval,
-            is_buy=True)
+        if args.is_not_simulation:
+            crypto_trade_bot = LiveTradeBot(
+                initial_value=args.initial_value,
+                account_bid_price=args.account_bid_price,
+                interest=args.interest,
+                bitstamp_token=TradeBotUtils.get_bitstamp_token(),
+                run_time_minutes=args.run_time_minutes,
+                is_reinvesting_profits=args.is_reinvesting_profits,
+                print_interval=args.print_interval,
+                is_reset_logs=args.is_reset_logs,
+                is_buy=True)
+        else:
+            crypto_trade_bot = SimulationTradeBot(
+                initial_value=args.initial_value,
+                account_bid_price=args.account_bid_price,
+                interest=args.interest,
+                bitstamp_token=TradeBotUtils.get_bitstamp_token(),
+                run_time_minutes=args.run_time_minutes,
+                is_reinvesting_profits=args.is_reinvesting_profits,
+                print_interval=args.print_interval,
+                is_reset_logs=args.is_reset_logs,
+                is_buy=True)
 
         crypto_trade_bot.run()
 

@@ -1,0 +1,9 @@
+Timestamp,Is Buy,Account Trade Price,Market Trade Price,Nr Successfully cycles,Initial Value [$],Current Value (Position),Position Profit [$],Position Profit [%]
+0,False,0.5075,1,3221,100,0.3,0.003,0.003
+0,True,0.5,0.3,6557,100,1,-99,-99
+0,True,0.5,0.3,9921,100,1,-99,-99
+0,False,0.5075,1,13322,100,0.3,0.003,0.003
+0,True,0.5,0.3,16649,100,1,-99,-99
+0,False,0.5075,1,19808,100,0.3,0.003,0.003
+0,True,0.5,0.3,23159,100,1,-99,-99
+0,False,0.5075,1,26438,100,0.3,0.003,0.003

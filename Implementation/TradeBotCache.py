@@ -1,67 +1,85 @@
-import math
-
-
 class TradeBotCache:
 
-    def __init__(self, initial_value, interest, is_reinvesting_profits):
-        self.initial_value = initial_value
-        self.interest = interest
-        self.is_reinvesting_profits = is_reinvesting_profits
-        self.successful_cycles = 0
-        self.market_timestamp = 0
-        self.account_bid_price = 0
-        self.market_bid_price = 0
-        self.account_ask_price = 0
-        self.market_ask_price = 0
+    def __init__(self, initial_value, interest, account_bid_price, is_reinvesting_profits):
+        self.__initial_value = initial_value
+        self.__interest = interest
+        self.__account_bid_price = account_bid_price
+        self.__account_ask_price = (1 + interest) * account_bid_price
+        self.__is_reinvesting_profits = is_reinvesting_profits
+        self.__successful_cycles = 0
+        self.__market_timestamp = 0
+        self.__market_bid_price = 0
+        self.__market_ask_price = 0
+        self.__position_value = 0
+        self.__cash_value = initial_value
 
-    def get_initial_value(self):
-        return self.initial_value
+    @property
+    def initial_value(self):
+        return self.__initial_value
 
-    def get_net_profit(self):
-        if self.is_reinvesting_profits:
-            growth = math.pow(self.interest, self.successful_cycles)
-        else:
-            growth = self.interest
-        return self.initial_value * (growth - 1)
+    @property
+    def successful_cycles(self):
+        return self.__successful_cycles
 
-    def get_percent_profit(self):
-        return self.get_net_profit() / self.initial_value
+    def increment_successful_cycles(self):
+        self.__successful_cycles += 1
 
-    def get_successful_cycles(self):
-        return self.successful_cycles
+    @property
+    def interest(self):
+        return self.__interest
 
-    def set_successful_cycles(self):
-        self.successful_cycles += 1
+    @property
+    def market_bid_price(self):
+        return self.__market_bid_price
 
-    def get_interest(self):
-        return self.interest
+    @market_bid_price.setter
+    def market_bid_price(self, market_bid_price):
+        self.__market_bid_price = market_bid_price
 
-    def get_market_bid_price(self):
-        return self.market_bid_price
+    @property
+    def market_ask_price(self):
+        return self.__market_ask_price
 
-    def set_market_bid_price(self, market_bid_price):
-        self.market_bid_price = market_bid_price
+    @market_ask_price.setter
+    def market_ask_price(self, market_ask_price):
+        self.__market_ask_price = market_ask_price
 
-    def get_market_ask_price(self):
-        return self.market_ask_price
+    @property
+    def market_timestamp(self):
+        return self.__market_timestamp
 
-    def set_market_ask_price(self, market_ask_price):
-        self.market_ask_price = market_ask_price
+    @market_timestamp.setter
+    def market_timestamp(self, market_timestamp):
+        self.__market_timestamp = market_timestamp
 
-    def get_market_timestamp(self):
-        return self.market_timestamp
+    @property
+    def account_ask_price(self):
+        return self.__account_ask_price
 
-    def set_market_timestamp(self, market_timestamp):
-        self.market_timestamp = market_timestamp
+    @account_ask_price.setter
+    def account_ask_price(self, account_ask_price):
+        self.__account_ask_price = account_ask_price
 
-    def get_account_ask_price(self):
-        return self.account_ask_price
+    @property
+    def account_bid_price(self):
+        return self.__account_bid_price
 
-    def set_account_ask_price(self, account_ask_price):
-        self.account_ask_price = account_ask_price
+    @account_bid_price.setter
+    def account_bid_price(self, account_bid_price):
+        self.__account_bid_price = account_bid_price
 
-    def get_account_bid_price(self):
-        return self.account_bid_price
+    @property
+    def cash_value(self):
+        return self.__cash_value
 
-    def set_account_bid_price(self, account_bid_price):
-        self.account_bid_price = account_bid_price
+    @cash_value.setter
+    def cash_value(self, cash_value):
+        self.__cash_value = cash_value
+
+    @property
+    def position_value(self):
+        return self.__position_value
+
+    @position_value.setter
+    def position_value(self, position_value):
+        self.__position_value = position_value

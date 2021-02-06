@@ -1,37 +1,90 @@
-from tabulate import tabulate
-import logging
+import csv
+import os
+from datetime import datetime
 
-logging.basicConfig(filename="logs/tradeBotLogs.log",
-                    filemode="a",
-                    level=logging.DEBUG)
-logger = logging.getLogger()
+from tabulate import tabulate
+from Calculator import Calculator
 
 
 class TradeBotOutput:
 
-    def __init__(self, trade_bot_cache):
-        self.trade_bot_cache = trade_bot_cache
+    def __init__(self, trade_bot_cache, is_reset_logs):
+        self.__trade_bot_cache = trade_bot_cache
+        self.__is_reset_logs = is_reset_logs
+        self.__current_formation_log_file = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
+                                                                               "logs/current_formation_log.csv")  # Shitty solution
+        self.__successful_trade_log = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
+                                                                       "logs/trades_logs.csv")  # Shitty solution
+        self.__calculator = Calculator(trade_bot_cache)
 
-    def print_data(self, is_buy):
+    def print_and_log_current_formation(self, is_buy):
         if is_buy:
             account_trade = "Account Bid Price [$]"
-            account_trade_price = self.trade_bot_cache.get_account_bid_price()
-            market_trade = "Account Ask Price [$]"
-            market_trade_price = self.trade_bot_cache.get_market_ask_price()
+            account_trade_price = self.__trade_bot_cache.account_bid_price
+
+            market_trade = "Market Ask Price [$]"
+            market_trade_price = self.__trade_bot_cache.market_ask_price
+
+            current_value_description = "Current Value (Cash)"
+            current_value = self.__trade_bot_cache.cash_value
+
+            net_profit = "Cash Profit [$]"
+            net_profit_value = self.__calculator.net_cash_profit()
+
+            percent_profit = "Cash Profit [%]"
+            percent_profit_value = self.__calculator.net_cash_profit()
+
         else:
             account_trade = "Account Ask Price [$]"
-            account_trade_price = self.trade_bot_cache.get_account_ask_price()
+            account_trade_price = self.__trade_bot_cache.account_ask_price
+
             market_trade = "Market Bid Price [$]"
-            market_trade_price = self.trade_bot_cache.get_market_bid_price()
+            market_trade_price = self.__trade_bot_cache.market_bid_price
 
+            current_value_description = "Current Value (Position)"
+            current_value = self.__trade_bot_cache.position_value
 
-        headers = ['Timestamp', account_trade, market_trade, 'Nr Successfully cycles', 'Net Profit [$]',
-                   'Percent Profit [%]', 'Initial Value [$]', 'Interest [%]']
-        output = [self.trade_bot_cache.get_market_timestamp(), account_trade_price,
-                  market_trade_price, self.trade_bot_cache.get_successful_cycles(),
-                  self.trade_bot_cache.get_net_profit(), self.trade_bot_cache.get_percent_profit(),
-                  self.trade_bot_cache.get_initial_value(), self.trade_bot_cache.get_interest() * 100]
+            net_profit = "Position Profit [$]"
+            net_profit_value = self.__calculator.percent_position_profit()
 
+            percent_profit = "Position Profit [%]"
+            percent_profit_value = self.__calculator.percent_position_profit()
+
+        headers = ['Timestamp', account_trade, market_trade, 'Nr Successfully cycles', 'Initial Value [$]',
+                   current_value_description, net_profit, percent_profit]
+
+        output = [self.__trade_bot_cache.market_timestamp, account_trade_price,
+                  market_trade_price, self.__trade_bot_cache.successful_cycles,
+                  self.__trade_bot_cache.initial_value, current_value, net_profit_value,
+                  percent_profit_value]
+
+        self.print_data(headers, output)
+
+        headers[1] = "Account Trade Price"
+        headers[2] = "Market Trade Price"
+        headers.insert(1, "Is Buy")
+        output.insert(1, is_buy)
+        self.log_data(headers, output, self.__current_formation_log_file)
+
+    def print_and_log_successful_trades(self, is_buy, trade_value):
+        headers = ['Timestamp', 'Is Buy', 'Value']
+        output = [datetime.now(), is_buy, trade_value]
+       # self.print_data(headers, output)
+        self.log_data(headers, output, self.__successful_trade_log)
+
+    def print_data(self, headers, output):
         tabulated_output = tabulate([output], headers=headers)
-        print(tabulated_output + "\n")
-        logger.info(tabulated_output)
+        print(tabulated_output + "\n\n\n\n\n\n")
+
+    def log_data(self, headers, output, file):
+        with open(file, 'a+') as f:
+            writer = csv.writer(f)
+            if self.__is_reset_logs:
+                f.truncate(0)
+                self.__is_reset_logs = False
+            if os.stat(file).st_size == 0:
+                writer.writerow(headers)
+                writer.writerow(output)
+            else:
+                writer.writerow(output)
+
