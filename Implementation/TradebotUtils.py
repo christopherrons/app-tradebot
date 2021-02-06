@@ -1,7 +1,6 @@
 import argparse
 import os
 from configparser import ConfigParser
-import time
 
 
 class TradeBotUtils:
@@ -21,3 +20,13 @@ class TradeBotUtils:
     @staticmethod
     def is_run_time_passed(current_time, run_stop_time):
         return current_time > run_stop_time
+
+    @staticmethod
+    def live_run_checker(is_not_simulation):
+        if is_not_simulation:
+            contract = input("WARNING LIVE RUN. If you want to trade sign the contract with: winteriscoming: ")
+            if contract != "winteriscoming":
+                print("ABORTING")
+                exit()
+            else:
+                print("Contracted signed! Live run accepted!\n")

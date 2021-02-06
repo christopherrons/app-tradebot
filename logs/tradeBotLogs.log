@@ -1,0 +1,297 @@
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       0                    0                       1
+INFO:root:  Timestamp    Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+-----------  -------------------  ----------------------  -------------------  ----------------------
+          0                    0                       1                    0                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:45:21.168130                    1                       1                    2                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:45:21.168130                    1                       1                    2                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:47:24.304750                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:47:24.304750                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:47:24.304750                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:09.682733                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:09.682733                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:09.682733                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:39.064022                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:46.937939                  0.5                       1                0.575                       1
+INFO:root:Time Stamp                    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:52:46.937939                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------
+2021-02-06 11:52:46.937939                  0.5                       1                0.575                       1
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:54:08.506939                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:55:47.264056                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:06.570838                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:56:58.900795                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:--------------------------  ---  -  -----  -  -  -  -  ----
+2021-02-06 11:56:58.900795  0.5  1  0.575  1  0  0  0  0.15
+--------------------------  ---  -  -----  -  -  -  -  ----
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 11:58:01.383313                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:--------------------------  ---  -  -----  -  -  -  -  ----
+2021-02-06 11:58:01.383313  0.5  1  0.575  1  0  0  0  0.15
+--------------------------  ---  -  -----  -  -  -  -  ----
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:00:21.575441                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  ---------------------  -------------------
+2021-02-06 12:04:10.258039                  0.5                       1                0.575                       1                         0                 0                      0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:05:09.736219                  0.5                       1                0.575                       1                         0                 0                     0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:05:09.736219                  0.5                       1                0.575                       1                         0                 0                     0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:05:09.736219                  0.5                       1                0.575                       1                         0                 0                     0                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:07:10.676358                  0.5                       1                0.575                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:07:10.676358                  0.5                       1                0.575                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    Account Ask Price    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -------------------  ----------------------  -------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:07:10.676358                  0.5                       1                0.575                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    {'Account Bid Price [$]'}    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  ---------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:10:38.219867                  0.5                       1                            1                       0                         0                 0                   100                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    {'Account Ask Price [$]'}    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  ---------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:10:38.219867                0.575                       1                            1                       0                         0                 0                   100                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    {'Account Bid Price [$]'}    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  ---------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:10:38.219867                  0.5                       1                            1                       0                         0                 0                   100                 0.15
+INFO:root:Timestamp                     Account Bid Price    Market Bid Price [$]    {'Account Ask Price [$]'}    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]
+--------------------------  -------------------  ----------------------  ---------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------
+2021-02-06 12:10:38.219867                0.575                       1                            1                       0                         0                 0                   100                 0.15
+INFO:root:Timestamp                     {'Account Bid Price [$]'}    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  ---------------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:13:00.888998                          0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     {'Account Ask Price [$]'}    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  ---------------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:13:00.888998                        0.575                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     {'Account Bid Price [$]'}    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  ---------------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:13:00.888998                          0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:                                   TimestampAccount Bid Price [$]Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  ---  ----------------------------------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:13:34.024108  0.5                                                     1                       1                         0                 0                     0                  100            0.15
+INFO:root:                                     TimestampAccount Ask Price [$]Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----  ----------------------------------------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:13:34.024108  0.575                                                     1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                      0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                    0.575                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                      0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                    0.575                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                      0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                    0.575                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                      0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                    0.575                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Market Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:14:02.566346                      0.5                       1                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:02.684653                      0.5                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:22.690316                      0.5                        1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:22.690316                    0.575                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:22.690316                      0.5                        1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:22.690316                    0.575                       1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:17:22.690316                      0.5                        1                         0                 0                     0                  100            0.15
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:05.302490                      0.5                        1                         0                 0                     0                  100              15
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                      0.5                        1                         0                 0                     0                  100             1.5
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                   0.5075                       1                         0                 0                     0                  100             1.5
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                      0.5                        1                         0                 0                     0                  100             1.5
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                   0.5075                       1                         0                 0                     0                  100             1.5
+INFO:root:Timestamp                     Account Bid Price [$]    Account Ask Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  -----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                      0.5                        1                         0                 0                     0                  100             1.5
+INFO:root:Timestamp                     Account Ask Price [$]    Market Bid Price [$]    Nr Successfully cycles    Net Profit [$]    Percent Profit [%]    Initial Value [$]    Interest [%]
+--------------------------  -----------------------  ----------------------  ------------------------  ----------------  --------------------  -------------------  --------------
+2021-02-06 12:18:48.679110                   0.5075                       1                         0                 0                     0                  100             1.5
