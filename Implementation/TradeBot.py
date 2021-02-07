@@ -14,10 +14,11 @@ class TradeBot:
                  is_reset_logs,
                  is_buy=True):
 
-        self._bitstamp_token = bitstamp_token
+        self._bitstamp_token = bitstamp_token # add BitStampApi instead
         self._is_buy = is_buy
         self._trade_bot_cache = TradeBotCache(initial_value, interest, account_bid_price, is_reinvesting_profits)
         self._trade_bot_output = TradeBotOutput(self._trade_bot_cache, is_reset_logs)
+
 
     def is_trade_able(self):
         if self._is_buy:
@@ -26,12 +27,12 @@ class TradeBot:
             return self._trade_bot_cache.account_ask_price <= self.get_market_bid_price()
 
     def get_market_ask_price(self):
-        market_ask_price = 0.3  ## temp
+        market_ask_price = 0.3  ## api call instead
         self._trade_bot_cache.market_ask_price = market_ask_price
         return market_ask_price
 
     def get_market_bid_price(self):
-        market_bid_price = 1  # temp
+        market_bid_price = 1  ## api call instead
         self._trade_bot_cache.market_bid_price = market_bid_price
         return market_bid_price
 
