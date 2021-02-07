@@ -2,7 +2,7 @@
 Analysis and implementation of cryptocurrency tradebot.
 
 ## Prerequisite 
-* Bitstamp Account with a main / sub account
+* Bitstamp Account with a main / sub account (sub account is recommended for more control)
 * Active api-key connected to the account 
 
 ## Run script instructions
