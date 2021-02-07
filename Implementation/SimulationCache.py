@@ -22,7 +22,7 @@ class SimulationCache(TradeBotCache):
 
     @property
     def position_value(self):
-        return self.__market_bid_price * self.__sell_quantity
+        return self.market_bid_price * self.__sell_quantity
 
     @position_value.setter
     def position_value(self, position_value):
