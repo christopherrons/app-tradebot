@@ -1,8 +1,11 @@
 # App-TradeBot
 Analysis and implementation of cryptocurrency tradebot.
 
-## Run script instructions
+## Prerequisite 
+* Bitstamp Account with a main / sub account
+* Active api-key connected to the account 
 
+## Run script instructions
 * Run pip3 install -r requirements.txt to install relevant external libraries
 * Add your bitstamp token to a ~/.scipt-config
    * [Bitstamp] token=mytoken
