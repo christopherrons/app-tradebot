@@ -14,6 +14,7 @@
 # TODO: Add database storage
 # TODO: Optimize with threading
 # TODO: Strategy for start price
+# TODO: Add fees to output. Fees are available through the API
 
 from argparse import ArgumentParser
 import sys
