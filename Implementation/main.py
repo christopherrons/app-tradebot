@@ -7,15 +7,13 @@
 #
 # ------------------------------------------------------------------------------
 # TODO: Get add logs to correct file independent of where the script is run
-# TODO: Get bit and ask via api
-# TODO: Run simulation
 # TODO: Setup trading via api
-# TODO: Create trading logs
 # TODO: Check options on hwo to setup accounts
 # TODO: Live run
 # TODO: Add relevant visualisations
 # TODO: Add database storage
 # TODO: Optimize with threading
+# TODO: Strategy for start price
 
 from argparse import ArgumentParser
 import sys
@@ -32,6 +30,7 @@ def main(argv):
     arg_parser.add_argument('account_bid_price', help='Specify the buy price [$]', type=float)
     arg_parser.add_argument('interest', help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('run_time_minutes', help='Specify the number of minutes the bot runs [min]', type=int)
+    arg_parser.add_argument('--market', default="xrpusd", help='Specify the trading market ', type=str)
     arg_parser.add_argument('--is_reinvesting_profits', help='Flag if the profits are reinvested',
                             default=True, action='store_false')
     arg_parser.add_argument('--is_not_simulation',
@@ -65,6 +64,7 @@ def main(argv):
                 account_bid_price=args.account_bid_price,
                 interest=args.interest,
                 bitstamp_token=TradeBotUtils.get_bitstamp_token(),
+                market=args.market,
                 run_time_minutes=args.run_time_minutes,
                 is_reinvesting_profits=args.is_reinvesting_profits,
                 print_interval=args.print_interval,

@@ -32,7 +32,7 @@ class TradeBotOutput:
             net_profit_value = self.__calculator.net_cash_profit()
 
             percent_profit = "Cash Profit [%]"
-            percent_profit_value = self.__calculator.net_cash_profit()
+            percent_profit_value = self.__calculator.percent_cash_profit()
 
         else:
             account_trade = "Account Ask Price [$]"
@@ -45,7 +45,7 @@ class TradeBotOutput:
             current_value = self.__trade_bot_cache.position_value
 
             net_profit = "Position Profit [$]"
-            net_profit_value = self.__calculator.percent_position_profit()
+            net_profit_value = self.__calculator.net_position_profit()
 
             percent_profit = "Position Profit [%]"
             percent_profit_value = self.__calculator.percent_position_profit()
@@ -53,7 +53,7 @@ class TradeBotOutput:
         headers = ['Timestamp', account_trade, market_trade, 'Nr Successfully cycles', 'Initial Value [$]',
                    current_value_description, net_profit, percent_profit]
 
-        output = [self.__trade_bot_cache.market_timestamp, account_trade_price,
+        output = [datetime.now(), account_trade_price,
                   market_trade_price, self.__trade_bot_cache.successful_cycles,
                   self.__trade_bot_cache.initial_value, current_value, net_profit_value,
                   percent_profit_value]
@@ -66,10 +66,10 @@ class TradeBotOutput:
         output.insert(1, is_buy)
         self.log_data(headers, output, self.__current_formation_log_file)
 
-    def print_and_log_successful_trades(self, is_buy, trade_value):
+    def print_and_log_successful_trades(self, is_buy):
         headers = ['Timestamp', 'Is Buy', 'Value']
-        output = [datetime.now(), is_buy, trade_value]
-       # self.print_data(headers, output)
+        output = [datetime.now(), is_buy, self.__trade_bot_cache.cash_value]
+        self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 
     def print_data(self, headers, output):

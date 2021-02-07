@@ -10,7 +10,7 @@ class Calculator:
         return self.__trade_bot_cache.cash_value - self.__trade_bot_cache.initial_value
 
     def percent_cash_profit(self):
-        return self.__trade_bot_cache.cash_value / self.__trade_bot_cache.initial_value
+        return 100 * (self.__trade_bot_cache.cash_value / self.__trade_bot_cache.initial_value - 1)
 
     def theoretical_cash_profit(self):
         if self.__trade_bot_cache.__is_reinvesting_profits:
@@ -26,4 +26,4 @@ class Calculator:
         return self.__trade_bot_cache.position_value - self.__trade_bot_cache.initial_value
 
     def percent_position_profit(self):
-        return self.__trade_bot_cache.position_value / self.__trade_bot_cache.initial_value
+        return 100 * (self.__trade_bot_cache.position_value / self.__trade_bot_cache.initial_value - 1)

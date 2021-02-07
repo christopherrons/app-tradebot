@@ -11,7 +11,9 @@ class TradeBotCache:
         self.__market_bid_price = 0
         self.__market_ask_price = 0
         self.__position_value = 0
-        self.__cash_value = initial_value
+        self.__buy_quantity = 0
+        self.__sell_quantity = 0
+        self.__cash_value = 0
 
     @property
     def initial_value(self):
@@ -67,19 +69,3 @@ class TradeBotCache:
     @account_bid_price.setter
     def account_bid_price(self, account_bid_price):
         self.__account_bid_price = account_bid_price
-
-    @property
-    def cash_value(self):
-        return self.__cash_value
-
-    @cash_value.setter
-    def cash_value(self, cash_value):
-        self.__cash_value = cash_value
-
-    @property
-    def position_value(self):
-        return self.__position_value
-
-    @position_value.setter
-    def position_value(self, position_value):
-        self.__position_value = position_value

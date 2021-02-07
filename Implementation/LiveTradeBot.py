@@ -1,6 +1,7 @@
 from TradeBot import TradeBot
 from TradebotUtils import TradeBotUtils
 from datetime import datetime, timedelta
+from LiveCache import LiveCache
 
 
 class LiveTradeBot(TradeBot):
@@ -10,21 +11,23 @@ class LiveTradeBot(TradeBot):
                  interest,
                  initial_value,
                  bitstamp_token,
+                 market,
                  run_time_minutes,
                  is_reinvesting_profits,
                  print_interval,
                  is_reset_logs,
                  is_buy=True):
 
-        super().__init__(account_bid_price, interest, initial_value, bitstamp_token, is_reinvesting_profits,
-                         is_reset_logs, is_buy)
+        super().__init__(bitstamp_token, market, is_reset_logs,
+                         LiveCache(initial_value, interest, account_bid_price, is_reinvesting_profits),
+                         is_buy)
 
         self.__run_stop_time = datetime.now() + timedelta(seconds=(run_time_minutes * 60))
         self.__print_interval = print_interval
 
     def run(self):
         start_time = datetime.now()
-        print(f"Starting trading at {start_time}\n")
+        print(f"Started trading at {start_time} and will ended at {self.__run_stop_time}\n")
 
         delta_minutes = start_time
         while not TradeBotUtils.is_run_time_passed(datetime.now(), self.__run_stop_time):
