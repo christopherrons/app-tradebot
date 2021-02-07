@@ -1,7 +1,7 @@
 from datetime import datetime
 from TradeBotCache import TradeBotCache
 from TradeBotOutput import TradeBotOutput
-
+from BitstampApitPlayground import BitstampApiPlayground
 
 class TradeBot:
 
@@ -14,7 +14,7 @@ class TradeBot:
                  is_reset_logs,
                  is_buy=True):
 
-        self._bitstamp_token = bitstamp_token # add BitStampApi instead
+        self._bitstamp_api = BitstampApiPlayground(bitstamp_token)
         self._is_buy = is_buy
         self._trade_bot_cache = TradeBotCache(initial_value, interest, account_bid_price, is_reinvesting_profits)
         self._trade_bot_output = TradeBotOutput(self._trade_bot_cache, is_reset_logs)
@@ -27,12 +27,12 @@ class TradeBot:
             return self._trade_bot_cache.account_ask_price <= self.get_market_bid_price()
 
     def get_market_ask_price(self):
-        market_ask_price = 0.3  ## api call instead
+        market_ask_price = self._bitstamp_api.get_market_ask_price()
         self._trade_bot_cache.market_ask_price = market_ask_price
         return market_ask_price
 
     def get_market_bid_price(self):
-        market_bid_price = 1  ## api call instead
+        market_bid_price = self._bitstamp_api.get_market_bid_price()
         self._trade_bot_cache.market_bid_price = market_bid_price
         return market_bid_price
 

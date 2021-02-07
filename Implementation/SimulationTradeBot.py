@@ -55,8 +55,8 @@ class SimulationTradeBot(TradeBot):
     def trade_action_sell(self):
         # THe buy price is taken from the market_bid_price in the cache
         trade_value = self._trade_bot_cache.market_bid_price # need quantity
-        self._trade_bot_output.print_and_log_successful_trades(self._is_buy, trade_value)
         self._trade_bot_cache.increment_successful_cycles()
+        self._trade_bot_output.print_and_log_successful_trades(self._is_buy, trade_value)
         self._is_buy = True
         self.update_account_prices()
         self.update_position_or_cash_value()
