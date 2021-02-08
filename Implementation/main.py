@@ -6,7 +6,10 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Get add logs to correct file independent of where the script is run
+# TODO: Add fees to output. Fees are available through the API
+# TODO: ADd input checker, e.g. that interest is not below 0.00105..
+# TODO: Get current market price before start
+# TODO: Add flag to start trading buy being or selling
 # TODO: Setup trading via api
 # TODO: Check options on hwo to setup accounts
 # TODO: Live run
@@ -14,7 +17,7 @@
 # TODO: Add database storage
 # TODO: Optimize with threading
 # TODO: Strategy for start price
-# TODO: Add fees to output. Fees are available through the API
+
 
 from argparse import ArgumentParser
 import sys
@@ -41,7 +44,8 @@ def main(argv):
                             help='Flag to reset logs at start of run',
                             default=False, action='store_true')
     arg_parser.add_argument('--print_interval', default=1,
-                            help='Specify the interval for current information data printing and logging [min]', type=float)
+                            help='Specify the interval for current information data printing and logging [min]',
+                            type=float)
 
     args = arg_parser.parse_args()
 

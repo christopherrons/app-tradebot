@@ -14,7 +14,7 @@ class TradeBotOutput:
         self.__current_formation_log_file = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
                                                                                "logs/current_formation_log.csv")  # Shitty solution
         self.__successful_trade_log = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
-                                                                       "logs/trades_logs.csv")  # Shitty solution
+                                                                         "logs/trades_logs.csv")  # Shitty solution
         self.__calculator = Calculator(trade_bot_cache)
 
     def print_and_log_current_formation(self, is_buy):
@@ -67,8 +67,15 @@ class TradeBotOutput:
         self.log_data(headers, output, self.__current_formation_log_file)
 
     def print_and_log_successful_trades(self, is_buy):
-        headers = ['Timestamp', 'Is Buy', 'Value']
-        output = [datetime.now(), is_buy, self.__trade_bot_cache.cash_value]
+        if is_buy:
+            value = self.__trade_bot_cache.cash_value
+            quantity = self.__trade_bot_cache.buy_quantity
+        else:
+            value = self.__trade_bot_cache.position_value
+            quantity = self.__trade_bot_cache.sell_quantity
+
+        headers = ['Timestamp', 'Is Buy', 'Value', 'Quantity']
+        output = [datetime.now(), is_buy, value, quantity]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 
@@ -87,4 +94,3 @@ class TradeBotOutput:
                 writer.writerow(output)
             else:
                 writer.writerow(output)
-

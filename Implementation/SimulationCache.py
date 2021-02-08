@@ -11,7 +11,6 @@ class SimulationCache(TradeBotCache):
         self.__buy_quantity = 0
         self.__sell_quantity = 0
 
-
     @property
     def cash_value(self):
         return self.__cash_value
