@@ -64,6 +64,6 @@ class SimulationTradeBot(TradeBot):
     def update_position_or_cash_value(self):
         if self._is_buy:
             self._trade_bot_cache.position_value = 0
-            self._trade_bot_cache.cash_value = self._trade_bot_cache.market_ask_price * self._trade_bot_cache.sell_quantity
+            self._trade_bot_cache.cash_value = self._trade_bot_cache.position_value
         else:
             self._trade_bot_cache.cash_value = 0
