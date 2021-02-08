@@ -33,7 +33,7 @@ def main(argv):
     arg_parser.add_argument('initial_value', help='Specify the amount of money to invest[$]', type=int)
     arg_parser.add_argument('account_bid_price', help='Specify the buy price [$]', type=float)
     arg_parser.add_argument('interest', help='Specify the interest gain [%%]', type=float)
-    arg_parser.add_argument('--run_time_minutes', default=10000000000, help='Specify the number of minutes the bot runs [min]', type=int)
+    arg_parser.add_argument('--run_time_minutes', default=1000000, help='Specify the number of minutes the bot runs [min]', type=int)
     arg_parser.add_argument('--market', default="xrpusd", help='Specify the trading market ', type=str)
     arg_parser.add_argument('--is_reinvesting_profits', help='Flag if the profits are reinvested',
                             default=True, action='store_false')
