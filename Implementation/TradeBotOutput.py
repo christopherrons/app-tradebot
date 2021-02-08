@@ -70,12 +70,14 @@ class TradeBotOutput:
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
+            price = self.__trade_bot_cache.market_ask_price
         else:
             value = self.__trade_bot_cache.position_value
             quantity = self.__trade_bot_cache.sell_quantity
+            price = self.__trade_bot_cache.market_bid_price
 
-        headers = ['Timestamp', 'Is Buy', 'Value', 'Quantity']
-        output = [datetime.now(), is_buy, value, quantity]
+        headers = ['Timestamp', 'Is Buy', 'Value', 'Price', 'Quantity']
+        output = [datetime.now(), is_buy, value, price, quantity]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 
