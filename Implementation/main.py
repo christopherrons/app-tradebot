@@ -35,7 +35,7 @@ def main(argv):
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of money to invest[$]', type=int)
     #arg_parser.add_argument('is_buy', help='Specify if buy or sell', default=True, action='store_false')
-    arg_parser.add_argument('interest', help='Specify the interest gain [%%]', type=float)
+    arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000,
                             help='Specify the number of minutes the bot runs [min]', type=int)
     arg_parser.add_argument('--market', default="xrpusd", help='Specify the trading market ', type=str)
