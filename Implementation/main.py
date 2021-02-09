@@ -6,21 +6,24 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Add fees to output. Fees are available through the API
-# TODO: ADd input checker, e.g. that interest is not below 0.00105..
-# TODO: Get current market price before start
-# TODO: Add flag to start trading buy being or selling
+# TODO: Check if market price inludes fees on bitstamp
 # TODO: Setup trading via api
-# TODO: Check options on hwo to setup accounts
-# TODO: Live run
 # TODO: Add relevant visualisations
-# TODO: Add database storage
+# TODO: Add database storage?
+# TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
+# TODO. Add fees to livetrade - Fees are available through the API
 # TODO: Optimize with threading
 # TODO: Strategy for start price
 
 
+# Complete/Discuss Above tasks before doing these
+# TODO: Live run
+
+
 from argparse import ArgumentParser
 import sys
+
+from BitstampApiAction import BitstampApiAction
 from TradebotUtils import TradeBotUtils
 from SimulationTradeBot import SimulationTradeBot
 from LiveTradeBot import LiveTradeBot
@@ -31,9 +34,10 @@ def main(argv):
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of money to invest[$]', type=int)
-    arg_parser.add_argument('account_bid_price', help='Specify the buy price [$]', type=float)
+    #arg_parser.add_argument('is_buy', help='Specify if buy or sell', default=True, action='store_false')
     arg_parser.add_argument('interest', help='Specify the interest gain [%%]', type=float)
-    arg_parser.add_argument('--run_time_minutes', default=1000000, help='Specify the number of minutes the bot runs [min]', type=int)
+    arg_parser.add_argument('--run_time_minutes', default=1000000,
+                            help='Specify the number of minutes the bot runs [min]', type=int)
     arg_parser.add_argument('--market', default="xrpusd", help='Specify the trading market ', type=str)
     arg_parser.add_argument('--is_reinvesting_profits', help='Flag if the profits are reinvested',
                             default=True, action='store_false')
@@ -46,18 +50,21 @@ def main(argv):
     arg_parser.add_argument('--print_interval', default=1,
                             help='Specify the interval for current information data printing and logging [min]',
                             type=float)
-
     args = arg_parser.parse_args()
 
-    TradeBotUtils.live_run_checker(args.is_not_simulation)
-
     try:
+
+        TradeBotUtils.validate_args(args)
+        TradeBotUtils.live_run_checker(args.is_not_simulation)
+        bitstamp_api = BitstampApiAction(TradeBotUtils.get_bitstamp_token(), args.market)
+        account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_api)
+
         if args.is_not_simulation:
             crypto_trade_bot = LiveTradeBot(
                 initial_value=args.initial_value,
-                account_bid_price=args.account_bid_price,
+                account_bid_price=account_bid_price,
                 interest=args.interest,
-                bitstamp_token=TradeBotUtils.get_bitstamp_token(),
+                bitstamp_api=bitstamp_api,
                 run_time_minutes=args.run_time_minutes,
                 is_reinvesting_profits=args.is_reinvesting_profits,
                 print_interval=args.print_interval,
@@ -66,10 +73,9 @@ def main(argv):
         else:
             crypto_trade_bot = SimulationTradeBot(
                 initial_value=args.initial_value,
-                account_bid_price=args.account_bid_price,
+                account_bid_price=account_bid_price,
                 interest=args.interest,
-                bitstamp_token=TradeBotUtils.get_bitstamp_token(),
-                market=args.market,
+                bitstamp_api=bitstamp_api,
                 run_time_minutes=args.run_time_minutes,
                 is_reinvesting_profits=args.is_reinvesting_profits,
                 print_interval=args.print_interval,
@@ -78,6 +84,8 @@ def main(argv):
 
         crypto_trade_bot.run()
 
+    except ValueError as error_message:
+        print(error_message)
     except KeyboardInterrupt:
         print("Keyboard Interrupted")
 

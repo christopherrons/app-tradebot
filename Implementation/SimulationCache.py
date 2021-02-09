@@ -10,10 +10,11 @@ class SimulationCache(TradeBotCache):
         self.__position_value = 0
         self.__buy_quantity = 0
         self.__sell_quantity = 0
+        self.__fee = 0.005
 
     @property
     def cash_value(self):
-        return self.__cash_value
+        return self.__cash_value * (1 - self.__fee)
 
     @cash_value.setter
     def cash_value(self, cash_value):
@@ -21,7 +22,7 @@ class SimulationCache(TradeBotCache):
 
     @property
     def position_value(self):
-        return self.market_bid_price * self.__sell_quantity
+        return (self.market_bid_price * self.__sell_quantity) * (1 - self.__fee)
 
     @position_value.setter
     def position_value(self, position_value):

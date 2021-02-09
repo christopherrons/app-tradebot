@@ -7,13 +7,12 @@ from BitstampApiAction import BitstampApiAction
 class TradeBot:
 
     def __init__(self,
-                 bitstamp_token,
-                 market,
+                 bistamp_api,
                  is_reset_logs,
                  trade_bot_cache,
                  is_buy=True):
 
-        self._bitstamp_api = BitstampApiAction(bitstamp_token, market)
+        self._bitstamp_api = bistamp_api
         self._is_buy = is_buy
         self._trade_bot_cache = trade_bot_cache
         self._trade_bot_output = TradeBotOutput(self._trade_bot_cache, is_reset_logs)
@@ -29,12 +28,12 @@ class TradeBot:
                    self._trade_bot_cache.buy_quantity <= market_bid_quantity
 
     def get_market_ask_price(self):
-        market_ask_price, market_ask_quantity = self._bitstamp_api.get_market_ask_price()
+        market_ask_price, market_ask_quantity = self._bitstamp_api.get_market_ask_price_and_quantity()
         self._trade_bot_cache.market_ask_price = market_ask_price
         return market_ask_price, market_ask_quantity
 
     def get_market_bid_price(self):
-        market_bid_price, market_bid_quantity = self._bitstamp_api.get_market_bid_price()
+        market_bid_price, market_bid_quantity = self._bitstamp_api.get_market_bid_price_and_quantity()
         self._trade_bot_cache.market_bid_price = market_bid_price
         return market_bid_price, market_bid_quantity
 
