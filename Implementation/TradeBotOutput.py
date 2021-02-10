@@ -55,7 +55,7 @@ class TradeBotOutput:
 
         output = [datetime.now(), account_trade_price,
                   market_trade_price, self.__trade_bot_cache.successful_cycles,
-                  self.__trade_bot_cache.initial_value, current_value,  
+                  self.__trade_bot_cache.initial_value, current_value,
                   percent_profit_value, self.__trade_bot_cache.accrued_fee]
 
         self.print_data(headers, output)

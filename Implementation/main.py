@@ -56,8 +56,7 @@ def main(argv):
 
         TradeBotUtils.validate_args(args)
         bitstamp_api = BitstampApiAction(TradeBotUtils.get_bitstamp_token(), args.market)
-       # account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_api)
-        account_bid_price = 0.5
+        account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_api)
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
         if args.is_not_simulation:
