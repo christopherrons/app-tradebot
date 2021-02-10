@@ -7,7 +7,7 @@
 #
 # ------------------------------------------------------------------------------
 # TODO: Check if market price inludes fees on bitstamp
-# TODO: Setup trading via api
+# TODO: Setup trading via api -  copy the simulation chache/trader and alter to live (easier to not miss changes)
 # TODO: Add relevant visualisations
 # TODO: Add database storage?
 # TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
@@ -55,9 +55,10 @@ def main(argv):
     try:
 
         TradeBotUtils.validate_args(args)
-        TradeBotUtils.live_run_checker(args.is_not_simulation)
         bitstamp_api = BitstampApiAction(TradeBotUtils.get_bitstamp_token(), args.market)
-        account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_api)
+       # account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_api)
+        account_bid_price = 0.5
+        TradeBotUtils.live_run_checker(args.is_not_simulation)
 
         if args.is_not_simulation:
             crypto_trade_bot = LiveTradeBot(

@@ -51,12 +51,12 @@ class TradeBotOutput:
             percent_profit_value = self.__calculator.percent_position_profit()
 
         headers = ['Timestamp', account_trade, market_trade, 'Nr Successfully cycles', 'Initial Value [$]',
-                   current_value_description, net_profit, percent_profit]
+                   current_value_description, percent_profit, 'Accrued Fees [$]']
 
         output = [datetime.now(), account_trade_price,
                   market_trade_price, self.__trade_bot_cache.successful_cycles,
-                  self.__trade_bot_cache.initial_value, current_value, net_profit_value,
-                  percent_profit_value]
+                  self.__trade_bot_cache.initial_value, current_value,  
+                  percent_profit_value, self.__trade_bot_cache.accrued_fee]
 
         self.print_data(headers, output)
 
@@ -71,13 +71,15 @@ class TradeBotOutput:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
             price = self.__trade_bot_cache.market_ask_price
+            fee = self.__trade_bot_cache.buy_fee()
         else:
             value = self.__trade_bot_cache.position_value
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
+            fee = self.__trade_bot_cache.sell_fee()
 
-        headers = ['Timestamp', 'Is Buy', 'Value', 'Price', 'Quantity']
-        output = [datetime.now(), is_buy, value, price, quantity]
+        headers = ['Timestamp', 'Is Buy', 'Value', 'Price', 'Quantity', 'Fee [$]']
+        output = [datetime.now(), is_buy, value, price, quantity, fee]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 

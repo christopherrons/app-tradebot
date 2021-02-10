@@ -40,7 +40,7 @@ class TradeBot:
     def update_account_prices(self):
         if self._is_buy:
             self._trade_bot_cache._account_bid_price = self._trade_bot_cache.market_ask_price / (
-                    1 + self._trade_bot_cache.interest)  # or always buy at the same price
+                    1 + self._trade_bot_cache.interest)
         else:
             self._trade_bot_cache._account_ask_price = self._trade_bot_cache.market_bid_price * (
                     1 + self._trade_bot_cache.interest)
