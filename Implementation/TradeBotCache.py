@@ -4,7 +4,7 @@ class TradeBotCache:
         self.__initial_value = initial_value
         self.__interest = interest
         self.__account_bid_price = account_bid_price
-        self.__account_ask_price = (1 + interest) * account_bid_price  # fix
+        self.__account_ask_price = (1 + interest) * account_bid_price
         self.__is_reinvesting_profits = is_reinvesting_profits
         self.__successful_cycles = 0
         self.__market_timestamp = 0

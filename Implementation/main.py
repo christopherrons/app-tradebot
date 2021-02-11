@@ -6,18 +6,20 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Check if market price inludes fees on bitstamp
-# TODO: Setup trading via api -  copy the simulation chache/trader and alter to live (easier to not miss changes)
-# TODO: Add relevant visualisations
-# TODO: Add database storage?
-# TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
-# TODO. Add fees to livetrade - Fees are available through the API
-# TODO: Optimize with threading
+# TODO: Setup trading via api -  copy the simulation cache/trader and alter to live (easier to not miss changes)
 # TODO: Strategy for start price
-
 
 # Complete/Discuss Above tasks before doing these
 # TODO: Live run
+
+# Nice to
+# TODO: Add dynamic fee
+# TODO: Optimize with threading
+    # TODO: Send email when trading or when orders are not going throug
+# TODO: Add relevant visualisations
+# TODO: Add database storage?
+# TODO: Docker container
+# TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
 
 
 from argparse import ArgumentParser

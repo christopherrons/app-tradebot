@@ -66,7 +66,7 @@ class TradeBotOutput:
         output.insert(1, is_buy)
         self.log_data(headers, output, self.__current_formation_log_file)
 
-    def print_and_log_successful_trades(self, is_buy):
+    def print_and_log_successful_trades(self, is_buy, fee):
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity

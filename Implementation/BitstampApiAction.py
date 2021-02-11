@@ -15,6 +15,7 @@ class BitstampApiAction:
                 "channel": f"order_book_{market}"
             }
         }
+        self.current_order_id = None
 
     def get_market_ask_price_and_quantity(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price_and_quantity())
@@ -80,7 +81,40 @@ class BitstampApiAction:
         pass
 
     def sell_action(self):
+        # sell quantity (amount)
+        # sell price
+        # fok_order = true
+        # get order id
         pass
 
     def buy_action(self):
+        # buy quantity (amount)
+        # buy price
+        # fok_order = true
+        # get order id
+        pass
+
+    def get_account_quantity(self):
+        pass
+
+    def get_account_cash(self):
+        # usd_balance
+        pass
+
+    def get_position_value(self):
+        # xrp_available
+        pass
+
+    def get_xrpusd_fee(self):
+        # xrpusd
+        pass
+
+    def get_usdxrp_fee(self):
+        pass
+
+    def get_order_status(self):
+        pass
+
+    def get_transascton_fee(self):
+        # there is a transaction fee in api
         pass

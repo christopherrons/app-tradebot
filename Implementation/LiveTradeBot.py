@@ -42,39 +42,42 @@ class LiveTradeBot(TradeBot):
 
     def trade_decision_algorithm(self):
         if self._is_buy:
-            self.trade_action_buy()  # If the price goes below the initial buy price the by some delta then we should adjust the buy and sell price
+            self.trade_action_buy()
         else:
             self.trade_action_sell()
 
     def trade_action_buy(self):
-        "Http-request to Bistamp API"
-        # THe buy price is taken from the market_ask_price in the cache
-        if self.is_successful_trade():
-            trade_value = self._trade_bot_cache.market_ask_price  # need the quantity aswell
-            self._trade_bot_output.print_and_log_successful_trades(self._is_buy, -trade_value)
-            self._is_buy = False
-            self.update_account_prices()
-            self.update_position_or_cash_value()
+        self._bitstamp_api.buy_action() # make sure sell action is succesfull
+        while not self.is_order_status_finished():
+            # add logic for printing while waiting
+            pass
+        fee = self._bitstamp_api.get_transaction_fee()
+        self._trade_bot_cache.accrued_fee = fee
+      #  self._trade_bot_output.print_and_log_successful_trades(self._is_buy, fee) # need fixing
+        self._is_buy = False
+        self.update_account_quantity_and_values()
+        self.update_account_prices()
 
     def trade_action_sell(self):
-        "Http-request to Bistamp API"
-        # THe sell price is taken from the market_bid_price in the cache
-        if self.is_successful_trade():
-            trade_value = self._trade_bot_cache.market_bid_price  # need quantity
-            self._trade_bot_output.print_and_log_successful_trades(self._is_buy, trade_value)
-            self._is_buy = True
-            self._trade_bot_cache.increment_successful_cycles()
-            self.update_account_prices()
-            self.update_position_or_cash_value()
+        self._bitstamp_api.sell_action() # make sure sell action is succesfull
+        while not self.is_order_status_finished():
+            # add logic for printing while waiting
+            pass
+        self._trade_bot_cache.increment_successful_cycles()
+        fee = self._bitstamp_api.get_transaction_fee()
+        self._trade_bot_cache.accrued_fee = fee
+      #  self._trade_bot_output.print_and_log_successful_trades(self._is_buy) need fixing
+        self._is_buy = True
+        self.update_account_prices()
+        self.update_account_quantity_values_and_fees()
 
-    def is_successful_trade(self):
-        "checks if the trades has gone through"
-        pass
-
-    def update_position_or_cash_value(self):
+    def update_account_quantity_values_and_fees(self):
+        self._trade_bot_cache.sell_quantity = self._bitstamp_api.get_account_quantity()
+        self._trade_bot_cache.cash_value = self._bitstamp_api.get_cash_value()
         if self._is_buy:
-            self._trade_bot_cache.position_value = 0
-            self._trade_bot_cache.position_value = self._trade_bot_cache.market_bid_price  # not exactly true, need to check the value of the trade
+            self._trade_bot_cache.fee = self._bitstamp_api.get_usdxrp_fee()
         else:
-            self._trade_bot_cache.cash_value = 0
-            self._trade_bot_cache.position_value = self._trade_bot_cache.market_ask_price  # not exactly true, need to check the value of the trade
+            self._trade_bot_cache.fee = self._bitstamp_api.get_xrpusd_fee()
+
+    def is_order_status_finished(self):
+        return self._bitstamp_api.get_order_status() == "Finished"
