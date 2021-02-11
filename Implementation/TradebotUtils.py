@@ -36,8 +36,8 @@ class TradeBotUtils:
         if args.initial_value < 1:
             raise ValueError(f'Initial Value {args.initial_value} is to low. Minimum value is 1')
 
-        if args.interest < 0.010050251256281229:
-            raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.010050251256281229')
+        if args.interest < 0.0100755031:
+            raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.0100755031')
 
         if args.print_interval < 0:
             raise ValueError(f'Print Interval {args.print_interval} is to low. Minimum value is 0')
