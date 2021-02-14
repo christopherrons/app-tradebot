@@ -71,12 +71,10 @@ class TradeBotOutput:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
             price = self.__trade_bot_cache.market_ask_price
-            fee = self.__trade_bot_cache.buy_fee()
         else:
             value = self.__trade_bot_cache.position_value
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
-            fee = self.__trade_bot_cache.sell_fee()
 
         headers = ['Timestamp', 'Is Buy', 'Value', 'Price', 'Quantity', 'Fee [$]']
         output = [datetime.now(), is_buy, value, price, quantity, fee]
