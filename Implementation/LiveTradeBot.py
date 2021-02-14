@@ -55,7 +55,7 @@ class LiveTradeBot(TradeBot):
         self._trade_bot_cache.accrued_fee = fee
         self._trade_bot_output.print_and_log_successful_trades(self._is_buy, fee)
         self._is_buy = False
-        self.update_account_quantity_and_values()
+        self.update_account_quantity_values_and_fees()
         self.update_account_prices()
 
     def trade_action_sell(self):
@@ -66,10 +66,10 @@ class LiveTradeBot(TradeBot):
         self._trade_bot_cache.increment_successful_cycles()
         fee = self._bitstamp_api.get_transaction_fee()
         self._trade_bot_cache.accrued_fee = fee
-        self._trade_bot_output.print_and_log_successful_trades(self._is_buy) 
+        self._trade_bot_output.print_and_log_successful_trades(self._is_buy)
         self._is_buy = True
-        self.update_account_prices()
         self.update_account_quantity_values_and_fees()
+        self.update_account_prices()
 
     def update_account_quantity_values_and_fees(self):
         self._trade_bot_cache.sell_quantity = self._bitstamp_api.get_account_quantity()
