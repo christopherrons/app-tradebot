@@ -3,7 +3,6 @@ import hmac
 import hashlib
 import time
 
-
 _API_URL = 'https://www.bitstamp.net/api/'
 
 
@@ -65,3 +64,44 @@ class APIAuthMixin(APIMixin):
 class APIOpenOrdersCall(APIAuthMixin):
     url = 'open_orders/'
 
+
+class APIBalanceCall(APIAuthMixin):
+    url = 'balance/'
+
+
+class APIAccountCash(APIBalanceCall):
+    def _process_response(self, response):
+        return response['usd_balance']
+
+
+class APIAccountQuantity(APIBalanceCall):
+    def _process_response(self, response):
+        return response['xrp_available']
+
+
+class APIBuyLimitOrder(APIAuthMixin):
+    url = 'v2/buy/xrpusd/'
+
+    def _process_response(self, response):
+        return response['id']
+
+
+class APISellLimitOrder(APIAuthMixin):
+    url = 'v2/sell/usdxrp/'
+
+    def _process_response(self, response):
+        return response['id']
+
+
+class APIOrderStatus(APIAuthMixin):
+    url = 'v2/order_status/'
+
+    def _process_response(self, response):
+        return response['status']
+
+
+class APITransactionFee(APIAuthMixin):
+    url = 'v2/user_transactions/'
+
+    def _process_response(self, response):
+        return response['fee']

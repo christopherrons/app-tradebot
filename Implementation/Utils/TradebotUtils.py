@@ -9,13 +9,31 @@ class TradeBotUtils:
         pass
 
     @staticmethod
-    def get_bitstamp_token():
+    def get_api_secret():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')
 
         config = ConfigParser()
         config.read(os.path.expanduser('~') + '/.script-config')
-        return config.get('Bitstamp', 'Token')
+        return config.get('Bitstamp', 'apiSecret')
+
+    @staticmethod
+    def get_api_key():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('Bitstamp', 'apiKey')
+
+    @staticmethod
+    def get_customer_ID():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('Bitstamp', 'customerID')
 
     @staticmethod
     def is_run_time_passed(current_time, run_stop_time):

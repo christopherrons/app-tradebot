@@ -4,10 +4,9 @@ import json
 import ast
 
 
-class BitstampApiAction:
+class BitstampWebSocket:
 
-    def __init__(self, bitstamp_token, market):
-        self.__bitstamp_token = bitstamp_token
+    def __init__(self,market):
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
@@ -76,45 +75,3 @@ class BitstampApiAction:
                 data = ast.literal_eval(await websocket.recv())
 
             return float(data['data']['bids'][0][0])
-
-    def check_order_status(self):
-        pass
-
-    def sell_action(self):
-        # sell quantity (amount)
-        # sell price
-        # fok_order = true
-        # get order id
-        pass
-
-    def buy_action(self):
-        # buy quantity (amount)
-        # buy price
-        # fok_order = true
-        # get order id
-        pass
-
-    def get_account_quantity(self):
-        pass
-
-    def get_account_cash(self):
-        # usd_balance
-        pass
-
-    def get_position_value(self):
-        # xrp_available
-        pass
-
-    def get_xrpusd_fee(self):
-        # xrpusd
-        pass
-
-    def get_usdxrp_fee(self):
-        pass
-
-    def get_order_status(self):
-        pass
-
-    def get_transascton_fee(self):
-        # there is a transaction fee in api
-        pass

@@ -1,5 +1,5 @@
 from TradeBot import TradeBot
-from TradebotUtils import TradeBotUtils
+from Implementation.Utils.TradebotUtils import TradeBotUtils
 from datetime import datetime, timedelta
 from SimulationCache import SimulationCache
 
@@ -10,14 +10,14 @@ class SimulationTradeBot(TradeBot):
                  account_bid_price,
                  interest,
                  initial_value,
-                 bitstamp_api,
+                 bitstamp_websocket,
                  run_time_minutes,
                  is_reinvesting_profits,
                  print_interval,
                  is_reset_logs,
                  is_buy=True):
 
-        super().__init__(bitstamp_api, is_reset_logs,
+        super().__init__(bitstamp_websocket, is_reset_logs,
                          SimulationCache(initial_value, interest, account_bid_price, is_reinvesting_profits),
                          is_buy)
 
