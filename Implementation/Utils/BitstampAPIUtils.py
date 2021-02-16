@@ -22,13 +22,12 @@ class APIMixin(object):
 
     def call(self, **params):
         # Form request
-        r = None
         url = _API_URL + self.url
         if self.method == 'get':
-            r = requests.get(url, params=params)
-        elif self.method == 'post':
-            r = requests.post(url, data=params)
-        response = r.json()
+            response = requests.get(url, params=params).json()
+        else:
+            response = requests.post(url, data=params).json()
+
         if isinstance(response, dict) and 'error' in response:
             raise APIError(response['error'])
         new_response = self._process_response(response)
