@@ -1,9 +1,14 @@
 import csv
 import os
 from datetime import datetime
-
+import smtplib
+from email import encoders
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
 from tabulate import tabulate
 from Calculator import Calculator
+from Utils.TradebotUtils import TradeBotUtils
 
 
 class TradeBotOutput:
@@ -96,3 +101,32 @@ class TradeBotOutput:
                 writer.writerow(output)
             else:
                 writer.writerow(output)
+
+    def send_email(self):
+        email_source = TradeBotUtils.get_email_source()
+        email_source_password = TradeBotUtils.get_email_source_password()
+        email_target = TradeBotUtils.get_email_target()
+
+        message = MIMEMultipart()
+        message['From'] = email_source
+        message['To'] = email_target
+        message['Subject'] = "Trade Occured"
+        message.attach(MIMEText('My message', 'plain'))
+
+        current_information_log = open(self.__current_formation_log_file, "rb")
+        trade_log = open(self.__successful_trade_log, "rb")
+
+        part = MIMEBase('applications', 'octet-stream')
+        part.set_payload(current_information_log.read())
+        part.set_payload(trade_log.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename=%s' % current_information_log)
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(email_source, email_source_password)
+        text = message.as_string()
+        server.sendmail(email_source, email_target, text)
+        server.quit()
+
+

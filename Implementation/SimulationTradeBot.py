@@ -1,5 +1,5 @@
 from TradeBot import TradeBot
-from Implementation.Utils.TradebotUtils import TradeBotUtils
+from Utils.TradebotUtils import TradeBotUtils
 from datetime import datetime, timedelta
 from SimulationCache import SimulationCache
 

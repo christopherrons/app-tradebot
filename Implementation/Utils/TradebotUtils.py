@@ -9,6 +9,32 @@ class TradeBotUtils:
         pass
 
     @staticmethod
+    def get_email_source():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('User', 'emailSource')
+
+    @staticmethod
+    def get_email_source_password():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('User', 'emailSourcePassword')
+
+    @staticmethod
+    def get_email_target():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('User', 'emailTarget')
+    @staticmethod
     def get_api_secret():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')

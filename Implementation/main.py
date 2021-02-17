@@ -27,7 +27,7 @@ import sys
 
 from BitstampAPIAction import BitstampAPIAction
 from BitstampWebsocket import BitstampWebSocket
-from Implementation.Utils.TradebotUtils import TradeBotUtils
+from Utils.TradebotUtils import TradeBotUtils
 from SimulationTradeBot import SimulationTradeBot
 from LiveTradeBot import LiveTradeBot
 

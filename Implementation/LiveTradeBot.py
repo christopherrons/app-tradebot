@@ -1,5 +1,5 @@
 from TradeBot import TradeBot
-from Implementation.Utils.TradebotUtils import TradeBotUtils
+from Utils.TradebotUtils import TradeBotUtils
 from datetime import datetime, timedelta
 from LiveCache import LiveCache
 
@@ -22,7 +22,7 @@ class LiveTradeBot(TradeBot):
                          LiveCache(initial_value, interest, account_bid_price, is_reinvesting_profits),
                          is_buy)
 
-        self.bitstamp_api = bitstamp_api
+        self.__bitstamp_api = bitstamp_api
         self.__run_stop_time = datetime.now() + timedelta(seconds=(run_time_minutes * 60))
         self.__print_interval = print_interval
 
@@ -49,12 +49,12 @@ class LiveTradeBot(TradeBot):
             self.trade_action_sell()
 
     def trade_action_buy(self):
-        buy_action_id = self._bitstamp_api.buy_action(self._trade_bot_cache.market_ask_price,
-                                                      self._trade_bot_cache.buy_quantity)
+        buy_action_id = self.__bitstamp_api.buy_action(self._trade_bot_cache.market_ask_price,
+                                                       self._trade_bot_cache.buy_quantity)
         while not self.is_order_status_finished(buy_action_id):
             # TODO add logic for printing while waiting
             pass
-        fee = self._bitstamp_api.get_transaction_fee()
+        fee = self.__bitstamp_api.get_transaction_fee()
         self._trade_bot_cache.accrued_fee = fee
         self._trade_bot_output.print_and_log_successful_trades(self._is_buy, fee)
         self._is_buy = False
@@ -62,8 +62,8 @@ class LiveTradeBot(TradeBot):
         self.update_account_prices()
 
     def trade_action_sell(self):
-        sell_order_id = self._bitstamp_api.sell_action(self._trade_bot_cache.market_bid_price,
-                                                       self._trade_bot_cache.sell_quantity)
+        sell_order_id = self.__bitstamp_api.sell_action(self._trade_bot_cache.market_bid_price,
+                                                        self._trade_bot_cache.sell_quantity)
         while not self.is_order_status_finished(sell_order_id):
             # TODO add logic for printing while waiting
             pass
@@ -76,8 +76,8 @@ class LiveTradeBot(TradeBot):
         self.update_account_prices()
 
     def update_account_quantity_values_and_fees(self):
-        self._trade_bot_cache.sell_quantity = self._bitstamp_api.get_account_quantity()
-        self._trade_bot_cache.cash_value = self._bitstamp_api.get_account_cash_value()
+        self._trade_bot_cache.sell_quantity = self.__bitstamp_api.get_account_quantity()
+        self._trade_bot_cache.cash_value = self.__bitstamp_api.get_account_cash_value()
         #  if self._is_buy:
         #     self._trade_bot_cache.fee = self._bitstamp_api.get_usdxrp_fee()
         # else:
