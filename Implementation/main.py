@@ -10,6 +10,7 @@
 # TODO: Strategy for start price
 
 # Complete/Discuss Above tasks before doing these
+# TODO: FIx email files
 # TODO: Live run
 
 # Nice to

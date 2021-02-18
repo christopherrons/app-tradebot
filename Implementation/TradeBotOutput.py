@@ -111,22 +111,34 @@ class TradeBotOutput:
         message['From'] = email_source
         message['To'] = email_target
         message['Subject'] = "Trade Occured"
-        message.attach(MIMEText('My message', 'plain'))
+        message.attach(MIMEText('Trade Occured test', 'plain'))
 
         current_information_log = open(self.__current_formation_log_file, "rb")
         trade_log = open(self.__successful_trade_log, "rb")
 
-        part = MIMEBase('applications', 'octet-stream')
-        part.set_payload(current_information_log.read())
-        part.set_payload(trade_log.read())
-        encoders.encode_base64(part)
-        part.add_header('Content-Disposition', 'attachment; filename=%s' % current_information_log)
+        part_information = MIMEBase('applications', 'octet-stream')
+        part_information.set_payload(current_information_log.read())
+        encoders.encode_base64(part_information)
+        part_information.add_header('Content-Disposition',
+                                    'attachment; filename=%s' % os.path.basename(self.__current_formation_log_file))
+        message.attach(part_information)
+
+        part_trade = MIMEBase('applications', 'octet-stream')
+        part_trade.set_payload(trade_log.read())
+        encoders.encode_base64(part_information)
+        part_trade.add_header('Content-Disposition',
+                              'attachment; filename=%s' % os.path.basename(self.__successful_trade_log))
+        message.attach(part_trade)
 
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
+
         server.login(email_source, email_source_password)
         text = message.as_string()
         server.sendmail(email_source, email_target, text)
         server.quit()
+
+        current_information_log.close()
+        trade_log.close()
 
 

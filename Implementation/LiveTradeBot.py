@@ -60,6 +60,8 @@ class LiveTradeBot(TradeBot):
         self._is_buy = False
         self.update_account_quantity_values_and_fees()
         self.update_account_prices()
+        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
+        self._trade_bot_output.send_email()
 
     def trade_action_sell(self):
         sell_order_id = self.__bitstamp_api.sell_action(self._trade_bot_cache.market_bid_price,
@@ -68,12 +70,14 @@ class LiveTradeBot(TradeBot):
             # TODO add logic for printing while waiting
             pass
         self._trade_bot_cache.increment_successful_cycles()
-        fee = self._bitstamp_api.get_transaction_fee()
+        fee = self.__bitstamp_api.get_transaction_fee()
         self._trade_bot_cache.accrued_fee = fee
         self._trade_bot_output.print_and_log_successful_trades(self._is_buy)
         self._is_buy = True
         self.update_account_quantity_values_and_fees()
         self.update_account_prices()
+        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
+        self._trade_bot_output.send_email()
 
     def update_account_quantity_values_and_fees(self):
         self._trade_bot_cache.sell_quantity = self.__bitstamp_api.get_account_quantity()

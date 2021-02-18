@@ -30,7 +30,6 @@ class BitstampAPIAction:
         pass
 
     def get_xrpusd_fee(self):
-        # xrpusd
         pass
 
     def get_usdxrp_fee(self):

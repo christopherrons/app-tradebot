@@ -53,6 +53,8 @@ class SimulationTradeBot(TradeBot):
         self._trade_bot_cache.sell_quantity = self._trade_bot_cache.buy_quantity
         self.update_account_prices()
         self.update_position_or_cash_value()
+        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
+        self._trade_bot_output.send_email()
 
     def trade_action_sell(self):
         self._trade_bot_cache.increment_successful_cycles()
@@ -61,6 +63,8 @@ class SimulationTradeBot(TradeBot):
         self._is_buy = True
         self.update_account_prices()
         self.update_position_or_cash_value()
+        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
+        self._trade_bot_output.send_email()
 
     def update_position_or_cash_value(self):
         if self._is_buy:
