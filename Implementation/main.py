@@ -8,7 +8,7 @@
 # ------------------------------------------------------------------------------
 # TODO: Setup trading via api -  copy the simulation cache/trader and alter to live (easier to not miss changes)
 # TODO: Strategy for start price
-# TODO: FIx email files
+# TODO: Check if binary has to be sett in python or file for configs
 # TODO: Check if there is a smart oop way to remove is_buy flag
 # TODO: Clean up code
 
