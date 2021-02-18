@@ -8,18 +8,15 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from tabulate import tabulate
 from Calculator import Calculator
-from Utils.TradebotUtils import TradeBotUtils
+from Utils.TradeBotUtils import TradeBotUtils
 
 
 class TradeBotOutput:
 
-    def __init__(self, trade_bot_cache, is_reset_logs):
+    def __init__(self, trade_bot_cache):
         self.__trade_bot_cache = trade_bot_cache
-        self.__is_reset_logs = is_reset_logs
-        self.__current_formation_log_file = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
-                                                                               "logs/current_formation_log.csv")  # Shitty solution
-        self.__successful_trade_log = os.path.realpath(__file__).replace("Implementation/TradeBotOutput.py",
-                                                                         "logs/trades_logs.csv")  # Shitty solution
+        self.__current_formation_log_file = TradeBotUtils.get_information_log_path()
+        self.__successful_trade_log = TradeBotUtils.get_trade_log_path()
         self.__calculator = Calculator(trade_bot_cache)
 
     def print_and_log_current_formation(self, is_buy):
@@ -93,9 +90,6 @@ class TradeBotOutput:
     def log_data(self, headers, output, file):
         with open(file, 'a+') as f:
             writer = csv.writer(f)
-            if self.__is_reset_logs:
-                f.truncate(0)
-                self.__is_reset_logs = False
             if os.stat(file).st_size == 0:
                 writer.writerow(headers)
                 writer.writerow(output)
@@ -110,22 +104,13 @@ class TradeBotOutput:
         message = MIMEMultipart()
         message['From'] = email_source
         message['To'] = email_target
-        message['Subject'] = "Trade Occured"
-        message.attach(MIMEText('Trade Occured test', 'plain'))
+        message['Subject'] = f"Trade Number {self.__trade_bot_cache.successful_cycles + 1}"
+        message.attach(MIMEText(f'Review logs', 'plain'))
 
-        current_information_log = open(self.__current_formation_log_file, "rb")
         trade_log = open(self.__successful_trade_log, "rb")
-
-        part_information = MIMEBase('applications', 'octet-stream')
-        part_information.set_payload(current_information_log.read())
-        encoders.encode_base64(part_information)
-        part_information.add_header('Content-Disposition',
-                                    'attachment; filename=%s' % os.path.basename(self.__current_formation_log_file))
-        message.attach(part_information)
-
         part_trade = MIMEBase('applications', 'octet-stream')
         part_trade.set_payload(trade_log.read())
-        encoders.encode_base64(part_information)
+        encoders.encode_base64(part_trade)
         part_trade.add_header('Content-Disposition',
                               'attachment; filename=%s' % os.path.basename(self.__successful_trade_log))
         message.attach(part_trade)
@@ -138,7 +123,4 @@ class TradeBotOutput:
         server.sendmail(email_source, email_target, text)
         server.quit()
 
-        current_information_log.close()
         trade_log.close()
-
-

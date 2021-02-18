@@ -1,5 +1,5 @@
 from TradeBot import TradeBot
-from Utils.TradebotUtils import TradeBotUtils
+from Utils.TradeBotUtils import TradeBotUtils
 from datetime import datetime, timedelta
 from SimulationCache import SimulationCache
 
@@ -14,10 +14,9 @@ class SimulationTradeBot(TradeBot):
                  run_time_minutes,
                  is_reinvesting_profits,
                  print_interval,
-                 is_reset_logs,
                  is_buy=True):
 
-        super().__init__(bitstamp_websocket, is_reset_logs,
+        super().__init__(bitstamp_websocket,
                          SimulationCache(initial_value, interest, account_bid_price, is_reinvesting_profits),
                          is_buy)
 
@@ -53,7 +52,6 @@ class SimulationTradeBot(TradeBot):
         self._trade_bot_cache.sell_quantity = self._trade_bot_cache.buy_quantity
         self.update_account_prices()
         self.update_position_or_cash_value()
-        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
         self._trade_bot_output.send_email()
 
     def trade_action_sell(self):
@@ -63,7 +61,6 @@ class SimulationTradeBot(TradeBot):
         self._is_buy = True
         self.update_account_prices()
         self.update_position_or_cash_value()
-        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
         self._trade_bot_output.send_email()
 
     def update_position_or_cash_value(self):

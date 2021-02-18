@@ -8,14 +8,13 @@ class TradeBot:
 
     def __init__(self,
                  bitstamp_websocket,
-                 is_reset_logs,
                  trade_bot_cache,
                  is_buy=True):
 
         self._bitstamp_websocket = bitstamp_websocket
         self._is_buy = is_buy
         self._trade_bot_cache = trade_bot_cache
-        self._trade_bot_output = TradeBotOutput(self._trade_bot_cache, is_reset_logs)
+        self._trade_bot_output = TradeBotOutput(self._trade_bot_cache)
 
     def is_trade_able(self):
         if self._is_buy:

@@ -8,9 +8,11 @@
 # ------------------------------------------------------------------------------
 # TODO: Setup trading via api -  copy the simulation cache/trader and alter to live (easier to not miss changes)
 # TODO: Strategy for start price
+# TODO: FIx email files
+# TODO: Check if there is a smart oop way to remove is_buy flag
+# TODO: Clean up code
 
 # Complete/Discuss Above tasks before doing these
-# TODO: FIx email files
 # TODO: Live run
 
 # Nice to
@@ -28,7 +30,7 @@ import sys
 
 from BitstampAPIAction import BitstampAPIAction
 from BitstampWebsocket import BitstampWebSocket
-from Utils.TradebotUtils import TradeBotUtils
+from Utils.TradeBotUtils import TradeBotUtils
 from SimulationTradeBot import SimulationTradeBot
 from LiveTradeBot import LiveTradeBot
 
@@ -57,7 +59,6 @@ def main(argv):
     args = arg_parser.parse_args()
 
     try:
-
         TradeBotUtils.validate_args(args)
         bitstamp_websocket = BitstampWebSocket(args.market)
         account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_websocket)
@@ -65,6 +66,8 @@ def main(argv):
                                          TradeBotUtils.get_api_key(),
                                          TradeBotUtils.get_api_secret())
         TradeBotUtils.live_run_checker(args.is_not_simulation)
+        if args.is_reset_logs:
+            TradeBotUtils.reset_logs()
 
         if args.is_not_simulation:
             crypto_trade_bot = LiveTradeBot(
@@ -76,7 +79,6 @@ def main(argv):
                 run_time_minutes=args.run_time_minutes,
                 is_reinvesting_profits=args.is_reinvesting_profits,
                 print_interval=args.print_interval,
-                is_reset_logs=args.is_reset_logs,
                 is_buy=True)
         else:
             crypto_trade_bot = SimulationTradeBot(
@@ -87,7 +89,6 @@ def main(argv):
                 run_time_minutes=args.run_time_minutes,
                 is_reinvesting_profits=args.is_reinvesting_profits,
                 print_interval=args.print_interval,
-                is_reset_logs=args.is_reset_logs,
                 is_buy=True)
 
         crypto_trade_bot.run()

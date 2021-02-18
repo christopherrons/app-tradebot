@@ -1,5 +1,5 @@
 from TradeBot import TradeBot
-from Utils.TradebotUtils import TradeBotUtils
+from Utils.TradeBotUtils import TradeBotUtils
 from datetime import datetime, timedelta
 from LiveCache import LiveCache
 
@@ -15,10 +15,9 @@ class LiveTradeBot(TradeBot):
                  run_time_minutes,
                  is_reinvesting_profits,
                  print_interval,
-                 is_reset_logs,
                  is_buy=True):
 
-        super().__init__(bitstamp_websocket, is_reset_logs,
+        super().__init__(bitstamp_websocket,
                          LiveCache(initial_value, interest, account_bid_price, is_reinvesting_profits),
                          is_buy)
 
@@ -60,7 +59,6 @@ class LiveTradeBot(TradeBot):
         self._is_buy = False
         self.update_account_quantity_values_and_fees()
         self.update_account_prices()
-        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
         self._trade_bot_output.send_email()
 
     def trade_action_sell(self):
@@ -76,7 +74,6 @@ class LiveTradeBot(TradeBot):
         self._is_buy = True
         self.update_account_quantity_values_and_fees()
         self.update_account_prices()
-        self._trade_bot_output.print_and_log_current_formation(self._is_buy)
         self._trade_bot_output.send_email()
 
     def update_account_quantity_values_and_fees(self):
