@@ -47,4 +47,4 @@ class SimulationCache(TradeBotCache):
         return self.__cash_value * self._fee
 
     def sell_fee(self):
-        return self.__position_value * self._fee
+        return self.position_value * self._fee
