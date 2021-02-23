@@ -1,10 +1,11 @@
-from Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
+from Services.Runner.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder
 
 
 class BitstampAPIAction:
 
     def __init__(self, customer_id, api_key, api_secret):
+        #TODO: Read as binary?
         self.customer_id = customer_id
         self.api_key = api_key
         self.api_secret = api_secret

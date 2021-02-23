@@ -4,9 +4,9 @@ import json
 import ast
 
 
-class BitstampWebSocket:
+class BitstampWebsocket:
 
-    def __init__(self,market):
+    def __init__(self, market):
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
@@ -20,7 +20,6 @@ class BitstampWebSocket:
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price_and_quantity())
 
     async def async_get_market_ask_price_and_quantity(self):
-
         async with websockets.connect(self.__uri) as websocket:
             await websocket.send(json.dumps(self.__subscription))
 
@@ -36,7 +35,6 @@ class BitstampWebSocket:
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price_and_quantity())
 
     async def async_get_market_bid_price_and_quantity(self):
-
         async with websockets.connect(self.__uri) as websocket:
             await websocket.send(json.dumps(self.__subscription))
 
@@ -52,7 +50,6 @@ class BitstampWebSocket:
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price())
 
     async def async_get_market_ask_price(self):
-
         async with websockets.connect(self.__uri) as websocket:
             await websocket.send(json.dumps(self.__subscription))
 
@@ -66,7 +63,6 @@ class BitstampWebSocket:
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price())
 
     async def async_get_market_bid_price(self):
-
         async with websockets.connect(self.__uri) as websocket:
             await websocket.send(json.dumps(self.__subscription))
 

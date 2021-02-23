@@ -1,5 +1,4 @@
 import argparse
-import csv
 import os
 from configparser import ConfigParser
 
@@ -17,12 +16,12 @@ class TradeBotUtils:
 
     @staticmethod
     def get_trade_log_path():
-        return os.path.realpath(__file__).replace("Implementation/Utils/TradeBotUtils.py",
+        return os.path.realpath(__file__).replace("Services/Runner/Utils/TradeBotUtils.py",
                                                   "logs/trades_logs.csv")
 
     @staticmethod
     def get_information_log_path():
-        return os.path.realpath(__file__).replace("Implementation/Utils/TradeBotUtils.py",
+        return os.path.realpath(__file__).replace("Services/Runner/Utils/TradeBotUtils.py",
                                                   "logs/current_formation_log.csv")
 
     @staticmethod

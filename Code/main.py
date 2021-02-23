@@ -6,19 +6,16 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Setup trading via api -  copy the simulation cache/trader and alter to live (easier to not miss changes)
 # TODO: Strategy for start price
 # TODO: Check if binary has to be sett in python or file for configs
-# TODO: Check if there is a smart oop way to remove is_buy flag
 # TODO: Clean up code
+# TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 
 # Complete/Discuss Above tasks before doing these
 # TODO: Live run
 
 # Nice to
-# TODO: Add dynamic fee
 # TODO: Optimize with threading
-# TODO: Send email when trading or when orders are not going throug
 # TODO: Add relevant visualisations
 # TODO: Add database storage?
 # TODO: Docker container
@@ -28,11 +25,16 @@
 from argparse import ArgumentParser
 import sys
 
-from BitstampAPIAction import BitstampAPIAction
-from BitstampWebsocket import BitstampWebSocket
-from Utils.TradeBotUtils import TradeBotUtils
-from SimulationTradeBot import SimulationTradeBot
-from LiveTradeBot import LiveTradeBot
+from Application.Runner.TradeRunner import TradeRunner
+from Services.Runner.CacheStorage.LiveCache import LiveCache
+from Services.Runner.CacheStorage.SimulationCache import SimulationCache
+from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
+from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
+from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
+from Services.Runner.TradeBots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
+from Services.Runner.TradeBots.SimulationTradeBotSeller import SimulationTradeBotSeller
+from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
+from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
 
 
 def main(argv):
@@ -40,7 +42,8 @@ def main(argv):
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of money to invest[$]', type=int)
-    # arg_parser.add_argument('is_buy', help='Specify if buy or sell', default=True, action='store_false')
+    arg_parser.add_argument('--exchange', default="Bitstamp", help='Specify the trading exchange', type=str)
+    arg_parser.add_argument('--is_buy', help='Specify if buy or sell', default=True, action='store_false')
     arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000,
                             help='Specify the number of minutes the bot runs [min]', type=int)
@@ -60,38 +63,45 @@ def main(argv):
 
     try:
         TradeBotUtils.validate_args(args)
-        bitstamp_websocket = BitstampWebSocket(args.market)
-        account_bid_price = TradeBotUtils.set_initial_trade_price(bitstamp_websocket)
-        bitstamp_api = BitstampAPIAction(TradeBotUtils.get_customer_ID(),
+        TradeBotUtils.live_run_checker(args.is_not_simulation)
+
+        # TODO: Add option to switch to kraken
+        exchange_websocket = BitstampWebsocket(args.market)
+        exchange_api = BitstampAPIAction(TradeBotUtils.get_customer_ID(),
                                          TradeBotUtils.get_api_key(),
                                          TradeBotUtils.get_api_secret())
-        TradeBotUtils.live_run_checker(args.is_not_simulation)
+
+        account_bid_price = TradeBotUtils.set_initial_trade_price(exchange_websocket)
+
         if args.is_reset_logs:
             TradeBotUtils.reset_logs()
 
         if args.is_not_simulation:
-            crypto_trade_bot = LiveTradeBot(
-                initial_value=args.initial_value,
-                account_bid_price=account_bid_price,
-                interest=args.interest,
-                bitstamp_api=bitstamp_api,
-                bitstamp_websocket=bitstamp_websocket,
-                run_time_minutes=args.run_time_minutes,
-                is_reinvesting_profits=args.is_reinvesting_profits,
-                print_interval=args.print_interval,
-                is_buy=True)
-        else:
-            crypto_trade_bot = SimulationTradeBot(
-                initial_value=args.initial_value,
-                account_bid_price=account_bid_price,
-                interest=args.interest,
-                bitstamp_websocket=bitstamp_websocket,
-                run_time_minutes=args.run_time_minutes,
-                is_reinvesting_profits=args.is_reinvesting_profits,
-                print_interval=args.print_interval,
-                is_buy=True)
+            cache = LiveCache(initial_value=args.initial_value,
+                              interest=args.interest,
+                              account_bid_price=account_bid_price,
+                              is_reinvesting_profits=args.is_reinvesting_profits)
 
-        crypto_trade_bot.run()
+            trade_bot_runner = TradeRunner(
+                is_buy=args.is_buy,
+                trade_bot_buyer=LiveTradeBotBuyer(exchange_api, exchange_websocket, cache),
+                trade_bot_seller=LiveTradeBotSeller(exchange_api, exchange_websocket, cache),
+                run_time_minutes=args.run_time_minutes,
+                print_interval=args.print_interval)
+        else:
+            cache = SimulationCache(initial_value=args.initial_value,
+                                    interest=args.interest,
+                                    account_bid_price=account_bid_price,
+                                    is_reinvesting_profits=args.is_reinvesting_profits)
+
+            trade_bot_runner = TradeRunner(
+                is_buy=args.is_buy,
+                trade_bot_buyer=SimulationTradeBotBuyer(exchange_websocket, cache),
+                trade_bot_seller=SimulationTradeBotSeller(exchange_websocket, cache),
+                run_time_minutes=args.run_time_minutes,
+                print_interval=args.print_interval)
+
+        trade_bot_runner.run()
 
     except ValueError as error_message:
         print(error_message)
