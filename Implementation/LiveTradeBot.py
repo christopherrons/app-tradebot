@@ -85,4 +85,4 @@ class LiveTradeBot(TradeBot):
         #   self._trade_bot_cache.fee = self._bitstamp_api.get_xrpusd_fee()
 
     def is_order_status_finished(self, order_id):
-        return self._bitstamp_api.get_order_status(order_id) == "Finished"
+        return self.__bitstamp_api.get_order_status(order_id) == "Finished"
