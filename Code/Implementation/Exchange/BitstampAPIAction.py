@@ -1,4 +1,4 @@
-from Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
+from Implementation.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder
 
 

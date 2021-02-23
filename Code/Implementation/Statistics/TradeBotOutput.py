@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from tabulate import tabulate
-from Calculator import Calculator
-from Utils.TradeBotUtils import TradeBotUtils
+from Implementation.Calculators.Calculator import Calculator
+from Implementation.Utils.TradeBotUtils import TradeBotUtils
 
 
 class TradeBotOutput:

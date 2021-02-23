@@ -1,7 +1,7 @@
-from TradeBot import TradeBot
-from Utils.TradeBotUtils import TradeBotUtils
+from Implementation.TradeBots.TradeBot import TradeBot
+from Implementation.Utils.TradeBotUtils import TradeBotUtils
 from datetime import datetime, timedelta
-from LiveCache import LiveCache
+from Implementation.CacheStorage.LiveCache import LiveCache
 
 
 class LiveTradeBot(TradeBot):

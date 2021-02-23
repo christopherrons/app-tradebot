@@ -11,6 +11,7 @@
 # TODO: Check if binary has to be sett in python or file for configs
 # TODO: Check if there is a smart oop way to remove is_buy flag
 # TODO: Clean up code
+# TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 
 # Complete/Discuss Above tasks before doing these
 # TODO: Live run
@@ -28,11 +29,11 @@
 from argparse import ArgumentParser
 import sys
 
-from BitstampAPIAction import BitstampAPIAction
-from BitstampWebsocket import BitstampWebSocket
-from Utils.TradeBotUtils import TradeBotUtils
-from SimulationTradeBot import SimulationTradeBot
-from LiveTradeBot import LiveTradeBot
+from Implementation.Exchange.BitstampAPIAction import BitstampAPIAction
+from Implementation.Exchange.BitstampWebsocket import BitstampWebSocket
+from Implementation.Utils.TradeBotUtils import TradeBotUtils
+from Implementation.TradeBots.SimulationTradeBot import SimulationTradeBot
+from Implementation.TradeBots.LiveTradeBot import LiveTradeBot
 
 
 def main(argv):
