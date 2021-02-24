@@ -78,8 +78,9 @@ class TradeBotOutput:
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
 
-        headers = ['Timestamp', 'Is Buy', 'Value', 'Price', 'Quantity', 'Fee [$]']
-        output = [datetime.now(), is_buy, value, price, quantity, fee]
+        headers = ['Timestamp', 'Is Buy', 'Price [$]', 'Quantity', 'Gross Trade Value [$]', 'Net Trade Value [$]',
+                   'Fee [$]']
+        output = [datetime.now(), price, quantity, is_buy, value, value - fee, fee]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 

@@ -6,9 +6,9 @@ class BitstampAPIAction:
 
     def __init__(self, customer_id, api_key, api_secret):
         #TODO: Read as binary?
-        self.customer_id = customer_id
-        self.api_key = api_key
-        self.api_secret = api_secret
+        self.customer_id = bytes(customer_id, 'ascii')
+        self.api_key = bytes(api_key, 'ascii')
+        self.api_secret = bytes(api_secret, 'ascii')
 
     def sell_action(self, price, quantity):
         return APISellLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=price,

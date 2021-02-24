@@ -72,7 +72,7 @@ def main(argv):
                                          TradeBotUtils.get_api_secret())
 
         account_bid_price = TradeBotUtils.set_initial_trade_price(exchange_websocket)
-        
+
         if args.is_reset_logs:
             TradeBotUtils.reset_logs()
 
@@ -102,7 +102,6 @@ def main(argv):
                 print_interval=args.print_interval)
 
         trade_bot_runner.run()
-
 
     except ValueError as error_message:
         print(error_message)
