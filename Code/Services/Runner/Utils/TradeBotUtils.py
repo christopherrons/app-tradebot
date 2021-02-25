@@ -131,5 +131,5 @@ class TradeBotUtils:
 
         print(
             f"Account Bid Price: {account_bid_price} [$]. \nNet Diff Market Ask: {bitstamp_api.get_market_ask_price() - account_bid_price} [$]."
-            f"\nPercent Diff Market Ask {100 * ((bitstamp_api.get_market_ask_price() / account_bid_price) - 1)} [%]\n")
+            f"\nPercent Diff Market Ask {100 * ((bitstamp_api.get_market_ask_price() / account_bid_price) - 1)} [%].\n")
         return account_bid_price

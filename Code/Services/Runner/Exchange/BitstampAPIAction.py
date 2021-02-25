@@ -16,7 +16,7 @@ class BitstampAPIAction:
 
     def buy_action(self, price, quantity):
         return APIBuyLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=price,
-                                                                                      amount=quantity,
+                                                                                      amount=round(quantity, 8),
                                                                                       fok_order=True)
 
     def get_account_cash_value(self):
