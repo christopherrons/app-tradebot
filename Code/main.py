@@ -16,7 +16,7 @@
 # TODO: Add database storage?
 # TODO: Docker container
 # TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
-
+# TODO: Transaction fee is not working properly eventhough the fee is available when i checke with the api. Maybe it didnt have time to register the transaction before the transaction_fee call
 
 import sys
 from argparse import ArgumentParser

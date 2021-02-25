@@ -111,7 +111,7 @@ class APIOpenOrders(APIAuthMixin):
 
 
 class APITransactionFee(APIAuthMixin):
-    url = 'v2/user_transactions/'
+    url = 'v2/order_status/'
 
     def _process_response(self, response):
-        return response[0]['fee']
+        return response['transactions'][0]['fee']

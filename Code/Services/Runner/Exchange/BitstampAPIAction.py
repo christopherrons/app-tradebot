@@ -31,7 +31,5 @@ class BitstampAPIAction:
     def get_open_orders(self):
         return APIOpenOrders(self.customer_id, self.api_key, self.api_secret).call()
 
-    def get_transaction_fee(self):
-        return float(APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(offset=0,
-                                                                                             sort='desc',
-                                                                                             limit=1))
+    def get_transaction_fee(self, order_id):
+        return float(APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(id=order_id))

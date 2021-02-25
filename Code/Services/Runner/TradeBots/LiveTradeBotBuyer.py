@@ -21,7 +21,7 @@ class LiveTradeBotBuyer(TradeBotBuyer):
 
         if self.is_order_successful(buy_action_id):
             self._trade_bot_cache.increment_successful_trades()
-            fee = self.__exchange_api.get_transaction_fee()
+            fee = self.__exchange_api.get_transaction_fee(buy_action_id)
             self._trade_bot_cache.accrued_fee = fee
             self.print_and_log_successful_trades(self.is_buy(), fee)
             self.update_account_quantity_values()
