@@ -10,6 +10,7 @@ class SimulationTradeBotBuyer(TradeBotBuyer):
 
     def create_trade(self):
         self.trade_action_buy()
+        return True
 
     def trade_action_buy(self):
         self._trade_bot_cache.accrued_fee = self._trade_bot_cache.buy_fee()

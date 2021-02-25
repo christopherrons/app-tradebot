@@ -28,8 +28,8 @@ class APIMixin(object):
         else:
             response = requests.post(url, data=params).json()
 
-        if isinstance(response, dict) and 'error' in response:
-            raise APIError(response['error'])
+        if isinstance(response, dict) and 'status' in response and response['status'] == 'error':
+            raise APIError(response['reason'])
         new_response = self._process_response(response)
         if new_response is not None:
             response = new_response
@@ -61,11 +61,11 @@ class APIAuthMixin(APIMixin):
 
 #TODO CHeck urls
 class APIOpenOrdersCall(APIAuthMixin):
-    url = 'open_orders/'
+    url = 'v2/open_orders/'
 
 
 class APIBalanceCall(APIAuthMixin):
-    url = 'balance/'
+    url = 'v2/balance/'
 
 
 class APIAccountCash(APIBalanceCall):
@@ -82,13 +82,15 @@ class APIBuyLimitOrder(APIAuthMixin):
     url = 'v2/buy/xrpusd/'
 
     def _process_response(self, response):
+        print(response)
         return response['id']
 
 
 class APISellLimitOrder(APIAuthMixin):
-    url = 'v2/sell/usdxrp/'
+    url = 'v2/sell/xrpusd/'
 
     def _process_response(self, response):
+        print(response)
         return response['id']
 
 
@@ -99,8 +101,15 @@ class APIOrderStatus(APIAuthMixin):
         return response['status']
 
 
+class APIOpenOrders(APIAuthMixin):
+    url = 'v2/open_orders/all/'
+
+    def _process_response(self, response):
+        return response
+
+
 class APITransactionFee(APIAuthMixin):
     url = 'v2/user_transactions/'
 
     def _process_response(self, response):
-        return response['fee']
+        return response[0]['fee']

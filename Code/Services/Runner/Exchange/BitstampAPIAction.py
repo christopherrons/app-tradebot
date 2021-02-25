@@ -1,14 +1,13 @@
 from Services.Runner.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders
 
 
 class BitstampAPIAction:
 
     def __init__(self, customer_id, api_key, api_secret):
-        #TODO: Read as binary?
-        self.customer_id = bytes(customer_id, 'ascii')
-        self.api_key = bytes(api_key, 'ascii')
-        self.api_secret = bytes(api_secret, 'ascii')
+        self.customer_id = bytes(customer_id, 'utf-8')
+        self.api_key = bytes(api_key, 'utf-8')
+        self.api_secret = bytes(api_secret, 'utf-8')
 
     def sell_action(self, price, quantity):
         return APISellLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=price,
@@ -21,25 +20,18 @@ class BitstampAPIAction:
                                                                                       fok_order=True)
 
     def get_account_cash_value(self):
-        return APIAccountCash(self.customer_id, self.api_key, self.api_secret).call()
+        return float(APIAccountCash(self.customer_id, self.api_key, self.api_secret).call())
 
     def get_account_quantity(self):
-        return APIAccountQuantity(self.customer_id, self.api_key, self.api_secret).call()
-
-    def get_position_value(self):
-        # xrp_available
-        pass
-
-    def get_xrpusd_fee(self):
-        pass
-
-    def get_usdxrp_fee(self):
-        pass
+        return float(APIAccountQuantity(self.customer_id, self.api_key, self.api_secret).call())
 
     def get_order_status(self, order_id):
         return APIOrderStatus(self.customer_id, self.api_key, self.api_secret).call(id=order_id)
 
+    def get_open_orders(self):
+        return APIOpenOrders(self.customer_id, self.api_key, self.api_secret).call()
+
     def get_transaction_fee(self):
-        return APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(offset=0,
+        return float(APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(offset=0,
                                                                                        sort='desc',
-                                                                                       limit=1)
+                                                                                       limit=1))

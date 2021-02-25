@@ -116,15 +116,14 @@ class TradeBotUtils:
     @staticmethod
     def set_initial_trade_price(bitstamp_api):
         account_bid_price = float('inf')
-        bid_percent_diff = float('inf')
-        is_invalid_account_bid_price = bitstamp_api.get_market_ask_price() - account_bid_price < 0 or bid_percent_diff > 0.03
+        is_invalid_account_bid_price = bitstamp_api.get_market_ask_price() - account_bid_price < 0
         while is_invalid_account_bid_price:
             market_bid_price = bitstamp_api.get_market_bid_price()
             market_ask_price = bitstamp_api.get_market_ask_price()
             print(f'Market bid: {market_bid_price} \nMarket ask: {market_ask_price}\n')
             account_bid_price = float(input('Set start account bid price: '))
             bid_percent_diff = abs(1 - (market_bid_price / account_bid_price))
-            is_invalid_account_bid_price = market_ask_price - account_bid_price < 0 or bid_percent_diff > 0.02
+            is_invalid_account_bid_price = market_ask_price - account_bid_price < 0 or bid_percent_diff > 0.08
             if is_invalid_account_bid_price:
                 print(
                     "ERROR: Account bid price has to be smaller than market ask price and max 3% diff from market price.")

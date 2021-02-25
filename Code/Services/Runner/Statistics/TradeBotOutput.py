@@ -80,7 +80,7 @@ class TradeBotOutput:
 
         headers = ['Timestamp', 'Is Buy', 'Price [$]', 'Quantity', 'Gross Trade Value [$]', 'Net Trade Value [$]',
                    'Fee [$]']
-        output = [datetime.now(), price, quantity, is_buy, value, value - fee, fee]
+        output = [datetime.now(), is_buy, price, quantity, value, value - fee, fee]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 

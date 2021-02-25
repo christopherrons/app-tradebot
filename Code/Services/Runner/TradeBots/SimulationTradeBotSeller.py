@@ -10,6 +10,7 @@ class SimulationTradeBotSeller(TradeBotSeller):
 
     def create_trade(self):
         self.trade_action_sell()
+        return True
 
     def trade_action_sell(self):
         self._trade_bot_cache.increment_successful_cycles()

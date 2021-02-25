@@ -77,7 +77,7 @@ def main(argv):
             TradeBotUtils.reset_logs()
 
         if args.is_not_simulation:
-            cache = LiveCache(initial_value=args.initial_value,
+            cache = LiveCache(initial_value=exchange_api.get_account_cash_value(),
                               interest=args.interest,
                               account_bid_price=account_bid_price,
                               is_reinvesting_profits=args.is_reinvesting_profits)

@@ -35,8 +35,8 @@ class TradeRunner:
                 delta_minutes = datetime.now()
 
             if self.__trade_bot.is_trade_able():
-                self.__trade_bot.create_trade()
-                self.switch_trader()
+                if self.__trade_bot.create_trade():
+                    self.switch_trader()
 
         print(f"Started trading at {start_time} and ended at {datetime.now()}")
 
