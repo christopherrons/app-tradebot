@@ -1,7 +1,8 @@
-import asyncio
-import websockets
-import json
 import ast
+import asyncio
+import json
+
+import websockets
 
 
 class BitstampWebsocket:

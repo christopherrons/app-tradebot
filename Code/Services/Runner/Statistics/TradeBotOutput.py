@@ -1,12 +1,14 @@
 import csv
 import os
-from datetime import datetime
 import smtplib
+from datetime import datetime
 from email import encoders
-from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 from tabulate import tabulate
+
 from Services.Runner.Calculators.Calculator import Calculator
 from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 

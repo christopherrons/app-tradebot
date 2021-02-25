@@ -1,5 +1,6 @@
-from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 from datetime import datetime, timedelta
+
+from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 
 
 class TradeRunner:

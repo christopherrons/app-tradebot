@@ -33,5 +33,5 @@ class BitstampAPIAction:
 
     def get_transaction_fee(self):
         return float(APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(offset=0,
-                                                                                       sort='desc',
-                                                                                       limit=1))
+                                                                                             sort='desc',
+                                                                                             limit=1))

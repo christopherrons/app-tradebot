@@ -7,12 +7,8 @@
 #
 # ------------------------------------------------------------------------------
 # TODO: Strategy for start price
-# TODO: Check if binary has to be sett in python or file for configs
 # TODO: Clean up code
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
-
-# Complete/Discuss Above tasks before doing these
-# TODO: Live run
 
 # Nice to
 # TODO: Optimize with threading
@@ -22,19 +18,19 @@
 # TODO: Add flag to start trading buy being or selling. If selling we need to know how much we have on the account
 
 
-from argparse import ArgumentParser
 import sys
+from argparse import ArgumentParser
 
 from Application.Runner.TradeRunner import TradeRunner
 from Services.Runner.CacheStorage.LiveCache import LiveCache
 from Services.Runner.CacheStorage.SimulationCache import SimulationCache
 from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
 from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
-from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
-from Services.Runner.TradeBots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
-from Services.Runner.TradeBots.SimulationTradeBotSeller import SimulationTradeBotSeller
 from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
 from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
+from Services.Runner.TradeBots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
+from Services.Runner.TradeBots.SimulationTradeBotSeller import SimulationTradeBotSeller
+from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 
 
 def main(argv):
