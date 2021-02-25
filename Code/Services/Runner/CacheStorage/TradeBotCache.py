@@ -6,6 +6,7 @@ class TradeBotCache:
         self.__account_bid_price = account_bid_price
         self.__account_ask_price = (1 + interest) * account_bid_price
         self.__is_reinvesting_profits = is_reinvesting_profits
+        self.__successful_trades = 0
         self.__successful_cycles = 0
         self.__market_timestamp = 0
         self._market_bid_price = 0
@@ -23,6 +24,13 @@ class TradeBotCache:
 
     def increment_successful_cycles(self):
         self.__successful_cycles += 1
+
+    @property
+    def successful_trades(self):
+        return self.__successful_trades
+
+    def increment_successful_trades(self):
+        self.__successful_trades += 1
 
     @property
     def interest(self):

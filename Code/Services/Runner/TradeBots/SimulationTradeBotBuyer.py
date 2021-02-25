@@ -13,6 +13,7 @@ class SimulationTradeBotBuyer(TradeBotBuyer):
         return True
 
     def trade_action_buy(self):
+        self._trade_bot_cache.increment_successful_trades()
         self._trade_bot_cache.accrued_fee = self._trade_bot_cache.buy_fee()
         self.print_and_log_successful_trades(self.is_buy(), self._trade_bot_cache.buy_fee())
         self._trade_bot_cache.sell_quantity = self._trade_bot_cache.buy_quantity

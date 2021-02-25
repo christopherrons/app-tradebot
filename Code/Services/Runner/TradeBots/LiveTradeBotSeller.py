@@ -20,6 +20,7 @@ class LiveTradeBotSeller(TradeBotSeller):
             time.sleep(10)
 
         if self.is_order_successful(sell_order_id):
+            self._trade_bot_cache.increment_successful_trades()
             self._trade_bot_cache.increment_successful_cycles()
             fee = self.__exchange_api.get_transaction_fee()
             self._trade_bot_cache.accrued_fee = fee

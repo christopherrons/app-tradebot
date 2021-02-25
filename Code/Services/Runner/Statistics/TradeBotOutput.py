@@ -107,7 +107,7 @@ class TradeBotOutput:
         message = MIMEMultipart()
         message['From'] = email_source
         message['To'] = email_target
-        message['Subject'] = f"Trade Number {self.__trade_bot_cache.successful_cycles + 1}"
+        message['Subject'] = f"Trade Number {self.__trade_bot_cache.successful_trades}"
         message.attach(MIMEText(f'Review logs', 'plain'))
 
         trade_log = open(self.__successful_trade_log, "rb")
