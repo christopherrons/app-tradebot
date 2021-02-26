@@ -52,7 +52,7 @@ class TradeBotUtils:
         return config.get('User', 'emailTarget')
 
     @staticmethod
-    def get_api_secret():
+    def get_bitstamp_api_secret():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')
 
@@ -61,7 +61,7 @@ class TradeBotUtils:
         return config.get('Bitstamp', 'apiSecret')
 
     @staticmethod
-    def get_api_key():
+    def get_bitstamp_api_key():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')
 
@@ -70,7 +70,7 @@ class TradeBotUtils:
         return config.get('Bitstamp', 'apiKey')
 
     @staticmethod
-    def get_customer_ID():
+    def get_bitstamp_customer_ID():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')
 

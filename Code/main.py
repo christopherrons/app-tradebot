@@ -64,9 +64,9 @@ def main(argv):
         if args.exchange == 'Bitstamp':
             print("Exchange Bitstamp is being used\n")
             exchange_websocket = BitstampWebsocket()
-            exchange_api = BitstampAPIAction(TradeBotUtils.get_customer_ID(),
-                                             TradeBotUtils.get_api_key(),
-                                             TradeBotUtils.get_api_secret())
+            exchange_api = BitstampAPIAction(TradeBotUtils.get_bitstamp_customer_ID(),
+                                             TradeBotUtils.get_bitstamp_api_key(),
+                                             TradeBotUtils.get_bitstamp_api_secret())
         else:
             print("Exchange Kraken is being used\n")
             exchange_websocket = KrakenWebsocket()
