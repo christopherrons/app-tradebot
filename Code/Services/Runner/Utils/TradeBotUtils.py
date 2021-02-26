@@ -109,10 +109,6 @@ class TradeBotUtils:
         if args.run_time_minutes > 1000000:
             raise ValueError(f'Print Interval {args.run_time_minutes} is to high. Maximum value is 1000000')
 
-        markets = ["xrpusd"]
-        if args.market not in markets:
-            raise ValueError(f'Market {args.market} is incorrect. Choose from {markets}')
-
     @staticmethod
     def set_initial_trade_price(bitstamp_api):
         account_bid_price = float('inf')

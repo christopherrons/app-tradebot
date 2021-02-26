@@ -1,18 +1,17 @@
 import ast
 import asyncio
 import json
-
 import websockets
 
 
 class BitstampWebsocket:
 
-    def __init__(self, market):
+    def __init__(self):
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
             "data": {
-                "channel": f"order_book_{market}"
+                "channel": "order_book_xrpusd"
             }
         }
         self.current_order_id = None

@@ -26,6 +26,7 @@ from Services.Runner.CacheStorage.LiveCache import LiveCache
 from Services.Runner.CacheStorage.SimulationCache import SimulationCache
 from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
 from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
+from Services.Runner.Exchange.KrakenWebsocket import KrakenWebsocket
 from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
 from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
 from Services.Runner.TradeBots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
@@ -38,12 +39,11 @@ def main(argv):
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of money to invest[$]', type=int)
-    arg_parser.add_argument('--exchange', default="Bitstamp", help='Specify the trading exchange', type=str)
+    arg_parser.add_argument('--exchange', default="Kraken", help='Type Bitstamp to use their API and WEbsocket', type=str)
     arg_parser.add_argument('--is_buy', help='Specify if buy or sell', default=True, action='store_false')
     arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000,
                             help='Specify the number of minutes the bot runs [min]', type=int)
-    arg_parser.add_argument('--market', default="xrpusd", help='Specify the trading market ', type=str)
     arg_parser.add_argument('--is_reinvesting_profits', help='Flag if the profits are reinvested',
                             default=True, action='store_false')
     arg_parser.add_argument('--is_not_simulation',
@@ -61,11 +61,15 @@ def main(argv):
         TradeBotUtils.validate_args(args)
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
-        # TODO: Add option to switch to kraken
-        exchange_websocket = BitstampWebsocket(args.market)
-        exchange_api = BitstampAPIAction(TradeBotUtils.get_customer_ID(),
-                                         TradeBotUtils.get_api_key(),
-                                         TradeBotUtils.get_api_secret())
+        if args.exchange == 'Bitstamp':
+            print("Exchange Bitstamp is being used\n")
+            exchange_websocket = BitstampWebsocket()
+            exchange_api = BitstampAPIAction(TradeBotUtils.get_customer_ID(),
+                                             TradeBotUtils.get_api_key(),
+                                             TradeBotUtils.get_api_secret())
+        else:
+            print("Exchange Kraken is being used\n")
+            exchange_websocket = KrakenWebsocket()
 
         account_bid_price = TradeBotUtils.set_initial_trade_price(exchange_websocket)
 

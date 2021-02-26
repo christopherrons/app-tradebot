@@ -1,2 +1,5 @@
 websockets==8.1
 tabulate==0.8.7
+
+requests~=2.25.1
+websocket~=0.2.1
