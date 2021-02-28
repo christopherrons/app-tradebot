@@ -7,7 +7,14 @@ def main():
                                      TradeBotUtils.get_bitstamp_api_key(),
                                      TradeBotUtils.get_bitstamp_api_secret())
 
-    print(exchange_api.get_account_quantity())
+    accrued_fee = 0
+    for i, transaction in enumerate(exchange_api.get_transactions()):
+        accrued_fee += float(transaction['fee'])
+        print(transaction)
+
+    print("")
+    print(accrued_fee)
+
 
 
 # print(exchange_api.get_open_orders())

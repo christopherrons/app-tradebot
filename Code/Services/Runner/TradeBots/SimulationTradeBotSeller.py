@@ -15,13 +15,15 @@ class SimulationTradeBotSeller(TradeBotSeller):
     def trade_action_sell(self):
         self._trade_bot_cache.increment_successful_trades()
         self._trade_bot_cache.increment_successful_cycles()
-        fee = self._trade_bot_cache.position_value * self._trade_bot_cache.exchange_fee
+        fee = self._trade_bot_cache.gross_position_value * self._trade_bot_cache.exchange_fee
         self._trade_bot_cache.accrued_fee = fee
         self._trade_bot_output.print_and_log_successful_trades(self.is_buy(), fee)
         self.update_bid_price()
-        self.update_values(fee)
+        self.update_values()
         self.send_email()
 
-    def update_values(self, fee):
-        self._trade_bot_cache.cash_value = self._trade_bot_cache.position_value - fee
-        self._trade_bot_cache.position_value = 0
+    def update_values(self):
+        self._trade_bot_cache.cash_value = self._trade_bot_cache.net_position_value
+        self._trade_bot_cache.gross_position_value = 0
+        self._trade_bot_cache.net_position_value = 0
+

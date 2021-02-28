@@ -115,3 +115,10 @@ class APITransactionFee(APIAuthMixin):
 
     def _process_response(self, response):
         return response['transactions'][0]['fee']
+
+
+class APIUserTransactions(APIAuthMixin):
+    url = 'v2/user_transactions/'
+
+    def _process_response(self, response):
+        return response

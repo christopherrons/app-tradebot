@@ -6,7 +6,8 @@ class TradeBotCache:
                  account_bid_price,
                  account_ask_price,
                  sell_quantity,
-                 exchange_fee):
+                 exchange_fee,
+                 accrued_fees):
         self.__initial_value = initial_value
         self.__cash_value = cash_value
         self.__interest = interest
@@ -14,14 +15,15 @@ class TradeBotCache:
         self.__account_ask_price = account_ask_price
         self.__sell_quantity = sell_quantity
         self.__exchange_fee = exchange_fee
-        self.__position_value = 0
+        self.__accrued_fee = accrued_fees
+        self.__gross_position_value = 0
+        self.__net_position_value = 0
         self.__buy_quantity = 0
         self.__successful_trades = 0
         self.__successful_cycles = 0
         self.__market_timestamp = 0
-        self._market_bid_price = 0
-        self._market_ask_price = 0
-        self.__accrued_fee = 0
+        self.__market_bid_price = 0
+        self.__market_ask_price = 0
 
     @property
     def initial_value(self):
@@ -36,12 +38,20 @@ class TradeBotCache:
         self.__cash_value = cash_value
 
     @property
-    def position_value(self):
-        return self._market_bid_price * self.__sell_quantity
+    def gross_position_value(self):
+        return self.__market_bid_price * self.__sell_quantity
 
-    @position_value.setter
-    def position_value(self, position_value):
-        self.__position_value = position_value
+    @gross_position_value.setter
+    def gross_position_value(self, gross_position_value):
+        self.__gross_position_value = gross_position_value
+
+    @property
+    def net_position_value(self):
+        return self.gross_position_value * (1 - self.__exchange_fee)
+
+    @net_position_value.setter
+    def net_position_value(self, net_position_value):
+        self.__net_position_value = net_position_value
 
     @property
     def buy_quantity(self):
@@ -79,19 +89,19 @@ class TradeBotCache:
 
     @property
     def market_bid_price(self):
-        return self._market_bid_price
+        return self.__market_bid_price
 
     @market_bid_price.setter
     def market_bid_price(self, market_bid_price):
-        self._market_bid_price = market_bid_price
+        self.__market_bid_price = market_bid_price
 
     @property
     def market_ask_price(self):
-        return self._market_ask_price
+        return self.__market_ask_price
 
     @market_ask_price.setter
     def market_ask_price(self, market_ask_price):
-        self._market_ask_price = market_ask_price
+        self.__market_ask_price = market_ask_price
 
     @property
     def market_timestamp(self):

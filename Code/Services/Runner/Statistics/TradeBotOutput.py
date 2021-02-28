@@ -29,11 +29,11 @@ class TradeBotOutput:
             market_trade = "Market Ask Price [$]"
             market_trade_price = self.__trade_bot_cache.market_ask_price
 
-            current_value_description = "Current Gross Value (Cash)"
+            current_value_description = "Current Value (Cash)"
             current_value = self.__trade_bot_cache.cash_value
 
             net_profit = "Cash Profit [$]"
-            net_profit_value = self.__calculator.gross_cash_profit()
+            net_profit_value = self.__calculator.cash_profit()
 
             percent_profit = "Cash Profit [%]"
             percent_profit_value = self.__calculator.percent_cash_profit()
@@ -45,11 +45,11 @@ class TradeBotOutput:
             market_trade = "Market Bid Price [$]"
             market_trade_price = self.__trade_bot_cache.market_bid_price
 
-            current_value_description = "Current Gross Value (Position)"
-            current_value = self.__trade_bot_cache.position_value
+            current_value_description = "Current Net Value (Position)"
+            current_value = self.__trade_bot_cache.net_position_value
 
             net_profit = "Position Profit [$]"
-            net_profit_value = self.__calculator.gross_position_profit()
+            net_profit_value = self.__calculator.net_position_profit()
 
             percent_profit = "Position Profit [%]"
             percent_profit_value = self.__calculator.percent_position_profit()
@@ -76,7 +76,7 @@ class TradeBotOutput:
             quantity = self.__trade_bot_cache.buy_quantity
             price = self.__trade_bot_cache.market_ask_price
         else:
-            value = self.__trade_bot_cache.position_value
+            value = self.__trade_bot_cache.gross_position_value
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
 

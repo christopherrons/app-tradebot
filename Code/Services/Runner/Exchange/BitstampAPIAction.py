@@ -1,5 +1,5 @@
 from Services.Runner.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
 
 
 class BitstampAPIAction:
@@ -33,3 +33,11 @@ class BitstampAPIAction:
 
     def get_transaction_fee(self, order_id):
         return float(APITransactionFee(self.customer_id, self.api_key, self.api_secret).call(id=order_id))
+
+    def get_transactions(self):
+        return APIUserTransactions(self.customer_id, self.api_key, self.api_secret).call(limit=1000)
+
+    def get_accrued_account_fees(self):
+        accrued_fee = 0
+        for transaction in (self.get_transactions()):
+            accrued_fee += float(transaction['fee'])
