@@ -39,5 +39,12 @@ class BitstampAPIAction:
 
     def get_accrued_account_fees(self):
         accrued_fee = 0
-        for transaction in (self.get_transactions()):
+        for transaction in self.get_transactions():
             accrued_fee += float(transaction['fee'])
+        return accrued_fee
+
+    def is_order_successful(self, order_id):
+        return self.get_order_status(order_id) != "Canceled"
+
+    def is_order_open(self, order_id):
+        return self.get_order_status(order_id) == "Open"

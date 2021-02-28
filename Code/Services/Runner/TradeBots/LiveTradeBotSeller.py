@@ -41,7 +41,7 @@ class LiveTradeBotSeller(TradeBotSeller):
         self._trade_bot_cache.cash_value = self.__exchange_api.get_account_cash_value()
 
     def is_order_successful(self, order_id):
-        return self.__exchange_api.get_order_status(order_id) != "Canceled"
+        return self.__exchange_api.is_order_successful(order_id)
 
     def is_order_status_open(self, order_id):
-        return self.__exchange_api.get_order_status(order_id) == "Open"
+        return self.__exchange_api.is_order_status_open(order_id)
