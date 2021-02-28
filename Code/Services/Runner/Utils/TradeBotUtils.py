@@ -93,12 +93,12 @@ class TradeBotUtils:
                 print("Contracted signed! Live run accepted!\n")
 
     @staticmethod
-    def validate_args(args):
+    def validate_args(args, minimum_interest):
         if args.initial_value < 1:
             raise ValueError(f'Initial Value {args.initial_value} is to low. Minimum value is 1')
 
-        if args.interest < 0.0100755031:
-            raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.0100755031')
+        if args.interest < minimum_interest :
+            raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.{minimum_interest}')
 
         if args.print_interval < 0:
             raise ValueError(f'Print Interval {args.print_interval} is to low. Minimum value is 0')
@@ -110,22 +110,36 @@ class TradeBotUtils:
             raise ValueError(f'Print Interval {args.run_time_minutes} is to high. Maximum value is 1000000')
 
     @staticmethod
-    def set_initial_trade_price(bitstamp_api):
-        account_bid_price = float('inf')
-        is_invalid_account_bid_price = bitstamp_api.get_market_ask_price() - account_bid_price < 0
-        while is_invalid_account_bid_price:
+    def set_initial_trade_price(bitstamp_api, is_sell):
+        is_invalid_account_trade_price = True
+        while is_invalid_account_trade_price:
             market_bid_price = bitstamp_api.get_market_bid_price()
             market_ask_price = bitstamp_api.get_market_ask_price()
             print(f'Market bid: {market_bid_price} \nMarket ask: {market_ask_price}\n')
-            account_bid_price = float(input('Set start account bid price: '))
-            bid_percent_diff = abs(1 - (market_bid_price / account_bid_price))
-            is_invalid_account_bid_price = market_ask_price - account_bid_price < 0 or bid_percent_diff > 0.08
-            if is_invalid_account_bid_price:
-                print(
-                    "ERROR: Account bid price has to be smaller than market ask price and max 3% diff from market price.")
-            print("")
 
-        print(
-            f"Account Bid Price: {account_bid_price} [$]. \nNet Diff Market Ask: {bitstamp_api.get_market_ask_price() - account_bid_price} [$]."
-            f"\nPercent Diff Market Ask {100 * ((bitstamp_api.get_market_ask_price() / account_bid_price) - 1)} [%].\n")
-        return account_bid_price
+            if is_sell:
+                account_trade_price = float(input('Set start account ASK price: '))
+                is_invalid_account_trade_price = TradeBotUtils.is_invalid_account_ask_price(market_bid_price,
+                                                                                            account_trade_price)
+                if is_invalid_account_trade_price:
+                    print("ERROR: Account ask price has to be larger than market bid price.\n")
+                else:
+                    print(f"Account Ask Price: {account_trade_price} [$].\n")
+            else:
+                account_trade_price = float(input('Set start account BID price: '))
+                is_invalid_account_trade_price = TradeBotUtils.is_invalid_account_bid_price(market_ask_price,
+                                                                                            account_trade_price)
+                if is_invalid_account_trade_price:
+                    print("ERROR: Account bid price has to be smaller than market ask price.\n")
+                else:
+                    print(f"Account Bid Price: {account_trade_price} [$].\n")
+
+        return account_trade_price
+
+    @staticmethod
+    def is_invalid_account_bid_price(market_ask_price, account_bid_price):
+        return market_ask_price - account_bid_price < 0
+
+    @staticmethod
+    def is_invalid_account_ask_price(market_bid_price, account_ask_price):
+        return market_bid_price - account_ask_price > 0

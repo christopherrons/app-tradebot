@@ -10,12 +10,12 @@ class BitstampAPIAction:
         self.api_secret = bytes(api_secret, 'utf-8')
 
     def sell_action(self, price, quantity):
-        return APISellLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=price,
+        return APISellLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=round(price, 5),
                                                                                        amount=quantity,
                                                                                        fok_order=True)
 
     def buy_action(self, price, quantity):
-        return APIBuyLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=price,
+        return APIBuyLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=round(price, 5),
                                                                                       amount=round(quantity, 8),
                                                                                       fok_order=True)
 

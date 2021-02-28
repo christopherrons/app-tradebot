@@ -6,7 +6,7 @@ from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 class TradeRunner:
 
     def __init__(self,
-                 is_buy,
+                 is_sell,
                  trade_bot_buyer,
                  trade_bot_seller,
                  run_time_minutes,
@@ -15,10 +15,10 @@ class TradeRunner:
         self.__trade_bot_buyer = trade_bot_buyer
         self.__trade_bot_seller = trade_bot_seller
 
-        if is_buy:
-            self.__trade_bot = trade_bot_buyer
-        else:
+        if is_sell:
             self.__trade_bot = trade_bot_seller
+        else:
+            self.__trade_bot = trade_bot_buyer
 
         self.__run_time_minutes = run_time_minutes
         self.__print_interval = print_interval

@@ -22,5 +22,5 @@ class TradeBotBuyer(TradeBotKing):
         return True
 
     def update_ask_price(self):
-        self._trade_bot_cache._account_ask_price = self._trade_bot_cache.market_bid_price * (
+        self._trade_bot_cache.account_ask_price = self._trade_bot_cache.market_ask_price * (
                 1 + self._trade_bot_cache.interest)
