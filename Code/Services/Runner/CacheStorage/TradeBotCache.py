@@ -7,7 +7,9 @@ class TradeBotCache:
                  account_ask_price,
                  sell_quantity,
                  exchange_fee,
-                 accrued_fees):
+                 accrued_fees,
+                 success_ful_trades,
+                 successful_cycles):
         self.__initial_value = initial_value
         self.__cash_value = cash_value
         self.__interest = interest
@@ -16,11 +18,11 @@ class TradeBotCache:
         self.__sell_quantity = sell_quantity
         self.__exchange_fee = exchange_fee
         self.__accrued_fee = accrued_fees
+        self.__successful_trades = success_ful_trades
+        self.__successful_cycles = successful_cycles
         self.__gross_position_value = 0
         self.__net_position_value = 0
         self.__buy_quantity = 0
-        self.__successful_trades = 0
-        self.__successful_cycles = 0
         self.__market_timestamp = 0
         self.__market_bid_price = 0
         self.__market_ask_price = 0

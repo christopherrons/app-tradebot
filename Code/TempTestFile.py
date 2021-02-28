@@ -8,7 +8,7 @@ def main():
                                      TradeBotUtils.get_bitstamp_api_secret())
 
 
-    print(exchange_api.get_accrued_account_fees())
+    print(exchange_api.get_successful_cycles())
 
 
 

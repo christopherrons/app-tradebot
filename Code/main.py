@@ -94,7 +94,9 @@ def main(argv):
                                   account_ask_price=account_ask_price,
                                   sell_quantity=exchange_api.get_account_quantity(),
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=exchange_api.get_accrued_account_fees())
+                                  accrued_fees=exchange_api.get_accrued_account_fees(),
+                                  success_ful_trades=exchange_api.get_successful_trades(),
+                                  successful_cycles=exchange_api.get_successful_cycles())
 
             trade_bot_runner = TradeRunner(
                 is_sell=args.is_sell,
@@ -111,7 +113,9 @@ def main(argv):
                                   sell_quantity=args.initial_value / ((1 - exchange_fee) * (account_ask_price / (
                                           1 + args.interest))) if not account_ask_price == 0 else 0,
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=0)
+                                  accrued_fees=0,
+                                  success_ful_trades=0,
+                                  successful_cycles=0)
 
             trade_bot_runner = TradeRunner(
                 is_sell=args.is_sell,
