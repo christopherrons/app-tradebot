@@ -1,6 +1,5 @@
 import asyncio
 import json
-
 import websockets
 
 
@@ -19,66 +18,71 @@ class KrakenWebsocket:
         self.__quantity_index = 1
         self.__best_price_index = 0
 
+        self.__websocket = None
+        self.loop = asyncio.get_event_loop()
+        self.loop.run_until_complete(self.__async__connect())
+
+    async def __async__connect(self):
+        print("Attempting connection to {}".format(self.__uri))
+        self.__websocket = await websockets.connect(self.__uri)
+        print("Connected\n")
+
     def get_market_ask_price_and_quantity(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price_and_quantity())
 
     async def async_get_market_ask_price_and_quantity(self):
-        async with websockets.connect(self.__uri) as websocket:
-            await websocket.send(json.dumps(self.__subscription))
+        await self.__websocket.send(json.dumps(self.__subscription))
 
-            while True:
-                data = json.loads(await websocket.recv())
-                if isinstance(data, list) and isinstance(data[1], dict) and 'as' in data[1].keys():
-                    break
+        while True:
+            data = json.loads(await self.__websocket.recv())
+            if isinstance(data, list) and isinstance(data[1], dict) and 'as' in data[1].keys():
+                break
 
-            market_bid_price = float(
-                data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
-            market_bid_quantity = float(
-                data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__quantity_index])
-            return market_bid_price, market_bid_quantity
+        market_bid_price = float(
+            data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
+        market_bid_quantity = float(
+            data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__quantity_index])
+        return market_bid_price, market_bid_quantity
 
     def get_market_bid_price_and_quantity(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price_and_quantity())
 
     async def async_get_market_bid_price_and_quantity(self):
-        async with websockets.connect(self.__uri) as websocket:
-            await websocket.send(json.dumps(self.__subscription))
+        await self.__websocket.send(json.dumps(self.__subscription))
 
-            while True:
-                data = json.loads(await websocket.recv())
-                if isinstance(data, list) and isinstance(data[1], dict) and 'bs' in data[1].keys():
-                    break
+        while True:
+            data = json.loads(await self.__websocket.recv())
+            if isinstance(data, list) and isinstance(data[1], dict) and 'bs' in data[1].keys():
+                break
 
-            market_bid_price = float(
-                data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
-            market_bid_quantity = float(
-                data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__quantity_index])
-            return market_bid_price, market_bid_quantity
+        market_bid_price = float(
+            data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
+        market_bid_quantity = float(
+            data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__quantity_index])
+        return market_bid_price, market_bid_quantity
 
     def get_market_ask_price(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price())
 
     async def async_get_market_ask_price(self):
-        async with websockets.connect(self.__uri) as websocket:
-            await websocket.send(json.dumps(self.__subscription))
+        await self.__websocket.send(json.dumps(self.__subscription))
 
-            while True:
-                data = json.loads(await websocket.recv())
-                if isinstance(data, list) and isinstance(data[1], dict) and 'as' in data[1].keys():
-                    break
+        while True:
+            data = json.loads(await self.__websocket.recv())
+            if isinstance(data, list) and isinstance(data[1], dict) and 'as' in data[1].keys():
+                break
 
-            return float(data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
+        return float(data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
 
     def get_market_bid_price(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price())
 
     async def async_get_market_bid_price(self):
-        async with websockets.connect(self.__uri) as websocket:
-            await websocket.send(json.dumps(self.__subscription))
+        await self.__websocket.send(json.dumps(self.__subscription))
 
-            while True:
-                data = json.loads(await websocket.recv())
-                if isinstance(data, list) and isinstance(data[1], dict) and 'bs' in data[1].keys():
-                    break
+        while True:
+            data = json.loads(await self.__websocket.recv())
+            if isinstance(data, list) and isinstance(data[1], dict) and 'bs' in data[1].keys():
+                break
 
-            return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
+        return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])

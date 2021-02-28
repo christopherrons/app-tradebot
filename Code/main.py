@@ -11,6 +11,8 @@
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 # TODO: Transaction fee is not working properly eventhough the fee is available when i checke with the api. Maybe it didnt have time to register the transaction before the transaction_fee call
 # TODO: Find smart way to set initial value other than memorizing
+# TODO: Return quantity and price or only price from websocket?
+# TODO: If possible trigger evant based on websocket rather than other way around
 
 # Nice to
 # TODO: Optimize with threading
