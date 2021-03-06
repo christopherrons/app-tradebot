@@ -141,10 +141,10 @@ def main(argv):
         print(error_message)
     except KeyboardInterrupt:
         print("Keyboard Interrupted")
-    except Exception:
+    except Exception as e:
         print("\n--- ERROR ---")
-        error = traceback.print_exc()
-        TradeBotUtils.send_error_has_occurred_email(args.exchange, error)
+        traceback.print_exc()
+        TradeBotUtils.send_error_has_occurred_email(args.exchange, e)
 
 
 if __name__ == '__main__':
