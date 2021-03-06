@@ -11,8 +11,9 @@
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 # TODO: Transaction fee is not working properly eventhough the fee is available when i checke with the api. Maybe it didnt have time to register the transaction before the transaction_fee call
 # TODO: Find smart way to set initial value other than memorizing
-# TODO: Return quantity and price or only price from websocket?
 # TODO: If possible trigger evant based on websocket rather than other way around
+# TODO: Split Tradebot output into classes utils?
+# TODO: Trade in EUR or USD? Check which market is the most liquid
 
 # Nice to
 # TODO: Optimize with threading
@@ -28,6 +29,7 @@ from Application.Runner.TradeRunner import TradeRunner
 from Services.Runner.CacheStorage.TradeBotCache import TradeBotCache
 from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
 from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
+from Services.Runner.Exchange.KrakenAPIAction import KrakenAPIAction
 from Services.Runner.Exchange.KrakenWebsocket import KrakenWebsocket
 from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
 from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
@@ -74,6 +76,8 @@ def main(argv):
         else:
             print("Exchange Kraken is being used\n")
             exchange_websocket = KrakenWebsocket()
+            exchange_api = KrakenAPIAction(TradeBotUtils.get_kraken_api_key(),
+                                           TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026
             minimum_interest = 0.0052203505
 
@@ -134,7 +138,7 @@ def main(argv):
     except KeyboardInterrupt:
         print("Keyboard Interrupted")
     except Exception:
-        print("--- ERROR ---")
+        print("\n--- ERROR ---")
         error = traceback.print_exc()
         TradeBotUtils.send_error_has_occurred_email(error)
 

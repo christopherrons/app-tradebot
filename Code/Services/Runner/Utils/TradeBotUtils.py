@@ -55,6 +55,24 @@ class TradeBotUtils:
         return config.get('User', 'emailTarget')
 
     @staticmethod
+    def get_kraken_api_secret():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('Kraken', 'apiSecret')
+
+    @staticmethod
+    def get_kraken_api_key():
+        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
+            raise ValueError('No configuration file exists. Expected file: ~/.script-config')
+
+        config = ConfigParser()
+        config.read(os.path.expanduser('~') + '/.script-config')
+        return config.get('Kraken', 'apiKey')
+
+    @staticmethod
     def get_bitstamp_api_secret():
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')

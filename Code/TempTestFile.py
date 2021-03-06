@@ -1,17 +1,14 @@
-from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
+from Services.Runner.Exchange.KrakenAPIAction import KrakenAPIAction
 from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 
 
 def main():
-    exchange_api = BitstampAPIAction(TradeBotUtils.get_bitstamp_customer_ID(),
-                                     TradeBotUtils.get_bitstamp_api_key(),
-                                     TradeBotUtils.get_bitstamp_api_secret())
+    exchange_api = KrakenAPIAction(TradeBotUtils.get_kraken_api_key(),
+                                   TradeBotUtils.get_kraken_api_secret())
 
-    print(exchange_api.get_successful_cycles())
+    # TODO: How is order id returned
+    # TODO: Check hwo to get the fee after trade
 
-
-# print(exchange_api.get_open_orders())
-# print(exchange_api.get_transaction_fee())
 
 if __name__ == '__main__':
     main()

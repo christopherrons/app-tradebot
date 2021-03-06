@@ -1,10 +1,13 @@
+import base64
 import hashlib
 import hmac
 import time
+import urllib
+from urllib import parse
 
 import requests
 
-_API_URL = 'https://api.kraken.com/0/'
+_API_URL = 'https://api.kraken.com'
 
 
 class APIError(Exception):
@@ -21,16 +24,16 @@ class APIMixin(object):
         """
         return
 
-    def call(self, **params):
+    def call(self, headers, data):
         # Form request
         url = _API_URL + self.url
+        print(url)
         if self.method == 'get':
-            response = requests.get(url, params=params).json()
+            response = requests.get(url, headers=headers, data=data).json()
         else:
-            response = requests.post(url, data=params).json()
-
-        if isinstance(response, dict) and 'status' in response and response['status'] == 'error':
-            raise APIError(response['reason'])
+            response = requests.post(url, headers=headers, data=data).json()
+        if isinstance(response, dict) and 'error' in response and response['error'] != []:
+            raise APIError(response['error'])
         new_response = self._process_response(response)
         if new_response is not None:
             response = new_response
@@ -45,75 +48,78 @@ class APIAuthMixin(APIMixin):
         self.api_secret = api_secret
 
     def get_nonce(self):
-        return bytes(str(int(time.time() * 1e6)), 'utf-8')
+        return int(time.time() * 1e6)
 
     def call(self, **params):
-        nonce = self.get_nonce()
-        message = nonce + self.api_key
-        signature = hmac.new(
-            self.api_secret,
-            msg=message,
-            digestmod=hashlib.sha256).hexdigest().upper()
-        params.update({
-            'key': self.api_key, 'signature': signature, 'nonce': nonce
-        })
-        return super(APIAuthMixin, self).call(**params)
+        params.update({'nonce': self.get_nonce()})
+        data = params
+        post_data = urllib.parse.urlencode(data)
+
+        # Unicode-objects must be encoded before hashing
+        encoded = (str(data['nonce']) + post_data).encode()
+        message = self.url.encode() + hashlib.sha256(encoded).digest()
+
+        signature = hmac.new(base64.b64decode(self.api_secret),
+                             message, hashlib.sha512)
+        signature_digest = base64.b64encode(signature.digest())
+        headers = {
+            'API-Key': self.api_key,
+            'API-Sign': signature_digest.decode()
+        }
+        return super(APIAuthMixin, self).call(headers, data)
 
 
-# TODO CHeck urls
 class APIOpenOrdersCall(APIAuthMixin):
-    url = 'private/OpenOrders'
+    url = '/0/private/OpenOrders'
 
 
 class APIBalanceCall(APIAuthMixin):
-    url = 'private/Balance'
+    url = '/0/private/Balance'
 
 
 class APIAccountCash(APIBalanceCall):
     def _process_response(self, response):
-        return response['usd_balance']
+        print(response)
+        return response['result']['ZUSD'] if 'ZUSD' in response['result'] else 0
 
 
 class APIAccountQuantity(APIBalanceCall):
     def _process_response(self, response):
-        return response['xrp_available']
+        return response['result']['XXRP'] if 'XXRP' in response['result'] else 0
+
 
 class APILimitOrder(APIAuthMixin):
-    url = 'private/AddOrder'
+    url = '/0/private/AddOrder'
 
 
 class APIBuyLimitOrder(APILimitOrder):
-
     def _process_response(self, response):
         print(response)
         return response['id']
 
 
 class APISellLimitOrder(APILimitOrder):
-
     def _process_response(self, response):
         print(response)
         return response['id']
 
 
 class APIOpenOrders(APIAuthMixin):
-    url = 'private/OpenOrders'
+    url = '/0/private/OpenOrders'
 
 
 class APIOrderStatus(APIOpenOrders):
-
     def _process_response(self, response):
-        return response['status']
+        return response['result']
 
 
 class APITransactionFee(APIOpenOrders):
-
     def _process_response(self, response):
         return response['transactions'][0]['fee']
 
 
 class APIUserTransactions(APIAuthMixin):
-    url = 'private/ClosedOrders'
+    url = '/0/private/ClosedOrders'
 
     def _process_response(self, response):
-        return response
+        return response['result']

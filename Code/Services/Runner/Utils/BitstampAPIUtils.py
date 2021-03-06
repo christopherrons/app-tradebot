@@ -61,7 +61,6 @@ class APIAuthMixin(APIMixin):
         return super(APIAuthMixin, self).call(**params)
 
 
-# TODO CHeck urls
 class APIOpenOrdersCall(APIAuthMixin):
     url = 'v2/open_orders/'
 
