@@ -61,5 +61,5 @@ class BitstampAPIAction:
     def is_order_successful(self, order_id):
         return self.get_order_status(order_id) != "Canceled"
 
-    def is_order_open(self, order_id):
+    def is_order_status_open(self, order_id):
         return self.get_order_status(order_id) == "Open"

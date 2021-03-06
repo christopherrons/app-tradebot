@@ -1,5 +1,6 @@
 import asyncio
 import json
+
 import websockets
 
 
@@ -27,10 +28,10 @@ class KrakenWebsocket:
         self.__websocket = await websockets.connect(self.__uri)
         print("Connected\n")
 
-    def get_market_ask_price_and_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price_and_quantity())
+    def get_market_ask_quantity(self):
+        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_quantity())
 
-    async def async_get_market_ask_price_and_quantity(self):
+    async def async_get_market_ask_quantity(self):
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -38,16 +39,14 @@ class KrakenWebsocket:
             if isinstance(data, list) and isinstance(data[1], dict) and 'as' in data[1].keys():
                 break
 
-        market_bid_price = float(
-            data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
         market_bid_quantity = float(
             data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__quantity_index])
-        return market_bid_price, market_bid_quantity
+        return market_bid_quantity
 
-    def get_market_bid_price_and_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price_and_quantity())
+    def get_market_bid_quantity(self):
+        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_quantity())
 
-    async def async_get_market_bid_price_and_quantity(self):
+    async def async_get_market_bid_quantity(self):
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -55,11 +54,9 @@ class KrakenWebsocket:
             if isinstance(data, list) and isinstance(data[1], dict) and 'bs' in data[1].keys():
                 break
 
-        market_bid_price = float(
-            data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
         market_bid_quantity = float(
             data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__quantity_index])
-        return market_bid_price, market_bid_quantity
+        return market_bid_quantity
 
     def get_market_ask_price(self):
         return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price())

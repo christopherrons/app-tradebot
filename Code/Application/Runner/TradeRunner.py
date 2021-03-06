@@ -30,7 +30,6 @@ class TradeRunner:
 
         delta_minutes = start_time
         while not TradeBotUtils.is_run_time_passed(datetime.now(), self.__run_stop_time):
-
             if (datetime.now() - delta_minutes).seconds >= (self.__print_interval * 60):
                 self.__trade_bot.print_and_log_current_formation(self.__trade_bot.is_buy())
                 delta_minutes = datetime.now()

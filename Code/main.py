@@ -21,6 +21,7 @@
 # TODO: Docker container
 
 import sys
+import traceback
 from argparse import ArgumentParser
 
 from Application.Runner.TradeRunner import TradeRunner
@@ -132,6 +133,10 @@ def main(argv):
         print(error_message)
     except KeyboardInterrupt:
         print("Keyboard Interrupted")
+    except Exception:
+        print("--- ERROR ---")
+        error = traceback.print_exc()
+        TradeBotUtils.send_error_has_occurred_email(error)
 
 
 if __name__ == '__main__':

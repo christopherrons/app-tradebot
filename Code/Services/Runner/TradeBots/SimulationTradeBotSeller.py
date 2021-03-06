@@ -26,4 +26,3 @@ class SimulationTradeBotSeller(TradeBotSeller):
         self._trade_bot_cache.cash_value = self._trade_bot_cache.net_position_value
         self._trade_bot_cache.gross_position_value = 0
         self._trade_bot_cache.net_position_value = 0
-
