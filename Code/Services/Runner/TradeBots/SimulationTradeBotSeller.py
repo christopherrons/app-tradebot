@@ -20,7 +20,7 @@ class SimulationTradeBotSeller(TradeBotSeller):
         self._trade_bot_output.print_and_log_successful_trades(self.is_buy(), fee)
         self.update_bid_price()
         self.update_values()
-        self.send_email()
+        #self.send_email()
 
     def update_values(self):
         self._trade_bot_cache.cash_value = self._trade_bot_cache.net_position_value
