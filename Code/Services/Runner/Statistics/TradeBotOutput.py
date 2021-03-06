@@ -75,7 +75,7 @@ class TradeBotOutput:
         output.insert(1, is_buy)
         self.log_data(headers, output, self.__current_formation_log_file)
 
-    def print_and_log_successful_trades(self, is_buy, fee):
+    def print_and_log_successful_trades(self, exchange_name, is_buy, fee):
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
@@ -85,11 +85,10 @@ class TradeBotOutput:
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
 
-        headers = ['Timestamp', 'Trade Number', 'Is Buy', 'Price [$]', 'Quantity', 'Gross Trade Value [$]',
-                   'Net Trade Value [$]',
-                   'Fee [$]']
-        output = [datetime.now(), self.__trade_bot_cache.successful_trades, is_buy, price, quantity, value, value - fee,
-                  fee]
+        headers = ['Timestamp', 'Exchange', 'Trade Number', 'Is Buy', 'Price [$]', 'Quantity',
+                   'Gross Trade Value [$]', 'Net Trade Value [$]', 'Fee [$]']
+        output = [datetime.now(), exchange_name, self.__trade_bot_cache.successful_trades, is_buy, price, quantity,
+                  value, value - fee, fee]
         self.print_data(headers, output)
         self.log_data(headers, output, self.__successful_trade_log)
 
@@ -106,7 +105,7 @@ class TradeBotOutput:
             else:
                 writer.writerow(output)
 
-    def send_email(self):
+    def send_email(self, exchange_name):
         email_source = TradeBotUtils.get_email_source()
         email_source_password = TradeBotUtils.get_email_source_password()
         email_target = TradeBotUtils.get_email_target()
@@ -114,7 +113,7 @@ class TradeBotOutput:
         message = MIMEMultipart()
         message['From'] = email_source
         message['To'] = email_target
-        message['Subject'] = f"Trade Number {self.__trade_bot_cache.successful_trades}"
+        message['Subject'] = f"{exchange_name}: Trade Number {self.__trade_bot_cache.successful_trades}"
         message.attach(MIMEText(f'Review logs', 'plain'))
 
         trade_log = open(self.__successful_trade_log, "rb")

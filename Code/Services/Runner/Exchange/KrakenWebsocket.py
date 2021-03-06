@@ -3,8 +3,10 @@ import json
 
 import websockets
 
+from Services.Runner.Exchange.ExchangeWebsocket import ExchangeWebsocket
 
-class KrakenWebsocket:
+
+class KrakenWebsocket(ExchangeWebsocket):
 
     def __init__(self):
         self.__uri = "wss://ws.kraken.com/"
@@ -83,4 +85,3 @@ class KrakenWebsocket:
                 break
 
         return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
-

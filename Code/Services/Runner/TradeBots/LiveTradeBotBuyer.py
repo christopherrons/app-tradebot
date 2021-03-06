@@ -24,10 +24,10 @@ class LiveTradeBotBuyer(TradeBotBuyer):
             self._trade_bot_cache.increment_successful_trades()
             fee = self.__exchange_api.get_transaction_fee(buy_action_id)
             self._trade_bot_cache.accrued_fee = fee
-            self.print_and_log_successful_trades(self.is_buy(), fee)
-            self.update_account_quantity_values()
+            self.print_and_log_successful_trades(self.__exchange_api.get_exchange_name(), self.is_buy(), fee)
+            self.update_account_values()
             self.update_ask_price()
-            self.send_email()
+            self.send_email(self.__exchange_api.get_exchange_name())
             return True
         else:
             print(f'\n--- {datetime.now()} - Order: {buy_action_id} was not successful! \n')
@@ -37,7 +37,7 @@ class LiveTradeBotBuyer(TradeBotBuyer):
         return self.__exchange_api.buy_action(self._trade_bot_cache.market_ask_price,
                                               self._trade_bot_cache.buy_quantity)
 
-    def update_account_quantity_values(self):
+    def update_account_values(self):
         self._trade_bot_cache.sell_quantity = self.__exchange_api.get_account_quantity()
         self._trade_bot_cache.cash_value = self.__exchange_api.get_account_cash_value()
 

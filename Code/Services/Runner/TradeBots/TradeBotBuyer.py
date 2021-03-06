@@ -1,10 +1,21 @@
+from abc import ABC, abstractmethod
+
 from Services.Runner.TradeBots.TradeBotKing import TradeBotKing
 
 
-class TradeBotBuyer(TradeBotKing):
+class TradeBotBuyer(TradeBotKing, ABC):
 
     def __init__(self, exchange_websocket, trade_bot_cache):
         super().__init__(exchange_websocket, trade_bot_cache)
+
+    @abstractmethod
+    def create_trade(self): pass
+
+    @abstractmethod
+    def trade_action_buy(self): pass
+
+    @abstractmethod
+    def update_account_values(self): pass
 
     def is_trade_able(self):
         market_ask_price = self.get_market_ask_price()

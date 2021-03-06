@@ -12,8 +12,10 @@
 # TODO: Transaction fee is not working properly eventhough the fee is available when i checke with the api. Maybe it didnt have time to register the transaction before the transaction_fee call
 # TODO: Find smart way to set initial value other than memorizing
 # TODO: If possible trigger evant based on websocket rather than other way around
-# TODO: Split Tradebot output into classes utils?
+# TODO: Split TradebotOutput into classes utils?
 # TODO: Trade in EUR or USD? Check which market is the most liquid
+# TODO: Add possibility to choose usd/eur as currency
+# TODO: Add a converter usd/eur and eur/usd to intivalize accrued fees
 
 # Nice to
 # TODO: Optimize with threading
@@ -27,9 +29,9 @@ from argparse import ArgumentParser
 
 from Application.Runner.TradeRunner import TradeRunner
 from Services.Runner.CacheStorage.TradeBotCache import TradeBotCache
-from Services.Runner.Exchange.BitstampAPIAction import BitstampAPIAction
+from Services.Runner.Exchange.BitstampApiImpl import BitstampApiImpl
 from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
-from Services.Runner.Exchange.KrakenAPIAction import KrakenAPIAction
+from Services.Runner.Exchange.KrakenApiImpl import KrakenApiImpl
 from Services.Runner.Exchange.KrakenWebsocket import KrakenWebsocket
 from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
 from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
@@ -68,16 +70,18 @@ def main(argv):
         if args.exchange == 'Bitstamp':
             print("Exchange Bitstamp is being used\n")
             exchange_websocket = BitstampWebsocket()
-            exchange_api = BitstampAPIAction(TradeBotUtils.get_bitstamp_customer_ID(),
-                                             TradeBotUtils.get_bitstamp_api_key(),
-                                             TradeBotUtils.get_bitstamp_api_secret())
+            exchange_api = BitstampApiImpl(exchange_websocket,
+                                           TradeBotUtils.get_bitstamp_customer_ID(),
+                                           TradeBotUtils.get_bitstamp_api_key(),
+                                           TradeBotUtils.get_bitstamp_api_secret())
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
         else:
             print("Exchange Kraken is being used\n")
             exchange_websocket = KrakenWebsocket()
-            exchange_api = KrakenAPIAction(TradeBotUtils.get_kraken_api_key(),
-                                           TradeBotUtils.get_kraken_api_secret())
+            exchange_api = KrakenApiImpl(exchange_websocket,
+                                         TradeBotUtils.get_kraken_api_key(),
+                                         TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026
             minimum_interest = 0.0052203505
 
@@ -140,7 +144,7 @@ def main(argv):
     except Exception:
         print("\n--- ERROR ---")
         error = traceback.print_exc()
-        TradeBotUtils.send_error_has_occurred_email(error)
+        TradeBotUtils.send_error_has_occurred_email(args.exchange, error)
 
 
 if __name__ == '__main__':

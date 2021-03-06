@@ -166,7 +166,7 @@ class TradeBotUtils:
         return market_bid_price - account_ask_price > 0
 
     @staticmethod
-    def send_error_has_occurred_email(error):
+    def send_error_has_occurred_email(exchange, error):
         email_source = TradeBotUtils.get_email_source()
         email_source_password = TradeBotUtils.get_email_source_password()
         email_target = TradeBotUtils.get_email_target()
@@ -174,7 +174,7 @@ class TradeBotUtils:
         message = MIMEMultipart()
         message['From'] = email_source
         message['To'] = email_target
-        message['Subject'] = f"Error has occurred"
+        message['Subject'] = f"exchange: Error has occurred"
         message.attach(MIMEText(f'{error}'))
 
         server = smtplib.SMTP('smtp.gmail.com', 587)

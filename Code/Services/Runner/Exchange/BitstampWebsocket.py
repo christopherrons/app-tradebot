@@ -4,8 +4,10 @@ import json
 
 import websockets
 
+from Services.Runner.Exchange.ExchangeWebsocket import ExchangeWebsocket
 
-class BitstampWebsocket:
+
+class BitstampWebsocket(ExchangeWebsocket):
 
     def __init__(self):
         self.__uri = "wss://ws.bitstamp.net/"

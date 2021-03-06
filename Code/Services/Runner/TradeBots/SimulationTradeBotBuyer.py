@@ -16,11 +16,11 @@ class SimulationTradeBotBuyer(TradeBotBuyer):
         self._trade_bot_cache.increment_successful_trades()
         fee = self._trade_bot_cache.cash_value * self._trade_bot_cache.exchange_fee
         self._trade_bot_cache.accrued_fee = fee
-        self.print_and_log_successful_trades(self.is_buy(), fee)
+        self.print_and_log_successful_trades('Simulation Exchange', self.is_buy(), fee)
         self._trade_bot_cache.sell_quantity = self._trade_bot_cache.buy_quantity
         self.update_ask_price()
-        self.update_value()
-        #self.send_email()
+        self.update_account_values()
+        self.send_email('Simulation Exchange')
 
-    def update_value(self):
+    def update_account_values(self):
         self._trade_bot_cache.cash_value = 0

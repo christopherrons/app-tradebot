@@ -10,8 +10,8 @@ class TradeBotKing:
     def print_and_log_current_formation(self, is_buy):
         self._trade_bot_output.print_and_log_current_formation(is_buy)
 
-    def print_and_log_successful_trades(self, is_buy, fee):
-        self._trade_bot_output.print_and_log_successful_trades(is_buy, fee)
+    def print_and_log_successful_trades(self, exchange_name, is_buy, fee):
+        self._trade_bot_output.print_and_log_successful_trades(exchange_name, is_buy, fee)
 
-    def send_email(self):
-        self._trade_bot_output.send_email()
+    def send_email(self, exchange_name):
+        self._trade_bot_output.send_email(exchange_name)

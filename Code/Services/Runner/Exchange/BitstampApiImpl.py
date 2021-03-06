@@ -1,10 +1,12 @@
-from Services.Runner.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
+from Services.Runner.Exchange.ExchangeApi import ExchangeApi
+from Services.Runner.Exchange.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
 
 
-class BitstampAPIAction:
+class BitstampApiImpl(ExchangeApi):
 
-    def __init__(self, customer_id, api_key, api_secret):
+    def __init__(self, exchange_websocket, customer_id, api_key, api_secret):
+        self.exchange_websocket = exchange_websocket
         self.customer_id = bytes(customer_id, 'utf-8')
         self.api_key = bytes(api_key, 'utf-8')
         self.api_secret = bytes(api_secret, 'utf-8')
@@ -63,3 +65,6 @@ class BitstampAPIAction:
 
     def is_order_status_open(self, order_id):
         return self.get_order_status(order_id) == "Open"
+
+    def get_exchange_name(self):
+        return "Bitstamp"

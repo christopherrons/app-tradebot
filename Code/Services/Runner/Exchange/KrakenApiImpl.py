@@ -1,10 +1,12 @@
-from Services.Runner.Utils.KrakenAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
+from Services.Runner.Exchange.ExchangeApi import ExchangeApi
+from Services.Runner.Exchange.Utils.KrakenAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
 
 
-class KrakenAPIAction:
+class KrakenApiImpl(ExchangeApi):
 
-    def __init__(self, api_key, api_secret):
+    def __init__(self, exchange_websocket, api_key, api_secret):
+        self.__exchange_websocket = exchange_websocket
         self.api_key = str(api_key)
         self.api_secret = str(api_secret)
 
@@ -55,13 +57,16 @@ class KrakenAPIAction:
                 successful_cycles += 1
         return successful_cycles
 
-    def get_successful_trade(self):
+    def get_successful_trades(self):
         return self.get_transactions()['count']
 
     def is_order_successful(self, order_id):
         order_status = self.get_order_status(order_id)
         return order_status != 'canceled' and order_status != 'expired'
 
-    def is_order_open(self, order_id):
+    def is_order_status_open(self, order_id):
         order_status = self.get_order_status(order_id)
         return order_status == 'open' or order_status == 'pending'
+
+    def get_exchange_name(self):
+        return "Kraken"
