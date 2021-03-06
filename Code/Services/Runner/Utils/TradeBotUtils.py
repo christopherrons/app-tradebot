@@ -1,6 +1,9 @@
 import argparse
 import os
+import smtplib
 from configparser import ConfigParser
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 
 class TradeBotUtils:
@@ -97,7 +100,7 @@ class TradeBotUtils:
         if args.initial_value < 1:
             raise ValueError(f'Initial Value {args.initial_value} is to low. Minimum value is 1')
 
-        if args.interest < minimum_interest :
+        if args.interest < minimum_interest:
             raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.{minimum_interest}')
 
         if args.print_interval < 0:
@@ -143,3 +146,23 @@ class TradeBotUtils:
     @staticmethod
     def is_invalid_account_ask_price(market_bid_price, account_ask_price):
         return market_bid_price - account_ask_price > 0
+
+    @staticmethod
+    def send_error_has_occurred_email(error):
+        email_source = TradeBotUtils.get_email_source()
+        email_source_password = TradeBotUtils.get_email_source_password()
+        email_target = TradeBotUtils.get_email_target()
+
+        message = MIMEMultipart()
+        message['From'] = email_source
+        message['To'] = email_target
+        message['Subject'] = f"Error has occurred"
+        message.attach(MIMEText(f'{error}'))
+
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+
+        server.login(email_source, email_source_password)
+        text = message.as_string()
+        server.sendmail(email_source, email_target, text)
+        server.quit()

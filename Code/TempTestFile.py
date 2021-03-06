@@ -7,9 +7,7 @@ def main():
                                      TradeBotUtils.get_bitstamp_api_key(),
                                      TradeBotUtils.get_bitstamp_api_secret())
 
-
     print(exchange_api.get_successful_cycles())
-
 
 
 # print(exchange_api.get_open_orders())

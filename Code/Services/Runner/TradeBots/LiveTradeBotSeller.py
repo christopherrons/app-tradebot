@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 from Services.Runner.TradeBots.TradeBotSeller import TradeBotSeller
 
@@ -30,6 +31,7 @@ class LiveTradeBotSeller(TradeBotSeller):
             self.send_email()
             return True
         else:
+            print(f'\n--- {datetime.now()} - Order: {sell_order_id} was not successful! \n')
             return False
 
     def trade_action_sell(self):

@@ -51,7 +51,7 @@ class BitstampAPIAction:
                     successful_cycles += 1
         return successful_cycles
 
-    def get_successful_trade(self):
+    def get_successful_trades(self):
         successful_trade = 0
         for transaction in self.get_transactions():
             if transaction['type'] == '2':
@@ -61,5 +61,5 @@ class BitstampAPIAction:
     def is_order_successful(self, order_id):
         return self.get_order_status(order_id) != "Canceled"
 
-    def is_order_open(self, order_id):
+    def is_order_status_open(self, order_id):
         return self.get_order_status(order_id) == "Open"

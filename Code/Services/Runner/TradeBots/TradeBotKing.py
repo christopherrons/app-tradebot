@@ -2,7 +2,8 @@ from Services.Runner.Statistics.TradeBotOutput import TradeBotOutput
 
 
 class TradeBotKing:
-    def __init__(self, trade_bot_cache):
+    def __init__(self, exchange_websocket, trade_bot_cache):
+        self._exchange_websocket = exchange_websocket
         self._trade_bot_cache = trade_bot_cache
         self._trade_bot_output = TradeBotOutput(self._trade_bot_cache)
 
