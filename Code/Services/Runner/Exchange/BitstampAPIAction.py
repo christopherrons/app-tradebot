@@ -51,7 +51,7 @@ class BitstampAPIAction:
                     successful_cycles += 1
         return successful_cycles
 
-    def get_successful_trade(self):
+    def get_successful_trades(self):
         successful_trade = 0
         for transaction in self.get_transactions():
             if transaction['type'] == '2':
