@@ -83,3 +83,4 @@ class KrakenWebsocket:
                 break
 
         return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
+

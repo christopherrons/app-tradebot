@@ -20,7 +20,7 @@ class SimulationTradeBotBuyer(TradeBotBuyer):
         self._trade_bot_cache.sell_quantity = self._trade_bot_cache.buy_quantity
         self.update_ask_price()
         self.update_value()
-        self.send_email()
+        #self.send_email()
 
     def update_value(self):
         self._trade_bot_cache.cash_value = 0
