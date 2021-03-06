@@ -174,7 +174,7 @@ class TradeBotUtils:
         message = MIMEMultipart()
         message['From'] = email_source
         message['To'] = email_target
-        message['Subject'] = f"exchange: Error has occurred"
+        message['Subject'] = f"{exchange}: Error has occurred"
         message.attach(MIMEText(f'{error}'))
 
         server = smtplib.SMTP('smtp.gmail.com', 587)
