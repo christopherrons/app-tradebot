@@ -153,3 +153,10 @@ class TradeBotUtils:
         text = message.as_string()
         server.sendmail(email_source, email_target, text)
         server.quit()
+
+    @staticmethod
+    def get_cash_currency_symbols():
+        return {
+            'USD': '$',
+            'EUR': '€'
+        }

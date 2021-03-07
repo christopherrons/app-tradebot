@@ -19,14 +19,11 @@ class TradeBotOutput:
         self.cash_currency = cash_currency
         self.crypto_currency = crypto_currency
         self.__trade_bot_cache = trade_bot_cache
+
         self.__current_formation_log_file = TradeBotUtils.get_information_log_path()
         self.__successful_trade_log = TradeBotUtils.get_trade_log_path()
         self.__calculator = AccountValueCalculator(trade_bot_cache)
-
-        self.currency_symbols = {
-            'USD': '$',
-            'EUR': '€'
-        }
+        self.currency_symbols = TradeBotUtils.get_cash_currency_symbols()
 
     def print_and_log_current_formation(self, is_buy):
         if is_buy:
