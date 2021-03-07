@@ -30,16 +30,16 @@ class TradeBotOutput:
 
     def print_and_log_current_formation(self, is_buy):
         if is_buy:
-            account_trade = f"Account Bid Price {self.currency_symbols[self.cash_currency]}"
+            account_trade = f"Account Bid Price [{self.currency_symbols[self.cash_currency]}]"
             account_trade_price = self.__trade_bot_cache.account_bid_price
 
-            market_trade = f"Market Ask Price {self.currency_symbols[self.cash_currency]}"
+            market_trade = f"Market Ask Price [{self.currency_symbols[self.cash_currency]}]"
             market_trade_price = self.__trade_bot_cache.market_ask_price
 
             current_value_description = "Cash Value"
             current_value = self.__trade_bot_cache.cash_value
 
-            net_profit = f"Cash Profit {self.currency_symbols[self.cash_currency]}"
+            net_profit = f"Cash Profit [{self.currency_symbols[self.cash_currency]}]"
             net_profit_value = self.__calculator.cash_profit()
 
             trade_quantity = f"Buy Quantity {self.crypto_currency.upper()}"
@@ -49,16 +49,16 @@ class TradeBotOutput:
             percent_profit_value = self.__calculator.percent_cash_profit()
 
         else:
-            account_trade = f"Account Ask Price {self.currency_symbols[self.cash_currency]}"
+            account_trade = f"Account Ask Price [{self.currency_symbols[self.cash_currency]}]"
             account_trade_price = self.__trade_bot_cache.account_ask_price
 
-            market_trade = f"Market Bid Price {self.currency_symbols[self.cash_currency]}"
+            market_trade = f"Market Bid Price [{self.currency_symbols[self.cash_currency]}]"
             market_trade_price = self.__trade_bot_cache.market_bid_price
 
-            current_value_description = f"Position Net Value {self.currency_symbols[self.cash_currency]}"
+            current_value_description = f"Position Net Value [{self.currency_symbols[self.cash_currency]}]"
             current_value = self.__trade_bot_cache.net_position_value
 
-            net_profit = f"Position Profit {self.currency_symbols[self.cash_currency]}"
+            net_profit = f"Position Profit [{self.currency_symbols[self.cash_currency]}]"
             net_profit_value = self.__calculator.net_position_profit()
 
             trade_quantity = f"Sell Quantity {self.crypto_currency.upper()}"
@@ -68,9 +68,9 @@ class TradeBotOutput:
             percent_profit_value = self.__calculator.percent_position_profit()
 
         headers = ['Timestamp', trade_quantity, account_trade, market_trade,
-                   'Initial Value {self.currency_symbols[self.cash_currency]}',
+                   f'Initial Value [{self.currency_symbols[self.cash_currency]}]',
                    current_value_description, percent_profit,
-                   f'Accrued Fees {self.currency_symbols[self.cash_currency]}', 'Nr Buy+Sell Cycles']
+                   f'Accrued Fees [{self.currency_symbols[self.cash_currency]}]', 'Nr Buy+Sell Cycles']
 
         output = [datetime.now(), trade_quantity_value, account_trade_price,
                   market_trade_price, self.__trade_bot_cache.initial_value, current_value,
@@ -95,10 +95,10 @@ class TradeBotOutput:
             price = self.__trade_bot_cache.market_bid_price
 
         headers = ['Timestamp', 'Exchange', 'Trade Number', 'Is Buy',
-                   f'Price {self.currency_symbols[self.cash_currency]}', 'Quantity {self.crypto_currency.upper()}',
-                   f'Gross Trade Value {self.currency_symbols[self.cash_currency]}',
-                   f'Net Trade Value {self.currency_symbols[self.cash_currency]}',
-                   f'Fee {self.currency_symbols[self.cash_currency]}']
+                   f'Price [{self.currency_symbols[self.cash_currency]}]', 'Quantity {self.crypto_currency.upper()}',
+                   f'Gross Trade Value [{self.currency_symbols[self.cash_currency]}]',
+                   f'Net Trade Value [{self.currency_symbols[self.cash_currency]}]',
+                   f'Fee [{self.currency_symbols[self.cash_currency]}]']
         output = [datetime.now(), exchange_name, self.__trade_bot_cache.successful_trades, is_buy, price, quantity,
                   value, value - fee, fee]
         self.print_data(headers, output)

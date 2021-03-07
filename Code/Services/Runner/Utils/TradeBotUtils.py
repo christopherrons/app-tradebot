@@ -114,7 +114,7 @@ class TradeBotUtils:
                 if is_invalid_account_trade_price:
                     print("ERROR: Account ask price has to be larger than market bid price.\n")
                 else:
-                    print(f"Account Ask Price: {account_trade_price} [$].\n")
+                    print(f"Account Ask Price: {account_trade_price}\n")
             else:
                 account_trade_price = float(input('Set start account BID price: '))
                 is_invalid_account_trade_price = TradeBotUtils.is_invalid_account_bid_price(market_ask_price,
@@ -122,7 +122,7 @@ class TradeBotUtils:
                 if is_invalid_account_trade_price:
                     print("ERROR: Account bid price has to be smaller than market ask price.\n")
                 else:
-                    print(f"Account Bid Price: {account_trade_price} [$].\n")
+                    print(f"Account Bid Price: {account_trade_price}\n")
 
         return account_trade_price
 

@@ -9,6 +9,8 @@ from Services.Runner.Exchange.ExchangeWebsocket import ExchangeWebsocket
 class KrakenWebsocket(ExchangeWebsocket):
 
     def __init__(self, cash_currency, crypto_currency):
+        self.cash_currency = cash_currency
+        self.crypto_currency = crypto_currency
         self.__uri = "wss://ws.kraken.com/"
         self.__subscription = {
             "event": "subscribe",
