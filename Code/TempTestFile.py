@@ -4,7 +4,7 @@ from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 
 
 def main():
-    exchange_api = KrakenApiImpl('USD',
+    exchange_api = KrakenApiImpl('EUR',
                                  'XRP',
                                  KrakenWebsocket('USD', 'XRP', ),
                                  TradeBotUtils.get_kraken_api_key(),

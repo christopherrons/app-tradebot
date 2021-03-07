@@ -46,12 +46,9 @@ def main(argv):
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]',
                             type=float)
-    arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'),
-                            type=str)
-    arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'),
-                            type=str)
-    arg_parser.add_argument('crypto_currency', choices=('XRP'),
-                            type=str)
+    arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose Exchange', type=str)
+    arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'), help='Choose Cash Currency', type=str)
+    arg_parser.add_argument('crypto_currency', choices=('XRP'), help='Choose CryptoCurrency', type=str)
     arg_parser.add_argument('--is_sell', help='Specify if buy or sell', default=False, action='store_true')
     arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000,

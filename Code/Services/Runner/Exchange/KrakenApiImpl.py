@@ -1,3 +1,4 @@
+from Services.Runner.Calculators.CurrencyConverter import CurrencyConverter
 from Services.Runner.Exchange.ExchangeApi import ExchangeApi
 from Services.Runner.Exchange.Utils.KrakenAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
@@ -16,6 +17,8 @@ class KrakenApiImpl(ExchangeApi):
         self.exchange_websocket = exchange_websocket
         self.api_key = str(api_key)
         self.api_secret = str(api_secret)
+
+        self.currency_converter = CurrencyConverter()
 
     def sell_action(self, price, quantity):
         return APISellLimitOrder(self.api_key, self.api_secret).call(price=round(price, 5),
@@ -52,10 +55,15 @@ class KrakenApiImpl(ExchangeApi):
     def get_accrued_account_fees(self):
         accrued_fee = 0
         closed_transactions = self.get_transactions()['closed']
-        print(closed_transactions)
         for transaction in closed_transactions.keys():
-            print(transaction)
-            accrued_fee += float(closed_transactions[transaction]['fee'])
+            transaction_currency = closed_transactions[transaction]['descr']['pair']
+            print(transaction_currency)
+            if self.cash_currency in transaction_currency:
+                accrued_fee += float(closed_transactions[transaction]['fee'])
+            else:
+                accrued_fee += self.currency_converter.convert_currency(value=float(closed_transactions[transaction]['fee']),
+                                                                        from_currency='USD' if 'USD' in transaction_currency else 'EUR',
+                                                                        to_currency=self.cash_currency)
         return accrued_fee
 
     def get_successful_cycles(self):
