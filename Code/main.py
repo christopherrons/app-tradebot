@@ -48,6 +48,10 @@ def main(argv):
                             type=float)
     arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'),
                             type=str)
+    arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'),
+                            type=str)
+    arg_parser.add_argument('crypto_currency', choices=('XRP'),
+                            type=str)
     arg_parser.add_argument('--is_sell', help='Specify if buy or sell', default=False, action='store_true')
     arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000,
@@ -68,18 +72,24 @@ def main(argv):
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
         if args.exchange == 'Bitstamp':
-            print("Exchange Bitstamp is being used\n")
-            exchange_websocket = BitstampWebsocket()
-            exchange_api = BitstampApiImpl(exchange_websocket,
+            print(f"Exchange {args.exchange} is being used for trading"
+                  f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
+            exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
+            exchange_api = BitstampApiImpl(args.cash_currency,
+                                           args.crypto_currency,
+                                           exchange_websocket,
                                            TradeBotUtils.get_bitstamp_customer_ID(),
                                            TradeBotUtils.get_bitstamp_api_key(),
                                            TradeBotUtils.get_bitstamp_api_secret())
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
         else:
-            print("Exchange Kraken is being used\n")
-            exchange_websocket = KrakenWebsocket()
-            exchange_api = KrakenApiImpl(exchange_websocket,
+            print(f"Exchange {args.exchange} is being used for trading"
+                  f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
+            exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
+            exchange_api = KrakenApiImpl(args.cash_currency,
+                                         args.crypto_currency,
+                                         exchange_websocket,
                                          TradeBotUtils.get_kraken_api_key(),
                                          TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026

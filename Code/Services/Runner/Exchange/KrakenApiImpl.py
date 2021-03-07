@@ -5,8 +5,15 @@ from Services.Runner.Exchange.Utils.KrakenAPIUtils import APIBuyLimitOrder, APIO
 
 class KrakenApiImpl(ExchangeApi):
 
-    def __init__(self, exchange_websocket, api_key, api_secret):
-        self.__exchange_websocket = exchange_websocket
+    def __init__(self,
+                 cash_currency,
+                 crypto_currency,
+                 exchange_websocket,
+                 api_key,
+                 api_secret):
+        self.cash_currency = cash_currency
+        self.crypto_currency = crypto_currency
+        self.exchange_websocket = exchange_websocket
         self.api_key = str(api_key)
         self.api_secret = str(api_secret)
 
@@ -45,7 +52,9 @@ class KrakenApiImpl(ExchangeApi):
     def get_accrued_account_fees(self):
         accrued_fee = 0
         closed_transactions = self.get_transactions()['closed']
+        print(closed_transactions)
         for transaction in closed_transactions.keys():
+            print(transaction)
             accrued_fee += float(closed_transactions[transaction]['fee'])
         return accrued_fee
 

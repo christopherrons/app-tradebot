@@ -9,12 +9,12 @@ from Services.Runner.Exchange.ExchangeWebsocket import ExchangeWebsocket
 
 class BitstampWebsocket(ExchangeWebsocket):
 
-    def __init__(self):
+    def __init__(self, cash_currency, crypto_currency):
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
             "data": {
-                "channel": "order_book_xrpusd"
+                "channel": f"order_book_{crypto_currency.lower()}{cash_currency.lower()}"
             }
         }
         self.current_order_id = None

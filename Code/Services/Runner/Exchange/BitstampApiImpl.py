@@ -1,3 +1,4 @@
+from Services.Runner.Calculators.CurrencyConverter import CurrencyConverter
 from Services.Runner.Exchange.ExchangeApi import ExchangeApi
 from Services.Runner.Exchange.Utils.BitstampAPIUtils import APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
@@ -5,11 +6,21 @@ from Services.Runner.Exchange.Utils.BitstampAPIUtils import APIBuyLimitOrder, AP
 
 class BitstampApiImpl(ExchangeApi):
 
-    def __init__(self, exchange_websocket, customer_id, api_key, api_secret):
+    def __init__(self,
+                 cash_currency,
+                 crypto_currency,
+                 exchange_websocket,
+                 customer_id,
+                 api_key,
+                 api_secret):
+        self.cash_currency = cash_currency
+        self.crypto_currency = crypto_currency
         self.exchange_websocket = exchange_websocket
         self.customer_id = bytes(customer_id, 'utf-8')
         self.api_key = bytes(api_key, 'utf-8')
         self.api_secret = bytes(api_secret, 'utf-8')
+
+        self.currency_converter = CurrencyConverter()
 
     def sell_action(self, price, quantity):
         return APISellLimitOrder(self.customer_id, self.api_key, self.api_secret).call(price=round(price, 5),
@@ -42,14 +53,28 @@ class BitstampApiImpl(ExchangeApi):
     def get_accrued_account_fees(self):
         accrued_fee = 0
         for transaction in self.get_transactions():
-            accrued_fee += float(transaction['fee'])
+            if transaction['usd'] != 0:
+                if self.cash_currency.lower() == 'usd':
+                    accrued_fee += float(transaction['fee'])
+                else:
+                    accrued_fee += self.currency_converter.convert_currency(value=float(transaction['fee']),
+                                                                            from_currency='usd',
+                                                                            to_currency=self.cash_currency)
+            else:
+                if self.cash_currency.lower() == 'eur':
+                    accrued_fee += float(transaction['fee'])
+                else:
+                    accrued_fee += self.currency_converter.convert_currency(value=float(transaction['fee']),
+                                                                            from_currency='eur',
+                                                                            to_currency=self.cash_currency)
+
         return accrued_fee
 
     def get_successful_cycles(self):
         successful_cycles = 0
         for transaction in self.get_transactions():
             if transaction['type'] == '2':
-                if float(transaction['usd']) > 0:
+                if float(transaction['usd']) > 0 or float(transaction['eur']) > 0:
                     successful_cycles += 1
         return successful_cycles
 
