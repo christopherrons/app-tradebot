@@ -6,22 +6,20 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Strategy for start price
 # TODO: Clean up code
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
-# TODO: Transaction fee is not working properly eventhough the fee is available when i checke with the api. Maybe it didnt have time to register the transaction before the transaction_fee call
-# TODO: Find smart way to set initial value other than memorizing
 # TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Split TradebotOutput into classes utils?
 # TODO: Trade in EUR or USD? Check which market is the most liquid
-# TODO: Add possibility to choose usd/eur as currency
-# TODO: Add a converter usd/eur and eur/usd to intivalize accrued fees
+
 
 # Nice to
 # TODO: Optimize with threading
 # TODO: Add relevant visualisations
 # TODO: Add database storage?
 # TODO: Docker container
+# TODO: Strategy for start price
+# TODO: Find smart way to set initial value other than memorizing
 
 import sys
 import traceback
