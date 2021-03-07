@@ -1,7 +1,7 @@
 import math
 
 
-class Calculator:
+class AccountValueCalculator:
 
     def __init__(self, trade_bot_cache):
         self.__trade_bot_cache = trade_bot_cache

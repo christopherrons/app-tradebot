@@ -6,10 +6,10 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+    
 from tabulate import tabulate
 
-from Services.Runner.Calculators.AccountValueCalculator import Calculator
+from Services.Runner.Calculators.AccountValueCalculator import AccountValueCalculator
 from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
 
 
@@ -21,7 +21,7 @@ class TradeBotOutput:
         self.__trade_bot_cache = trade_bot_cache
         self.__current_formation_log_file = TradeBotUtils.get_information_log_path()
         self.__successful_trade_log = TradeBotUtils.get_trade_log_path()
-        self.__calculator = Calculator(trade_bot_cache)
+        self.__calculator = AccountValueCalculator(trade_bot_cache)
 
         self.currency_symbols = {
             'USD': '$',
