@@ -25,6 +25,4 @@ Analysis and implementation of cryptocurrency tradebot.
    emailSourcePassword=password <br />
    emailTarget=target@mail.com <br />
 
-
-* Create a symlink from the main.py directory: "sudo ln -s $(pwd)/main.py /usr/local/bin/run_trade_bot"
 * Type run_trade_bot -h for script instructions 
