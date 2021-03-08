@@ -11,7 +11,7 @@
 # TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Split TradebotOutput into classes utils?
 # TODO: Trade in EUR or USD? Check which market is the most liquid
-
+# TODO: Add log directory in generated files
 
 # Nice to
 # TODO: Optimize with threading
@@ -20,22 +20,24 @@
 # TODO: Docker container
 # TODO: Strategy for start price
 # TODO: Find smart way to set initial value other than memorizing
+# TODO: Create Analytics based on Account information
 
 import sys
 import traceback
 from argparse import ArgumentParser
 
-from Application.Runner.TradeRunner import TradeRunner
-from Services.Runner.CacheStorage.TradeBotCache import TradeBotCache
-from Services.Runner.Exchange.BitstampApiImpl import BitstampApiImpl
-from Services.Runner.Exchange.BitstampWebsocket import BitstampWebsocket
-from Services.Runner.Exchange.KrakenApiImpl import KrakenApiImpl
-from Services.Runner.Exchange.KrakenWebsocket import KrakenWebsocket
-from Services.Runner.TradeBots.LiveTradeBotBuyer import LiveTradeBotBuyer
-from Services.Runner.TradeBots.LiveTradeBotSeller import LiveTradeBotSeller
-from Services.Runner.TradeBots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
-from Services.Runner.TradeBots.SimulationTradeBotSeller import SimulationTradeBotSeller
-from Services.Runner.Utils.TradeBotUtils import TradeBotUtils
+from application.algorithmic_trading.src.main.runners.VolatilityStrategyRunner import VolatilityStrategyRunner
+from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
+from services.algorithmic_trading.src.main.data_output_handler.EmailHandler import EmailHandler
+from services.algorithmic_trading.src.main.exchange.BitstampApiImpl import BitstampApiImpl
+from services.algorithmic_trading.src.main.exchange.BitstampWebsocket import BitstampWebsocket
+from services.algorithmic_trading.src.main.exchange.KrakenApiImpl import KrakenApiImpl
+from services.algorithmic_trading.src.main.exchange.KrakenWebsocket import KrakenWebsocket
+from services.algorithmic_trading.src.main.tradebots.LiveTradeBotBuyer import LiveTradeBotBuyer
+from services.algorithmic_trading.src.main.tradebots.LiveTradeBotSeller import LiveTradeBotSeller
+from services.algorithmic_trading.src.main.tradebots.SimulationTradeBotBuyer import SimulationTradeBotBuyer
+from services.algorithmic_trading.src.main.tradebots.SimulationTradeBotSeller import SimulationTradeBotSeller
+from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
 def main(argv):
@@ -44,7 +46,7 @@ def main(argv):
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
     arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]',
                             type=float)
-    arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose Exchange', type=str)
+    arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose exchange', type=str)
     arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'), help='Choose Cash Currency', type=str)
     arg_parser.add_argument('crypto_currency', choices=('XRP'), help='Choose CryptoCurrency', type=str)
     arg_parser.add_argument('--is_sell', help='Specify if buy or sell', default=False, action='store_true')
@@ -67,7 +69,7 @@ def main(argv):
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
         if args.exchange == 'Bitstamp':
-            print(f"Exchange {args.exchange} is being used for trading"
+            print(f"exchange {args.exchange} is being used for trading"
                   f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
             exchange_api = BitstampApiImpl(args.cash_currency,
@@ -79,7 +81,7 @@ def main(argv):
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
         else:
-            print(f"Exchange {args.exchange} is being used for trading"
+            print(f"exchange {args.exchange} is being used for trading"
                   f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
             exchange_api = KrakenApiImpl(args.cash_currency,
@@ -100,7 +102,7 @@ def main(argv):
             account_ask_price = 0
 
         if args.is_reset_logs:
-            TradeBotUtils.reset_logs()
+            TradeBotUtils.reset_logs(args.exchange)
 
         if args.is_not_simulation:
             cache = TradeBotCache(initial_value=args.initial_value,
@@ -114,7 +116,7 @@ def main(argv):
                                   success_ful_trades=exchange_api.get_successful_trades(),
                                   successful_cycles=exchange_api.get_successful_cycles())
 
-            trade_bot_runner = TradeRunner(
+            trade_bot_runner = VolatilityStrategyRunner(
                 is_sell=args.is_sell,
                 trade_bot_buyer=LiveTradeBotBuyer(exchange_api, exchange_websocket, cache),
                 trade_bot_seller=LiveTradeBotSeller(exchange_api, exchange_websocket, cache),
@@ -133,7 +135,7 @@ def main(argv):
                                   success_ful_trades=0,
                                   successful_cycles=0)
 
-            trade_bot_runner = TradeRunner(
+            trade_bot_runner = VolatilityStrategyRunner(
                 is_sell=args.is_sell,
                 trade_bot_buyer=SimulationTradeBotBuyer(exchange_websocket, cache),
                 trade_bot_seller=SimulationTradeBotSeller(exchange_websocket, cache),
@@ -146,10 +148,11 @@ def main(argv):
         print(error_message)
     except KeyboardInterrupt:
         print("Keyboard Interrupted")
-    except Exception as e:
+    except Exception as error:
         print("\n--- ERROR ---")
         traceback.print_exc()
-        TradeBotUtils.send_error_has_occurred_email(args.exchange, e)
+        EmailHandler().send_email_message(subject=args.exchange,
+                                          email_message=error)
 
 
 if __name__ == '__main__':
