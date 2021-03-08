@@ -8,6 +8,8 @@ Analysis and implementation of cryptocurrency tradebot.
 ## Run script instructions
 * Run pip3 install -r requirements.txt to install relevant external libraries
 * Add the following information to a ~/.script-config
+
+
 [Bitstamp] <br />
    apiKey=apiKey <br />
    customerID=customerID <br />
