@@ -2,8 +2,11 @@ import argparse
 import os
 import smtplib
 from configparser import ConfigParser
+from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
 
 
 class TradeBotUtils:
@@ -12,7 +15,7 @@ class TradeBotUtils:
         pass
 
     @staticmethod
-    def reset_logs(exchange_name):
+    def reset_logs(exchange_name: str):
         log_files = [TradeBotUtils.get_trade_log_path(exchange_name),
                      TradeBotUtils.get_information_log_path(exchange_name)]
         if log_files:
@@ -21,19 +24,19 @@ class TradeBotUtils:
                     f.truncate(0)
 
     @staticmethod
-    def get_trade_log_path(exchange):
+    def get_trade_log_path(exchange: str) -> str:
         return os.path.realpath(__file__).replace(
             "src/main/utils/TradeBotUtils.py",
             f"target/generated/{exchange.lower()}_successful_trade_log.csv")
 
     @staticmethod
-    def get_information_log_path(exchange):
+    def get_information_log_path(exchange: str) -> str:
         return os.path.realpath(__file__).replace(
             "src/main/utils/TradeBotUtils.py",
             f"target/generated/{exchange.lower()}_trading_formation_log.csv")
 
     @staticmethod
-    def get_script_config_attribute(parent, attribute):
+    def get_script_config_attribute(parent: str, attribute: str) -> str:
         if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
             raise ValueError('No configuration file exists. Expected file: ~/.script-config')
 
@@ -42,43 +45,43 @@ class TradeBotUtils:
         return config.get(parent, attribute)
 
     @staticmethod
-    def get_email_source():
+    def get_email_source() -> str:
         return TradeBotUtils.get_script_config_attribute('User', 'emailSource')
 
     @staticmethod
-    def get_email_source_password():
+    def get_email_source_password() -> str:
         return TradeBotUtils.get_script_config_attribute('User', 'emailSourcePassword')
 
     @staticmethod
-    def get_email_target():
+    def get_email_target() -> str:
         return TradeBotUtils.get_script_config_attribute('User', 'emailTarget')
 
     @staticmethod
-    def get_kraken_api_secret():
+    def get_kraken_api_secret() -> str:
         return TradeBotUtils.get_script_config_attribute('Kraken', 'apiSecret')
 
     @staticmethod
-    def get_kraken_api_key():
+    def get_kraken_api_key() -> str:
         return TradeBotUtils.get_script_config_attribute('Kraken', 'apiKey')
 
     @staticmethod
-    def get_bitstamp_api_secret():
+    def get_bitstamp_api_secret() -> str:
         return TradeBotUtils.get_script_config_attribute('Bitstamp', 'apiSecret')
 
     @staticmethod
-    def get_bitstamp_api_key():
+    def get_bitstamp_api_key() -> str:
         return TradeBotUtils.get_script_config_attribute('Bitstamp', 'apiKey')
 
     @staticmethod
-    def get_bitstamp_customer_ID():
+    def get_bitstamp_customer_id() -> str:
         return TradeBotUtils.get_script_config_attribute('Bitstamp', 'customerID')
 
     @staticmethod
-    def is_run_time_passed(current_time, run_stop_time):
+    def is_run_time_passed(current_time: datetime, run_stop_time: datetime) -> bool:
         return current_time > run_stop_time
 
     @staticmethod
-    def live_run_checker(is_not_simulation):
+    def live_run_checker(is_not_simulation: bool):
         if is_not_simulation:
             contract = input("WARNING LIVE RUN. If you want to trade sign the contract with: winteriscoming: ")
             if contract != "winteriscoming":
@@ -88,7 +91,7 @@ class TradeBotUtils:
                 print("Contracted signed! Live run accepted!\n")
 
     @staticmethod
-    def validate_args(args, minimum_interest):
+    def validate_args(args, minimum_interest: float):
         if args.initial_value < 1:
             raise ValueError(f'Initial Value {args.initial_value} is to low. Minimum value is 1')
 
@@ -105,11 +108,12 @@ class TradeBotUtils:
             raise ValueError(f'Print Interval {args.run_time_minutes} is to high. Maximum value is 1000000')
 
     @staticmethod
-    def set_initial_trade_price(bitstamp_api, is_sell):
+    def set_initial_trade_price(exchange_websocket: ExchangeWebsocket, is_sell: bool) -> float:
         is_invalid_account_trade_price = True
+        account_trade_price = 0
         while is_invalid_account_trade_price:
-            market_bid_price = bitstamp_api.get_market_bid_price()
-            market_ask_price = bitstamp_api.get_market_ask_price()
+            market_bid_price = exchange_websocket.get_market_bid_price()
+            market_ask_price = exchange_websocket.get_market_ask_price()
             print(f'Market bid: {market_bid_price} \nMarket ask: {market_ask_price}\n')
 
             if is_sell:
@@ -132,15 +136,15 @@ class TradeBotUtils:
         return account_trade_price
 
     @staticmethod
-    def is_invalid_account_bid_price(market_ask_price, account_bid_price):
+    def is_invalid_account_bid_price(market_ask_price: float, account_bid_price: float) -> bool:
         return market_ask_price - account_bid_price < 0
 
     @staticmethod
-    def is_invalid_account_ask_price(market_bid_price, account_ask_price):
+    def is_invalid_account_ask_price(market_bid_price: float, account_ask_price: float) -> bool:
         return market_bid_price - account_ask_price > 0
 
     @staticmethod
-    def send_error_has_occurred_email(exchange, error):
+    def send_error_has_occurred_email(exchange: str, error: str):
         email_source = TradeBotUtils.get_email_source()
         email_source_password = TradeBotUtils.get_email_source_password()
         email_target = TradeBotUtils.get_email_target()
@@ -160,9 +164,8 @@ class TradeBotUtils:
         server.quit()
 
     @staticmethod
-    def get_cash_currency_symbols():
+    def get_cash_currency_symbols() -> dict:
         return {
             'USD': '$',
             'EUR': '€'
         }
-

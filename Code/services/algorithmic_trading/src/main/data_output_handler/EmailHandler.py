@@ -14,7 +14,7 @@ class EmailHandler:
         self.__email_source_password = TradeBotUtils.get_email_source_password()
         self.__email_target = TradeBotUtils.get_email_target()
 
-    def create_message(self, subject, email_message):
+    def __create_message(self, subject: str, email_message: str) -> MIMEMultipart:
         message = MIMEMultipart()
         message['From'] = self.__email_source
         message['To'] = self.__email_target
@@ -22,7 +22,7 @@ class EmailHandler:
         message.attach(MIMEText(email_message, 'plain'))
         return message
 
-    def create_attachment(self, file_path):
+    def __create_attachment(self, file_path: str) -> MIMEBase:
         with open(file_path, "rb") as f:
             attachment = MIMEBase('applications', 'octet-stream')
             attachment.set_payload(f.read())
@@ -31,17 +31,17 @@ class EmailHandler:
                                   'attachment; filename=%s' % os.path.basename(file_path))
         return attachment
 
-    def send_email_with_attachment(self, subject, email_message, file_paths):
-        message = self.create_message(subject, email_message)
-        for file_path in file_paths:
-            message.attach(self.create_attachment(file_path))
-        self.send_email(message)
+    def send_email_with_attachment(self, email_subject: str, email_message: str, attachment_file_paths: list):
+        message = self.__create_message(email_subject, email_message)
+        for file_path in attachment_file_paths:
+            message.attach(self.__create_attachment(file_path))
+        self.__send_email(message)
 
-    def send_email_message(self, subject, email_message):
-        message = self.create_message(subject, email_message)
-        self.send_email(message)
+    def send_email_message(self, email_subject: str, email_message: str):
+        message = self.__create_message(email_subject, email_message)
+        self.__send_email(message)
 
-    def send_email(self, message):
+    def __send_email(self, message: MIMEMultipart):
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(self.__email_source, self.__email_source_password)

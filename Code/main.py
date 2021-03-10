@@ -12,6 +12,10 @@
 # TODO: Split TradebotOutput into classes utils?
 # TODO: Trade in EUR or USD? Check which market is the most liquid
 # TODO: Add log directory in generated files
+# TODO: Consider order could not be placed error from bitstamp
+# TODO: Consider websocket connection loss error
+# TODO: Switch name from trade -> order
+
 
 # Nice to
 # TODO: Optimize with threading
@@ -72,23 +76,23 @@ def main(argv):
             print(f"exchange {args.exchange} is being used for trading"
                   f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
-            exchange_api = BitstampApiImpl(args.cash_currency,
-                                           args.crypto_currency,
-                                           exchange_websocket,
-                                           TradeBotUtils.get_bitstamp_customer_ID(),
-                                           TradeBotUtils.get_bitstamp_api_key(),
-                                           TradeBotUtils.get_bitstamp_api_secret())
+            exchange_api = BitstampApiImpl(cash_currency=args.cash_currency,
+                                           crypto_currency=args.crypto_currency,
+                                           exchange_websocket=exchange_websocket,
+                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(),
+                                           api_key=TradeBotUtils.get_bitstamp_api_key(),
+                                           api_secret=TradeBotUtils.get_bitstamp_api_secret())
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
         else:
             print(f"exchange {args.exchange} is being used for trading"
                   f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
-            exchange_api = KrakenApiImpl(args.cash_currency,
-                                         args.crypto_currency,
-                                         exchange_websocket,
-                                         TradeBotUtils.get_kraken_api_key(),
-                                         TradeBotUtils.get_kraken_api_secret())
+            exchange_api = KrakenApiImpl(cash_currency=args.cash_currency,
+                                         crypto_currency=args.crypto_currency,
+                                         exchange_websocket=exchange_websocket,
+                                         api_key=TradeBotUtils.get_kraken_api_key(),
+                                         api_secret=TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026
             minimum_interest = 0.0052203505
 
@@ -151,8 +155,8 @@ def main(argv):
     except Exception as error:
         print("\n--- ERROR ---")
         traceback.print_exc()
-        EmailHandler().send_email_message(subject=args.exchange,
-                                          email_message=error)
+        EmailHandler().send_email_message(email_subject=args.exchange,
+                                          email_message=str(error))
 
 
 if __name__ == '__main__':

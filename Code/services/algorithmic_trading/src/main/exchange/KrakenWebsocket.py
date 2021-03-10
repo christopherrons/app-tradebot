@@ -9,8 +9,8 @@ from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import Exc
 class KrakenWebsocket(ExchangeWebsocket):
 
     def __init__(self, cash_currency, crypto_currency):
-        self.cash_currency = cash_currency
-        self.crypto_currency = crypto_currency
+        self.__cash_currency = cash_currency
+        self.__crypto_currency = crypto_currency
         self.__uri = "wss://ws.kraken.com/"
         self.__subscription = {
             "event": "subscribe",
@@ -23,6 +23,7 @@ class KrakenWebsocket(ExchangeWebsocket):
         self.__quantity_index = 1
         self.__best_price_index = 0
 
+        self.__exchange_name = "Kraken"
         self.__websocket = None
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.__async__connect())
@@ -32,10 +33,10 @@ class KrakenWebsocket(ExchangeWebsocket):
         self.__websocket = await websockets.connect(self.__uri)
         print("Connected\n")
 
-    def get_market_ask_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_quantity())
+    def get_market_ask_quantity(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_ask_quantity())
 
-    async def async_get_market_ask_quantity(self):
+    async def __async_get_market_ask_quantity(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -47,10 +48,10 @@ class KrakenWebsocket(ExchangeWebsocket):
             data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__quantity_index])
         return market_bid_quantity
 
-    def get_market_bid_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_quantity())
+    def get_market_bid_quantity(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_bid_quantity())
 
-    async def async_get_market_bid_quantity(self):
+    async def __async_get_market_bid_quantity(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -62,10 +63,10 @@ class KrakenWebsocket(ExchangeWebsocket):
             data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__quantity_index])
         return market_bid_quantity
 
-    def get_market_ask_price(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price())
+    def get_market_ask_price(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_ask_price())
 
-    async def async_get_market_ask_price(self):
+    async def __async_get_market_ask_price(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -75,10 +76,10 @@ class KrakenWebsocket(ExchangeWebsocket):
 
         return float(data[self.__ask_dictionary_index]['as'][self.__best_price_index][self.__price_index])
 
-    def get_market_bid_price(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price())
+    def get_market_bid_price(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_bid_price())
 
-    async def async_get_market_bid_price(self):
+    async def __async_get_market_bid_price(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         while True:
@@ -88,5 +89,26 @@ class KrakenWebsocket(ExchangeWebsocket):
 
         return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
 
-    def get_exchange_name(self):
-        return 'kraken'
+    @property
+    def exchange_name(self) -> str:
+        return self.__exchange_name
+
+    @exchange_name.setter
+    def exchange_name(self, exchange_name: str):
+        self.__exchange_name = exchange_name
+
+    @property
+    def cash_currency(self) -> str:
+        return self.__cash_currency
+
+    @cash_currency.setter
+    def cash_currency(self, cash_currency: str):
+        self.__cash_currency = cash_currency
+
+    @property
+    def crypto_currency(self) -> str:
+        return self.__crypto_currency
+
+    @crypto_currency.setter
+    def crypto_currency(self, crypto_currency):
+        self.__crypto_currency = crypto_currency

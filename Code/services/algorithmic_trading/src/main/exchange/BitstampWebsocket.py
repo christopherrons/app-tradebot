@@ -9,9 +9,9 @@ from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import Exc
 
 class BitstampWebsocket(ExchangeWebsocket):
 
-    def __init__(self, cash_currency, crypto_currency):
-        self.cash_currency = cash_currency
-        self.crypto_currency = crypto_currency
+    def __init__(self, cash_currency: str, crypto_currency: str):
+        self.__cash_currency = cash_currency
+        self.__crypto_currency = crypto_currency
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
@@ -19,8 +19,9 @@ class BitstampWebsocket(ExchangeWebsocket):
                 "channel": f"order_book_{crypto_currency.lower()}{cash_currency.lower()}"
             }
         }
-        self.current_order_id = None
 
+        self.__exchange_name = "Bitstamp"
+        self.__current_order_id = None
         self.__websocket = None
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.__async__connect())
@@ -30,10 +31,10 @@ class BitstampWebsocket(ExchangeWebsocket):
         self.__websocket = await websockets.connect(self.__uri)
         print("Connected\n")
 
-    def get_market_ask_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_quantity())
+    def get_market_ask_quantity(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_ask_quantity())
 
-    async def async_get_market_ask_quantity(self):
+    async def __async_get_market_ask_quantity(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         data = ast.literal_eval(await self.__websocket.recv())
@@ -43,10 +44,10 @@ class BitstampWebsocket(ExchangeWebsocket):
         market_ask_quantity = float(data['data']['asks'][0][1])
         return market_ask_quantity
 
-    def get_market_bid_quantity(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_quantity())
+    def get_market_bid_quantity(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_bid_quantity())
 
-    async def async_get_market_bid_quantity(self):
+    async def __async_get_market_bid_quantity(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         data = ast.literal_eval(await self.__websocket.recv())
@@ -56,10 +57,10 @@ class BitstampWebsocket(ExchangeWebsocket):
         market_bid_quantity = float(data['data']['bids'][0][1])
         return market_bid_quantity
 
-    def get_market_ask_price(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_ask_price())
+    def get_market_ask_price(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_ask_price())
 
-    async def async_get_market_ask_price(self):
+    async def __async_get_market_ask_price(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         data = ast.literal_eval(await self.__websocket.recv())
@@ -68,10 +69,10 @@ class BitstampWebsocket(ExchangeWebsocket):
 
         return float(data['data']['asks'][0][0])
 
-    def get_market_bid_price(self):
-        return asyncio.get_event_loop().run_until_complete(self.async_get_market_bid_price())
+    def get_market_bid_price(self) -> float:
+        return asyncio.get_event_loop().run_until_complete(self.__async_get_market_bid_price())
 
-    async def async_get_market_bid_price(self):
+    async def __async_get_market_bid_price(self) -> float:
         await self.__websocket.send(json.dumps(self.__subscription))
 
         data = ast.literal_eval(await self.__websocket.recv())
@@ -80,5 +81,26 @@ class BitstampWebsocket(ExchangeWebsocket):
 
         return float(data['data']['bids'][0][0])
 
-    def get_exchange_name(self):
-        return 'bitstamp'
+    @property
+    def exchange_name(self) -> str:
+        return self.__exchange_name
+
+    @exchange_name.setter
+    def exchange_name(self, exchange_name: str):
+        self.__exchange_name = exchange_name
+
+    @property
+    def cash_currency(self) -> str:
+        return self.__cash_currency
+
+    @cash_currency.setter
+    def cash_currency(self, cash_currency: str):
+        self.__cash_currency = cash_currency
+
+    @property
+    def crypto_currency(self) -> str:
+        return self.__crypto_currency
+
+    @crypto_currency.setter
+    def crypto_currency(self, crypto_currency):
+        self.__crypto_currency = crypto_currency
