@@ -15,6 +15,7 @@
 # TODO: Consider websocket connection loss error
 # TODO: Switch name from trade -> order
 # TODO: Should email handler be a utils class
+# TODO: Clean up main fail, hwow do we deal with if we add another tradebot (e.g. arbitrage)
 
 # Nice to
 # TODO: Optimize with threading
