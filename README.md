@@ -2,12 +2,12 @@
 Analysis and implementation of cryptocurrency tradebot.
 
 ## Prerequisite 
-* Bitstamp Account with a main / sub account (sub account is recommended for more control)
+* Bitstamp Account or Kraken account
 * Active api-key connected to the account 
 
 ## Run script instructions
 * Run pip3 install -r requirements.txt to install relevant external libraries
-* Add the following information to a ~/.script-config
+* Create a file names ~/.script-config and add the following Add the following information to a:
 
 
 [Bitstamp] <br />
@@ -25,4 +25,4 @@ Analysis and implementation of cryptocurrency tradebot.
    emailSourcePassword=password <br />
    emailTarget=target@mail.com <br />
 
-* Type run_trade_bot -h for script instructions 
+* Type main.py -h for script instructions 
