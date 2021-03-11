@@ -9,8 +9,6 @@ from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import Exc
 class KrakenWebsocket(ExchangeWebsocket):
 
     def __init__(self, cash_currency, crypto_currency):
-        self.__cash_currency = cash_currency
-        self.__crypto_currency = crypto_currency
         self.__uri = "wss://ws.kraken.com/"
         self.__subscription = {
             "event": "subscribe",
@@ -23,10 +21,11 @@ class KrakenWebsocket(ExchangeWebsocket):
         self.__quantity_index = 1
         self.__best_price_index = 0
 
-        self.__exchange_name = "Kraken"
         self.__websocket = None
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.__async__connect())
+
+        super().__init__("Kraken", cash_currency, crypto_currency)
 
     async def __async__connect(self):
         print("Attempting connection to {}".format(self.__uri))
@@ -88,27 +87,3 @@ class KrakenWebsocket(ExchangeWebsocket):
                 break
 
         return float(data[self.__bid_dictionary_index]['bs'][self.__best_price_index][self.__price_index])
-
-    @property
-    def exchange_name(self) -> str:
-        return self.__exchange_name
-
-    @exchange_name.setter
-    def exchange_name(self, exchange_name: str):
-        self.__exchange_name = exchange_name
-
-    @property
-    def cash_currency(self) -> str:
-        return self.__cash_currency
-
-    @cash_currency.setter
-    def cash_currency(self, cash_currency: str):
-        self.__cash_currency = cash_currency
-
-    @property
-    def crypto_currency(self) -> str:
-        return self.__crypto_currency
-
-    @crypto_currency.setter
-    def crypto_currency(self, crypto_currency):
-        self.__crypto_currency = crypto_currency

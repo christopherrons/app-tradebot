@@ -2,12 +2,12 @@ from datetime import datetime
 
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
 from services.algorithmic_trading.src.main.calculators.AccountValueCalculator import AccountValueCalculator
-from services.algorithmic_trading.src.main.data_output_handler.EmailHandler import EmailHandler
-from services.algorithmic_trading.src.main.data_output_handler.utils.PrinterUtils import PrinterUtils
+from services.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
+from services.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
-class TradeBotOutput:
+class TradeBotOutputHandler:
 
     def __init__(self, exchange_name: str,
                  trade_bot_cache: TradeBotCache,
@@ -18,7 +18,7 @@ class TradeBotOutput:
         self.__trade_bot_cache = trade_bot_cache
         self.__exchange_name = exchange_name
 
-        self.__emailHandler = EmailHandler()
+        self.__email_handler = EmailHandler()
         self.__trading_formation_log_file = TradeBotUtils.get_information_log_path(exchange_name)
         self.__successful_trade_log = TradeBotUtils.get_trade_log_path(exchange_name)
         self.__calculator = AccountValueCalculator(trade_bot_cache)
@@ -100,7 +100,7 @@ class TradeBotOutput:
         PrinterUtils.log_data(headers=headers, output=output, file_path=self.__successful_trade_log)
 
     def send_email_with_successful_trade(self):
-        self.__emailHandler.send_email_with_attachment(
+        self.__email_handler.send_email_with_attachment(
             email_subject=f"{self.__exchange_name}: Trade Number {self.__trade_bot_cache.successful_trades}",
             email_message=f'Review logs',
             attachment_file_paths=[self.__successful_trade_log])

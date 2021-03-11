@@ -1,0 +1,2 @@
+Timestamp,exchange,Trade Number,Is Buy,Price [$],Quantity XRP,Gross Trade Value [$],Net Trade Value [$],Fee [$]
+2021-03-11 18:34:33.442443,Bitstamp,1,True,0.4523,219.98673446827328,100.0,99.5,0.5

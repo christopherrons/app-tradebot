@@ -10,8 +10,6 @@ from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import Exc
 class BitstampWebsocket(ExchangeWebsocket):
 
     def __init__(self, cash_currency: str, crypto_currency: str):
-        self.__cash_currency = cash_currency
-        self.__crypto_currency = crypto_currency
         self.__uri = "wss://ws.bitstamp.net/"
         self.__subscription = {
             "event": "bts:subscribe",
@@ -25,6 +23,10 @@ class BitstampWebsocket(ExchangeWebsocket):
         self.__websocket = None
         self.loop = asyncio.get_event_loop()
         self.loop.run_until_complete(self.__async__connect())
+
+        super().__init__(exchange_name="Bitstamp",
+                         cash_currency=cash_currency,
+                         crypto_currency=crypto_currency)
 
     async def __async__connect(self):
         print("Attempting connection to {}".format(self.__uri))
@@ -80,27 +82,3 @@ class BitstampWebsocket(ExchangeWebsocket):
             data = ast.literal_eval(await self.__websocket.recv())
 
         return float(data['data']['bids'][0][0])
-
-    @property
-    def exchange_name(self) -> str:
-        return self.__exchange_name
-
-    @exchange_name.setter
-    def exchange_name(self, exchange_name: str):
-        self.__exchange_name = exchange_name
-
-    @property
-    def cash_currency(self) -> str:
-        return self.__cash_currency
-
-    @cash_currency.setter
-    def cash_currency(self, cash_currency: str):
-        self.__cash_currency = cash_currency
-
-    @property
-    def crypto_currency(self) -> str:
-        return self.__crypto_currency
-
-    @crypto_currency.setter
-    def crypto_currency(self, crypto_currency):
-        self.__crypto_currency = crypto_currency

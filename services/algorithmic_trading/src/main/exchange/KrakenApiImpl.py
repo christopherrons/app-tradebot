@@ -1,7 +1,6 @@
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import \
     CurrencyConverter
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
-from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
 from services.algorithmic_trading.src.main.exchange.utils.KrakenAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
@@ -12,24 +11,23 @@ class KrakenApiImpl(ExchangeApi):
     def __init__(self,
                  cash_currency: str,
                  crypto_currency: str,
-                 exchange_websocket: ExchangeWebsocket,
                  api_key: str,
                  api_secret: str):
-        self.__cash_currency = cash_currency
-        self.__crypto_currency = crypto_currency
-        self.__exchange_websocket = exchange_websocket
         self.__api_key = str(api_key)
         self.__api_secret = str(api_secret)
 
         self.__currency_converter = CurrencyConverter()
-        self.__exchange_name = "Kraken"
 
-    def sell_action(self, price: float, quantity: float) -> str:
+        super().__init__(exchange_name="Kraken",
+                         cash_currency=cash_currency,
+                         crypto_currency=crypto_currency)
+
+    def execute_sell_order(self, price: float, quantity: float) -> str:
         return APISellLimitOrder(self.__api_key, self.__api_secret).call(price=round(price, 5),
                                                                          amount=quantity,
                                                                          fok_order=True)
 
-    def buy_action(self, price: float, quantity: float) -> str:
+    def execute_buy_order(self, price: float, quantity: float) -> str:
         return APIBuyLimitOrder(self.__api_key, self.__api_secret).call(price=round(price, 5),
                                                                         amount=round(quantity, 8),
                                                                         fok_order=True)
@@ -90,26 +88,4 @@ class KrakenApiImpl(ExchangeApi):
         order_status = self.get_order_status(order_id)
         return order_status == 'open' or order_status == 'pending'
 
-    @property
-    def exchange_name(self) -> str:
-        return self.exchange_name
 
-    @exchange_name.setter
-    def exchange_name(self, exchange_name: str):
-        self.__exchange_name = exchange_name
-
-    @property
-    def cash_currency(self) -> str:
-        return self.cash_currency
-
-    @cash_currency.setter
-    def cash_currency(self, cash_currency: str):
-        self.__cash_currency = cash_currency
-
-    @property
-    def crypto_currency(self) -> str:
-        return self.crypto_currency
-
-    @crypto_currency.setter
-    def crypto_currency(self, crypto_currency):
-        self.__crypto_currency = crypto_currency

@@ -9,13 +9,12 @@
 # TODO: Clean up code
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 # TODO: If possible trigger evant based on websocket rather than other way around
-# TODO: Split TradebotOutput into classes utils?
 # TODO: Trade in EUR or USD? Check which market is the most liquid
 # TODO: Add log directory in generated files
 # TODO: Consider order could not be placed error from bitstamp
 # TODO: Consider websocket connection loss error
 # TODO: Switch name from trade -> order
-
+# TODO: Should email handler be a utils class
 
 # Nice to
 # TODO: Optimize with threading
@@ -32,15 +31,19 @@ from argparse import ArgumentParser
 
 from application.algorithmic_trading.src.main.runners.VolatilityTradeRunner import VolatilityTradeRunner
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
-from services.algorithmic_trading.src.main.data_output_handler.EmailHandler import EmailHandler
 from services.algorithmic_trading.src.main.exchange.BitstampApiImpl import BitstampApiImpl
 from services.algorithmic_trading.src.main.exchange.BitstampWebsocket import BitstampWebsocket
 from services.algorithmic_trading.src.main.exchange.KrakenApiImpl import KrakenApiImpl
 from services.algorithmic_trading.src.main.exchange.KrakenWebsocket import KrakenWebsocket
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotBuyer import LiveVolatilityTradeBotBuyer
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotSeller import LiveVolatilityTradeBotSeller
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.SimulationVolatilityTradeBotBuyer import SimulationVolatilityTradeBotBuyer
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.SimulationVolatilityTradeBotSeller import SimulationVolatilityTradeBotSeller
+from services.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotBuyer import \
+    LiveVolatilityTradeBotBuyer
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotSeller import \
+    LiveVolatilityTradeBotSeller
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.SimulationVolatilityTradeBotBuyer import \
+    SimulationVolatilityTradeBotBuyer
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.SimulationVolatilityTradeBotSeller import \
+    SimulationVolatilityTradeBotSeller
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -72,25 +75,21 @@ def main(argv):
 
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
+        print(f"Exchange {args.exchange} is being used for trading"
+              f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
         if args.exchange == 'Bitstamp':
-            print(f"exchange {args.exchange} is being used for trading"
-                  f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
             exchange_api = BitstampApiImpl(cash_currency=args.cash_currency,
                                            crypto_currency=args.crypto_currency,
-                                           exchange_websocket=exchange_websocket,
                                            customer_id=TradeBotUtils.get_bitstamp_customer_id(),
                                            api_key=TradeBotUtils.get_bitstamp_api_key(),
                                            api_secret=TradeBotUtils.get_bitstamp_api_secret())
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
         else:
-            print(f"Exchange {args.exchange} is being used for trading"
-                  f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
             exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
             exchange_api = KrakenApiImpl(cash_currency=args.cash_currency,
                                          crypto_currency=args.crypto_currency,
-                                         exchange_websocket=exchange_websocket,
                                          api_key=TradeBotUtils.get_kraken_api_key(),
                                          api_secret=TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026

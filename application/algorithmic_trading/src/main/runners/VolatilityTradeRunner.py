@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import VolatilityTradeBotBuyer
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import VolatilityTradeBotSeller
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import \
+    VolatilityTradeBotBuyer
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
+    VolatilityTradeBotSeller
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -36,9 +38,9 @@ class VolatilityTradeRunner:
                 self.__trade_bot.print_trading_formation(self.__trade_bot.is_buy())
                 delta_minutes = datetime.now()
 
-            if self.__trade_bot.is_trade_able():
-                order_id = self.__trade_bot.create_trade()
-                if self.__trade_bot.is_trade_successful(order_id):
+            if self.__trade_bot.is_account_price_matching_market_price():
+                order_id = self.__trade_bot.execute_order()
+                if self.__trade_bot.is_order_executed(order_id):
                     self.__trade_bot.update_cache(order_id)
                     self.__trade_bot.send_email_with_successful_trade()
                     self.__switch_trader()

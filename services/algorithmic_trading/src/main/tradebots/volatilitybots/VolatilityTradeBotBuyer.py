@@ -12,10 +12,7 @@ class VolatilityTradeBotBuyer(VolatilityTradeBot, ABC):
                  trade_bot_cache: TradeBotCache):
         super().__init__(exchange_websocket, trade_bot_cache)
 
-    @abstractmethod
-    def trade_action_buy(self) -> str: pass
-
-    def is_trade_able(self) -> bool:
+    def is_account_price_matching_market_price(self) -> bool:
         market_ask_price = self.get_market_ask_price()
         market_ask_quantity = self._exchange_websocket.get_market_ask_quantity()
         return self._trade_bot_cache.account_bid_price >= market_ask_price and \

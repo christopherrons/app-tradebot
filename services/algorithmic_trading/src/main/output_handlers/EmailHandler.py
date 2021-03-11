@@ -1,5 +1,6 @@
 import os
 import smtplib
+from datetime import datetime
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -31,6 +32,15 @@ class EmailHandler:
                                   'attachment; filename=%s' % os.path.basename(file_path))
         return attachment
 
+    def __send_email(self, message: MIMEMultipart):
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(self.__email_source, self.__email_source_password)
+        text = message.as_string()
+        server.sendmail(self.__email_source, self.__email_target, text)
+        server.quit()
+        print(f'--- {datetime.now()}: Email Sent---\n\n')
+
     def send_email_with_attachment(self, email_subject: str, email_message: str, attachment_file_paths: list):
         message = self.__create_message(email_subject, email_message)
         for file_path in attachment_file_paths:
@@ -40,12 +50,3 @@ class EmailHandler:
     def send_email_message(self, email_subject: str, email_message: str):
         message = self.__create_message(email_subject, email_message)
         self.__send_email(message)
-
-    def __send_email(self, message: MIMEMultipart):
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(self.__email_source, self.__email_source_password)
-        text = message.as_string()
-        server.sendmail(self.__email_source, self.__email_target, text)
-        server.quit()
-        print('---Email Sent---\n\n')

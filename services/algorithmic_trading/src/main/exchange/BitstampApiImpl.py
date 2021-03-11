@@ -1,7 +1,7 @@
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import \
     CurrencyConverter
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
-from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
+from services.algorithmic_trading.src.main.exchange.ExchangeService import ExchangeService
 from services.algorithmic_trading.src.main.exchange.utils.BitstampAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions, APIError
@@ -12,22 +12,21 @@ class BitstampApiImpl(ExchangeApi):
     def __init__(self,
                  cash_currency: str,
                  crypto_currency: str,
-                 exchange_websocket: ExchangeWebsocket,
                  customer_id: str,
                  api_key: str,
                  api_secret: str):
-        self.__cash_currency = cash_currency
-        self.__crypto_currency = crypto_currency
-        self.__exchange_websocket = exchange_websocket
         self.__customer_id = bytes(customer_id, 'utf-8')
         self.__api_key = bytes(api_key, 'utf-8')
         self.__api_secret = bytes(api_secret, 'utf-8')
 
         self.__currency_converter = CurrencyConverter()
-        self.__exchange_name = "Bitstamp"
         self.__api_order_tries = 25
 
-    def sell_action(self, price: float, quantity: float) -> str:
+        super().__init__(exchange_name="Bitstamp",
+                         cash_currency=cash_currency,
+                         crypto_currency=crypto_currency)
+
+    def execute_sell_order(self, price: float, quantity: float) -> str:
         order_id = ""
         for i in range(0, self.__api_order_tries):
             while True:
@@ -42,7 +41,7 @@ class BitstampApiImpl(ExchangeApi):
 
         return order_id
 
-    def buy_action(self, price: float, quantity: float) -> str:
+    def execute_buy_order(self, price: float, quantity: float) -> str:
         order_id = ""
         for i in range(0, self.__api_order_tries):
             while True:
@@ -79,19 +78,19 @@ class BitstampApiImpl(ExchangeApi):
         accrued_fee = 0
         for transaction in self.get_transactions():
             if transaction['usd'] != 0:
-                if self.__cash_currency.lower() == 'usd':
+                if self._cash_currency.lower() == 'usd':
                     accrued_fee += float(transaction['fee'])
                 else:
                     accrued_fee += self.__currency_converter.convert_currency(value=float(transaction['fee']),
                                                                               from_currency='usd',
-                                                                              to_currency=self.__cash_currency)
+                                                                              to_currency=self._cash_currency)
             else:
-                if self.__cash_currency.lower() == 'eur':
+                if self._cash_currency.lower() == 'eur':
                     accrued_fee += float(transaction['fee'])
                 else:
                     accrued_fee += self.__currency_converter.convert_currency(value=float(transaction['fee']),
                                                                               from_currency='eur',
-                                                                              to_currency=self.__cash_currency)
+                                                                              to_currency=self._cash_currency)
 
         return accrued_fee
 
@@ -116,26 +115,4 @@ class BitstampApiImpl(ExchangeApi):
     def is_order_status_open(self, order_id: str) -> bool:
         return self.get_order_status(order_id) == "Open"
 
-    @property
-    def exchange_name(self) -> str:
-        return self.__exchange_name
 
-    @exchange_name.setter
-    def exchange_name(self, exchange_name: str):
-        self.__exchange_name = exchange_name
-
-    @property
-    def cash_currency(self) -> str:
-        return self.__cash_currency
-
-    @cash_currency.setter
-    def cash_currency(self, cash_currency: str):
-        self.__cash_currency = cash_currency
-
-    @property
-    def crypto_currency(self) -> str:
-        return self.__crypto_currency
-
-    @crypto_currency.setter
-    def crypto_currency(self, crypto_currency):
-        self.__crypto_currency = crypto_currency

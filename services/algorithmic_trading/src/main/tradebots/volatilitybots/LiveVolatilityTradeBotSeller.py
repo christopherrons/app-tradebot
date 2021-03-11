@@ -4,7 +4,8 @@ from datetime import datetime
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
 from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
-from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import VolatilityTradeBotSeller
+from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
+    VolatilityTradeBotSeller
 
 
 class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
@@ -16,22 +17,19 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         super().__init__(exchange_websocket, trade_bot_cache)
         self.__exchange_api = exchange_api
 
-    def create_trade(self) -> str:
-        return self.trade_action_sell()
+    def execute_order(self) -> str:
+        return self.__exchange_api.execute_sell_order(self._trade_bot_cache.market_bid_price,
+                                                      self._trade_bot_cache.sell_quantity)
 
-    def trade_action_sell(self) -> str:
-        return self.__exchange_api.sell_action(self._trade_bot_cache.market_bid_price,
-                                               self._trade_bot_cache.sell_quantity)
-
-    def is_trade_successful(self, order_id: str) -> bool:
+    def is_order_executed(self, order_id: str) -> bool:
         while self.__is_order_status_open(order_id):
             print(f"Order id {order_id} is still open")
             time.sleep(10)
 
-        if self.__is_order_successful(order_id):
+        if self.__is_order_executed(order_id):
             return True
         else:
-            print(f'\n--- {datetime.now()} - Order: {order_id} was not successful! \n')
+            print(f'\n--- {datetime.now()} - Order: {order_id} was not executed! \n')
             return False
 
     def update_cache(self, order_id: str):
@@ -44,7 +42,7 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         self._trade_bot_cache.cash_value = self.__exchange_api.get_account_cash_value()
         self.update_bid_price()
 
-    def __is_order_successful(self, order_id: str) -> bool:
+    def __is_order_executed(self, order_id: str) -> bool:
         return self.__exchange_api.is_order_successful(order_id)
 
     def __is_order_status_open(self, order_id: str) -> bool:
