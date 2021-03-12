@@ -13,9 +13,8 @@
 # TODO: Add log directory in generated files
 # TODO: Consider order could not be placed error from bitstamp
 # TODO: Consider websocket connection loss error
-# TODO: Switch name from trade -> order
 # TODO: Should email handler be a utils class
-# TODO: Clean up main fail, hwow do we deal with if we add another tradebot (e.g. arbitrage)
+# TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage)
 
 # Nice to
 # TODO: Optimize with threading
