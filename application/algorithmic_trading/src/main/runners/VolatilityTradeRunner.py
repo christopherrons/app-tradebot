@@ -41,8 +41,7 @@ class VolatilityTradeRunner:
             if self.__trade_bot.is_account_price_matching_market_price():
                 order_id = self.__trade_bot.execute_order()
                 if self.__trade_bot.is_order_executed(order_id):
-                    self.__trade_bot.update_cache(order_id)
-                    self.__trade_bot.send_email_with_successful_trade()
+                    self.__trade_bot.run_post_trade_batch(order_id)
                     self.__switch_trader()
 
         print(f"Started trading at {start_time} and ended at {datetime.now()}")

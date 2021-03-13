@@ -24,6 +24,12 @@ class TradeBotUtils:
                     f.truncate(0)
 
     @staticmethod
+    def get_trade_report_path(exchange: str) -> str:
+        return os.path.realpath(__file__).replace(
+            "src/main/utils/TradeBotUtils.py",
+            f"target/generated/{exchange.lower()}_trade_report.html")
+
+    @staticmethod
     def get_trade_log_path(exchange: str) -> str:
         return os.path.realpath(__file__).replace(
             "src/main/utils/TradeBotUtils.py",

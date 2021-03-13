@@ -1,8 +1,9 @@
 from datetime import datetime
 
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
-from services.algorithmic_trading.src.main.calculators.AccountValueCalculator import AccountValueCalculator
+from services.algorithmic_trading.src.main.calculators.ProfitCalculatorUtil import ProfitCalculatorUtil
 from services.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
+from services.algorithmic_trading.src.main.output_handlers.PlotHandler import PlotHandler
 from services.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
@@ -19,9 +20,8 @@ class TradeBotOutputHandler:
         self.__exchange_name = exchange_name
 
         self.__email_handler = EmailHandler()
-        self.__trading_formation_log_file = TradeBotUtils.get_information_log_path(exchange_name)
-        self.__successful_trade_log = TradeBotUtils.get_trade_log_path(exchange_name)
-        self.__calculator = AccountValueCalculator(trade_bot_cache)
+        self.__plot_handler = PlotHandler(trade_bot_cache.initial_value, trade_bot_cache.interest, exchange_name,
+                                          cash_currency, crypto_currency)
         self.__currency_symbols = TradeBotUtils.get_cash_currency_symbols()
 
     def print_trading_formation(self, is_buy: bool):
@@ -39,7 +39,8 @@ class TradeBotOutputHandler:
             trade_quantity_value = self.__trade_bot_cache.buy_quantity
 
             percent_profit = "Cash Profit [%]"
-            percent_profit_value = self.__calculator.percent_cash_profit()
+            percent_profit_value = ProfitCalculatorUtil.percent_cash_profit(cash_value=current_value,
+                                                                            initial_value=self.__trade_bot_cache.initial_value)
 
         else:
             account_trade = f"Account Ask Price [{self.__currency_symbols[self.__cash_currency]}]"
@@ -55,7 +56,8 @@ class TradeBotOutputHandler:
             trade_quantity_value = self.__trade_bot_cache.sell_quantity
 
             percent_profit = "Position Profit [%]"
-            percent_profit_value = self.__calculator.percent_position_profit()
+            percent_profit_value = ProfitCalculatorUtil.percent_cash_profit(cash_value=current_value,
+                                                                            initial_value=self.__trade_bot_cache.initial_value)
 
         headers = ['Timestamp', trade_quantity, account_trade, market_trade,
                    f'Initial Value [{self.__currency_symbols[self.__cash_currency]}]',
@@ -75,9 +77,10 @@ class TradeBotOutputHandler:
         headers[2] = "Market Trade Price"
         headers.insert(1, "Is Buy")
         output.insert(1, is_buy)
-        PrinterUtils.log_data(headers=headers, output=output, file_path=self.__trading_formation_log_file)
+        PrinterUtils.log_data(headers=headers, output=output,
+                              file_path=TradeBotUtils.get_information_log_path(self.__exchange_name))
 
-    def print_successful_trades(self, is_buy: bool, fee: float):
+    def print_successful_trade(self, is_buy: bool, fee: float):
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
@@ -97,10 +100,15 @@ class TradeBotOutputHandler:
                   quantity, value, value - fee, fee]
 
         PrinterUtils.print_data_as_tabulate(headers, output)
-        PrinterUtils.log_data(headers=headers, output=output, file_path=self.__successful_trade_log)
+        PrinterUtils.log_data(headers=headers, output=output,
+                              file_path=TradeBotUtils.get_trade_log_path(self.__exchange_name))
 
-    def send_email_with_successful_trade(self):
+    def create_visual_trade_report(self):
+        self.__plot_handler.create_visual_trade_report()
+
+    def email_trade_reports(self):
         self.__email_handler.send_email_with_attachment(
             email_subject=f"{self.__exchange_name}: Trade Number {self.__trade_bot_cache.successful_trades}",
             email_message=f'Review logs',
-            attachment_file_paths=[self.__successful_trade_log])
+            attachment_file_paths=[TradeBotUtils.get_trade_log_path(self.__exchange_name),
+                                   TradeBotUtils.get_trade_report_path(self.__exchange_name)])

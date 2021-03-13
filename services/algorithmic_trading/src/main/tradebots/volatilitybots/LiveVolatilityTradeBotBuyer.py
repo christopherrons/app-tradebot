@@ -31,11 +31,16 @@ class LiveVolatilityTradeBotBuyer(VolatilityTradeBotBuyer):
             print(f'\n--- {datetime.now()} - Order: {order_id} was not executed! \n')
             return False
 
+    def run_post_trade_batch(self, order_id: str):
+        self.update_cache(order_id)
+        self.create_visual_trade_report()
+        self.email_trade_reports()
+
     def update_cache(self, order_id: str):
         self._trade_bot_cache.increment_successful_trades()
         fee = self.__exchange_api.get_transaction_fee(order_id)
         self._trade_bot_cache.accrued_fee = fee
-        self.print_successful_trades(self.is_buy(), fee)
+        self.print_successful_trade(self.is_buy(), fee)
         self._trade_bot_cache.sell_quantity = self.__exchange_api.get_account_quantity()
         self._trade_bot_cache.cash_value = self.__exchange_api.get_account_cash_value()
         self.update_ask_price()

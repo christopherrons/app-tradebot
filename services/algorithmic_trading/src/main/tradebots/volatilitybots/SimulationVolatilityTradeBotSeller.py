@@ -17,12 +17,17 @@ class SimulationVolatilityTradeBotSeller(VolatilityTradeBotSeller):
     def is_order_executed(self, order_id: str) -> bool:
         return True
 
+    def run_post_trade_batch(self, order_id: str):
+        self.update_cache(order_id)
+        self.create_visual_trade_report()
+        self.email_trade_reports()
+
     def update_cache(self, order_id: str):
         self._trade_bot_cache.increment_successful_trades()
         self._trade_bot_cache.increment_successful_cycles()
         fee = self._trade_bot_cache.gross_position_value * self._trade_bot_cache.exchange_fee
         self._trade_bot_cache.accrued_fee = fee
-        self._trade_bot_output_handler.print_successful_trades(self.is_buy(), fee)
+        self._trade_bot_output_handler.print_successful_trade(self.is_buy(), fee)
         self.update_bid_price()
         self._trade_bot_cache.cash_value = self._trade_bot_cache.net_position_value
         self._trade_bot_cache.gross_position_value = 0
