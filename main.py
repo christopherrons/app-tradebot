@@ -31,11 +31,13 @@ from argparse import ArgumentParser
 
 from application.algorithmic_trading.src.main.runners.VolatilityTradeRunner import VolatilityTradeRunner
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
+from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from services.algorithmic_trading.src.main.exchange.BitstampApiImpl import BitstampApiImpl
 from services.algorithmic_trading.src.main.exchange.BitstampWebsocket import BitstampWebsocket
 from services.algorithmic_trading.src.main.exchange.KrakenApiImpl import KrakenApiImpl
 from services.algorithmic_trading.src.main.exchange.KrakenWebsocket import KrakenWebsocket
 from services.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
+from services.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
 from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotBuyer import \
     LiveVolatilityTradeBotBuyer
 from services.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotSeller import \
@@ -119,10 +121,15 @@ def main(argv):
                                   success_ful_trades=exchange_api.get_successful_trades(),
                                   successful_cycles=exchange_api.get_successful_cycles())
 
+            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, DatabaseService(),
+                                                             args.cash_currency, args.crypto_currency)
+
             trade_bot_runner = VolatilityTradeRunner(
                 is_sell=args.is_sell,
-                trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket, cache),
-                trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api, exchange_websocket, cache),
+                trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket, trade_bot_output_handler,
+                                                            cache),
+                trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api, exchange_websocket,
+                                                              trade_bot_output_handler, cache),
                 run_time_minutes=args.run_time_minutes,
                 print_interval=args.print_interval)
         else:
@@ -137,13 +144,16 @@ def main(argv):
                                   accrued_fees=0,
                                   success_ful_trades=0,
                                   successful_cycles=0)
+            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, DatabaseService,
+                                                             args.cash_currency, args.crypto_currency)
 
-            trade_bot_runner = VolatilityTradeRunner(
-                is_sell=args.is_sell,
-                trade_bot_buyer=SimulationVolatilityTradeBotBuyer(exchange_websocket, cache),
-                trade_bot_seller=SimulationVolatilityTradeBotSeller(exchange_websocket, cache),
-                run_time_minutes=args.run_time_minutes,
-                print_interval=args.print_interval)
+            trade_bot_runner = VolatilityTradeRunner(is_sell=args.is_sell,
+                                                     trade_bot_buyer=SimulationVolatilityTradeBotBuyer(
+                                                         exchange_websocket, trade_bot_output_handler, cache),
+                                                     trade_bot_seller=SimulationVolatilityTradeBotSeller(
+                                                         exchange_websocket, trade_bot_output_handler, cache),
+                                                     run_time_minutes=args.run_time_minutes,
+                                                     print_interval=args.print_interval)
 
         trade_bot_runner.run()
 

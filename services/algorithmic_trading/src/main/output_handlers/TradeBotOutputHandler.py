@@ -2,6 +2,7 @@ from datetime import datetime
 
 from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
 from services.algorithmic_trading.src.main.calculators.ProfitCalculatorUtil import ProfitCalculatorUtil
+from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from services.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
 from services.algorithmic_trading.src.main.output_handlers.PlotHandler import PlotHandler
 from services.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
@@ -12,12 +13,14 @@ class TradeBotOutputHandler:
 
     def __init__(self, exchange_name: str,
                  trade_bot_cache: TradeBotCache,
+                 database_service: DatabaseService,
                  cash_currency: str,
                  crypto_currency: str):
+        self.__exchange_name = exchange_name
+        self.__trade_bot_cache = trade_bot_cache
+        self.__database_service = database_service
         self.__cash_currency = cash_currency
         self.__crypto_currency = crypto_currency
-        self.__trade_bot_cache = trade_bot_cache
-        self.__exchange_name = exchange_name
 
         self.__email_handler = EmailHandler()
         self.__plot_handler = PlotHandler(trade_bot_cache.initial_value, trade_bot_cache.interest, exchange_name,
@@ -80,7 +83,7 @@ class TradeBotOutputHandler:
         PrinterUtils.log_data(headers=headers, output=output,
                               file_path=TradeBotUtils.get_information_log_path(self.__exchange_name))
 
-    def print_successful_trade(self, is_buy: bool, fee: float):
+    def print_and_store_trade_report(self, is_buy: bool, fee: float):
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
@@ -102,6 +105,11 @@ class TradeBotOutputHandler:
         PrinterUtils.print_data_as_tabulate(headers, output)
         PrinterUtils.log_data(headers=headers, output=output,
                               file_path=TradeBotUtils.get_trade_log_path(self.__exchange_name))
+
+        self.__database_service.insert_trade_report(exchange=self.__exchange_name, timestamp=datetime.now(),
+                                                    trade_number=self.__trade_bot_cache.successful_trades, buy=is_buy,
+                                                    sell=not is_buy, price=price, quantity=quantity,
+                                                    gross_trade_value=value, net_trade_value=value - fee, fee=fee)
 
     def create_visual_trade_report(self):
         self.__plot_handler.create_visual_trade_report()

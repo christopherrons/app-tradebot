@@ -1,12 +1,16 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 
+from services.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
+from services.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
+from services.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
 from services.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBot import VolatilityTradeBot
 
 
 class VolatilityTradeBotSeller(VolatilityTradeBot, ABC):
 
-    def __init__(self, exchange_websocket, trade_bot_cache):
-        super().__init__(exchange_websocket, trade_bot_cache)
+    def __init__(self, exchange_websocket: ExchangeWebsocket, trade_bot_output_handler: TradeBotOutputHandler,
+                 trade_bot_cache: TradeBotCache):
+        super().__init__(exchange_websocket, trade_bot_output_handler, trade_bot_cache)
 
     def is_account_price_matching_market_price(self) -> bool:
         market_bid_price = self.get_market_bid_price()
