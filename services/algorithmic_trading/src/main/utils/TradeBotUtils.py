@@ -24,16 +24,18 @@ class TradeBotUtils:
                     f.truncate(0)
 
     @staticmethod
+    def get_data_base_queries_path() -> str:
+        return os.path.join(os.path.dirname(__file__), '../../resources/templates/database_tables.sql')
+
+    @staticmethod
     def get_trade_report_path(exchange: str) -> str:
-        return os.path.realpath(__file__).replace(
-            "src/main/utils/TradeBotUtils.py",
-            f"target/generated/{exchange.lower()}_trade_report.html")
+        return os.path.join(os.path.dirname(__file__),
+                            f"../../../target/generated/{exchange.lower()}_trade_report.html")
 
     @staticmethod
     def get_trade_log_path(exchange: str) -> str:
-        return os.path.realpath(__file__).replace(
-            "src/main/utils/TradeBotUtils.py",
-            f"target/generated/{exchange.lower()}_successful_trade_log.csv")
+        return os.path.join(os.path.dirname(__file__),
+                            f"../../../target/generated/{exchange.lower()}_successful_trade_log.csv")
 
     @staticmethod
     def get_information_log_path(exchange: str) -> str:
@@ -43,11 +45,14 @@ class TradeBotUtils:
 
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
-        if not os.path.exists(os.path.expanduser('~') + '/.script-config'):
-            raise ValueError('No configuration file exists. Expected file: ~/.script-config.ini')
-
         config = ConfigParser()
-        config.read(os.path.expanduser('~') + '/.script-config')
+        config_path = os.path.join(os.path.dirname(__file__), '../../resources/configs/script-config.ini')
+        config.read(config_path)
+        config_path = config.get('Paths', 'script_config_path')
+        if not os.path.exists(config_path):
+            raise ValueError(f'No configuration file exists. Expected file: {config_path}')
+
+        config.read(config_path)
         return config.get(parent, attribute)
 
     @staticmethod

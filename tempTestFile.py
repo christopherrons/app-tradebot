@@ -1,4 +1,6 @@
+from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from services.algorithmic_trading.src.main.output_handlers.PlotHandler import PlotHandler
+from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
 def main():
@@ -13,8 +15,8 @@ def main():
 
     # print(exchange_api.get_accrued_account_fees())
     # print(TradeBotUtils.get_information_log_path("t"))
-    plot_handler = PlotHandler(100, 0.1, 'Bitstamp', 'usd', 'xrp')
-    plot_handler.create_visual_trade_report()
+    db = DatabaseService()
+    db.create_tables_if_not_exist()
 
 
 if __name__ == '__main__':
