@@ -109,6 +109,8 @@ class TradeBotOutputHandler:
         self.__database_service.insert_trade_report(exchange=self.__exchange_name, timestamp=datetime.now(),
                                                     trade_number=self.__trade_bot_cache.successful_trades, buy=is_buy,
                                                     sell=not is_buy, price=price, quantity=quantity,
+                                                    cash_currency=self.__cash_currency,
+                                                    crypto_currency=self.__crypto_currency,
                                                     gross_trade_value=value, net_trade_value=value - fee, fee=fee)
 
     def create_visual_trade_report(self):

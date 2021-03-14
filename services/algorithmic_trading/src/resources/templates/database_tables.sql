@@ -1,9 +1,10 @@
 CREATE SCHEMA IF NOT EXISTS trade_data;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA trade_data;
+
 CREATE TABLE IF NOT EXISTS trade_data.report (
-  trade_id UUID NOT NULL,
   exchange VARCHAR(100) NOT NULL,
-  datetime DATE NOT NULL,
+  datetime TIMESTAMP NOT NULL,
   trade_number INT NOT NULL,
   buy BOOLEAN NOT NULL,
   sell BOOLEAN NOT NULL,

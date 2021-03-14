@@ -22,10 +22,10 @@ class DatabaseService:
     def insert_trade_report(self, exchange: str, timestamp, trade_number: int, buy: bool, sell: bool, price: float,
                             cash_currency: str, quantity: float, crypto_currency: str, fee: float,
                             gross_trade_value: float, net_trade_value: float):
-        columns = f'INSERT INTO trade_data.report (trade_id, exchange,' \
+        columns = f'INSERT INTO trade_data.report (exchange,' \
                   f' datetime, trade_number, buy, sell, price, cash_currency,' \
                   f' quantity, crypto_currency,fee, gross_trade_value, net_trade_value)'
-        data = f'VALUES ({exchange}, date {timestamp}, {trade_number}, {buy}, {sell}, {price}, {cash_currency},' \
+        data = f'VALUES ({exchange}, {timestamp}, {trade_number}, {buy}, {sell}, {price}, {cash_currency},' \
                f' {quantity}, {crypto_currency}, {fee}, {gross_trade_value}, {net_trade_value});'
 
         query = [columns + data]
@@ -34,6 +34,7 @@ class DatabaseService:
     def __execute_query(self, queries: list):
         cursor = self.__conn.cursor()
         for query in queries:
+            print(query)
             cursor.execute(query)
             self.__conn.commit()
         cursor.close()

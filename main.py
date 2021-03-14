@@ -109,6 +109,9 @@ def main(argv):
         if args.is_reset_logs:
             TradeBotUtils.reset_logs(args.exchange)
 
+        database_service = DatabaseService()
+        database_service.create_tables_if_not_exist()
+
         if args.is_not_simulation:
             cache = TradeBotCache(initial_value=args.initial_value,
                                   cash_value=exchange_api.get_account_cash_value(),
@@ -121,7 +124,7 @@ def main(argv):
                                   success_ful_trades=exchange_api.get_successful_trades(),
                                   successful_cycles=exchange_api.get_successful_cycles())
 
-            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, DatabaseService(),
+            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, database_service,
                                                              args.cash_currency, args.crypto_currency)
 
             trade_bot_runner = VolatilityTradeRunner(
@@ -144,7 +147,7 @@ def main(argv):
                                   accrued_fees=0,
                                   success_ful_trades=0,
                                   successful_cycles=0)
-            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, DatabaseService,
+            trade_bot_output_handler = TradeBotOutputHandler(args.exchange, cache, database_service,
                                                              args.cash_currency, args.crypto_currency)
 
             trade_bot_runner = VolatilityTradeRunner(is_sell=args.is_sell,
