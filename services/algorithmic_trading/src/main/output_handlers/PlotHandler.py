@@ -6,7 +6,7 @@ from services.algorithmic_trading.src.main.calculators.ProfitCalculatorUtil impo
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
-class PlotHandler:
+class PlotHandler:  # TODO FINISH
     def __init__(self, initial_value, interest: float, exchange: str, cash_currency: str, crypto_currency: str):
         self.__initial_value = initial_value
         self.__interest = 1 + interest  # TODO take interest from database

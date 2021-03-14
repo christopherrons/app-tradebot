@@ -25,7 +25,8 @@ class TradeBotUtils:
 
     @staticmethod
     def get_data_base_queries_path() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/templates/database_tables.sql')
+        return os.path.join(os.path.dirname(__file__),
+                            '../../resources/templates/algorithmic_trading_database_schema.sql')
 
     @staticmethod
     def get_trade_report_path(exchange: str) -> str:
@@ -39,9 +40,8 @@ class TradeBotUtils:
 
     @staticmethod
     def get_information_log_path(exchange: str) -> str:
-        return os.path.realpath(__file__).replace(
-            "src/main/utils/TradeBotUtils.py",
-            f"target/generated/{exchange.lower()}_trading_formation_log.csv")
+        return os.path.join(os.path.dirname(__file__),
+                            f"../../../target/generated/{exchange.lower()}_trading_formation_log.csv")
 
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
@@ -180,3 +180,23 @@ class TradeBotUtils:
             'USD': '$',
             'EUR': '€'
         }
+
+    @staticmethod
+    def get_permitted_crypto_currencies():
+        return ['XRP']
+
+    @staticmethod
+    def get_permitted_cash_currencies():
+        return ['USD', 'EUR']
+
+    @staticmethod
+    def get_permitted_trade_pairs():
+        trading_pairs = []
+        for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
+            for cash_currency in TradeBotUtils.get_permitted_cash_currencies():
+                trading_pairs.append(crypto_currency + cash_currency)
+        return trading_pairs
+
+    @staticmethod
+    def convert_epoch_time_to_timestamp(from_time:str) -> datetime:
+        return datetime.fromtimestamp(float(from_time))

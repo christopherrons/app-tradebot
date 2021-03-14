@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import \
     CurrencyConverter
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
 from services.algorithmic_trading.src.main.exchange.utils.KrakenAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
+from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
 class KrakenApiImpl(ExchangeApi):
@@ -88,4 +91,35 @@ class KrakenApiImpl(ExchangeApi):
         order_status = self.get_order_status(order_id)
         return order_status == 'open' or order_status == 'pending'
 
+    def get_transaction_timestamp(self, transaction: dict) -> datetime:
+        return TradeBotUtils.convert_epoch_time_to_timestamp(transaction['closetm'])
 
+    def is_transaction_buy(self, transaction: dict) -> bool:
+        return False if transaction['descr']['type'] == 'sell' else True
+
+    def get_transaction_cash_currency(self, transaction: dict) -> str:
+        for cash_currency in TradeBotUtils.get_permitted_cash_currencies():
+            if cash_currency in transaction['descr']['pair']:
+                return cash_currency
+        return 'fail'
+
+    def get_transaction_crypto_currency(self, transaction: dict) -> str:
+        for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
+            if crypto_currency in transaction['descr']['pair']:
+                return crypto_currency
+        return 'fail'
+
+    def get_transaction_fee_from_transaction_dict(self, transaction: dict) -> float:
+        return float(transaction['fee'])
+
+    def get_transaction_price_per_quantity(self, transaction: dict) -> float:
+        return float(transaction['descr']['price'])
+
+    def get_transaction_quantity(self, transaction: dict) -> float:
+        return float(transaction['vol'])
+
+    def get_transaction_gross_value(self, transaction: dict) -> float:
+        return self.get_transaction_price_per_quantity(transaction) * self.get_transaction_quantity(transaction)
+
+    def get_transaction_net_value(self, transaction: dict) -> float:
+        return self.get_transaction_gross_value(transaction) - self.get_transaction_fee_from_transaction_dict(transaction)

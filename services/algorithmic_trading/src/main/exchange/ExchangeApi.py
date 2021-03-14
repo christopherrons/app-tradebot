@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 
 from services.algorithmic_trading.src.main.exchange.ExchangeService import ExchangeService
 
@@ -46,3 +47,35 @@ class ExchangeApi(ExchangeService, ABC):
 
     @abstractmethod
     def is_order_status_open(self, order_id: str) -> bool: pass
+
+    @abstractmethod
+    def get_transaction_timestamp(self, transaction: dict) -> datetime: pass
+
+    @abstractmethod
+    def is_transaction_buy(self, transaction: dict) -> bool: pass
+
+    @abstractmethod
+    def get_transaction_cash_currency(self, transaction: dict) -> str: pass
+
+    @abstractmethod
+    def get_transaction_crypto_currency(self, transaction: dict) -> str: pass
+
+    @abstractmethod
+    def get_transaction_fee_from_transaction_dict(self, transaction: dict) -> float: pass
+
+    @abstractmethod
+    def get_transaction_price_per_quantity(self, transaction: dict) -> float: pass
+
+    @abstractmethod
+    def get_transaction_quantity(self, transaction: dict) -> float: pass
+
+    @abstractmethod
+    def get_transaction_gross_value(self, transaction: dict) -> float: pass
+
+    @abstractmethod
+    def get_transaction_net_value(self, transaction: dict) -> float: pass
+
+
+
+
+

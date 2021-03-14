@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import \
     CurrencyConverter
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
-from services.algorithmic_trading.src.main.exchange.ExchangeService import ExchangeService
 from services.algorithmic_trading.src.main.exchange.utils.BitstampAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions, APIError
+from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
 class BitstampApiImpl(ExchangeApi):
@@ -115,4 +117,34 @@ class BitstampApiImpl(ExchangeApi):
     def is_order_status_open(self, order_id: str) -> bool:
         return self.get_order_status(order_id) == "Open"
 
+    def get_transaction_timestamp(self, transaction: dict) -> datetime:
+        return transaction['datetime']
 
+    def is_transaction_buy(self, transaction: dict) -> bool:
+        return True if float(transaction['usd']) < 0 or float(transaction['eur']) < 0 else False
+
+    def get_transaction_cash_currency(self, transaction: dict) -> str:
+        return 'usd' if transaction['usd'] != 0 else 'eur'
+
+    def get_transaction_crypto_currency(self, transaction: dict) -> str:
+        for key in transaction.keys():
+            for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
+                if key.upper() == crypto_currency and transaction[key] != 0:
+                    return key
+        return 'fail'
+
+    def get_transaction_fee_from_transaction_dict(self, transaction: dict) -> float:
+        return float(transaction['fee'])
+
+    def get_transaction_price_per_quantity(self, transaction: dict) -> float:
+        return float(
+            transaction[f'{self.get_transaction_crypto_currency(transaction).lower()}_{self.get_transaction_cash_currency(transaction).lower()}'])
+
+    def get_transaction_quantity(self, transaction: dict) -> float:
+        return abs(float(transaction[f'{self.get_transaction_crypto_currency(transaction).lower()}']))
+
+    def get_transaction_gross_value(self, transaction: dict) -> float:
+        return self.get_transaction_price_per_quantity(transaction) * self.get_transaction_quantity(transaction)
+
+    def get_transaction_net_value(self, transaction: dict) -> float:
+        return self.get_transaction_gross_value(transaction) - self.get_transaction_fee_from_transaction_dict(transaction)

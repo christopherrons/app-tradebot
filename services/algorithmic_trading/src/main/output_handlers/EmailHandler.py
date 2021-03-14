@@ -39,7 +39,7 @@ class EmailHandler:
         text = message.as_string()
         server.sendmail(self.__email_source, self.__email_target, text)
         server.quit()
-        print(f'--- {datetime.now()}: Email Sent---\n\n')
+        print(f'---Email Sent: {datetime.now()}---')
 
     def send_email_with_attachment(self, email_subject: str, email_message: str, attachment_file_paths: list):
         message = self.__create_message(email_subject, email_message)

@@ -11,11 +11,13 @@ from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUt
 
 class TradeBotOutputHandler:
 
-    def __init__(self, exchange_name: str,
+    def __init__(self, is_simulation: bool,
+                 exchange_name: str,
                  trade_bot_cache: TradeBotCache,
                  database_service: DatabaseService,
                  cash_currency: str,
                  crypto_currency: str):
+        self.__is_simulation = is_simulation
         self.__exchange_name = exchange_name
         self.__trade_bot_cache = trade_bot_cache
         self.__database_service = database_service
@@ -83,7 +85,7 @@ class TradeBotOutputHandler:
         PrinterUtils.log_data(headers=headers, output=output,
                               file_path=TradeBotUtils.get_information_log_path(self.__exchange_name))
 
-    def print_and_store_trade_report(self, is_buy: bool, fee: float):
+    def print_and_store_trade_report(self, is_buy: bool, fee: float, order_id: str):
         if is_buy:
             value = self.__trade_bot_cache.cash_value
             quantity = self.__trade_bot_cache.buy_quantity
@@ -93,25 +95,24 @@ class TradeBotOutputHandler:
             quantity = self.__trade_bot_cache.sell_quantity
             price = self.__trade_bot_cache.market_bid_price
 
-        headers = ['Timestamp', 'exchange', 'Trade Number', 'Is Buy',
+        headers = ['Timestamp', 'is_simulation', 'exchange', 'Trade Number', 'Is Buy',
                    f'Price [{self.__currency_symbols[self.__cash_currency]}]',
                    f'Quantity {self.__crypto_currency.upper()}',
                    f'Gross Trade Value [{self.__currency_symbols[self.__cash_currency]}]',
                    f'Net Trade Value [{self.__currency_symbols[self.__cash_currency]}]',
                    f'Fee [{self.__currency_symbols[self.__cash_currency]}]']
-        output = [datetime.now(), self.__exchange_name, self.__trade_bot_cache.successful_trades, is_buy, price,
-                  quantity, value, value - fee, fee]
+        output = [datetime.now(), self.__is_simulation, self.__exchange_name, self.__trade_bot_cache.successful_trades, is_buy, price, quantity,
+                  value, value - fee, fee]
 
         PrinterUtils.print_data_as_tabulate(headers, output)
         PrinterUtils.log_data(headers=headers, output=output,
                               file_path=TradeBotUtils.get_trade_log_path(self.__exchange_name))
 
-        self.__database_service.insert_trade_report(exchange=self.__exchange_name, timestamp=datetime.now(),
-                                                    trade_number=self.__trade_bot_cache.successful_trades, buy=is_buy,
-                                                    sell=not is_buy, price=price, quantity=quantity,
-                                                    cash_currency=self.__cash_currency,
-                                                    crypto_currency=self.__crypto_currency,
-                                                    gross_trade_value=value, net_trade_value=value - fee, fee=fee)
+        self.__database_service.insert_trade_report(order_id=order_id, is_simulation=self.__is_simulation, exchange=self.__exchange_name,
+                                                    timestamp=datetime.now(), trade_number=self.__trade_bot_cache.successful_trades, buy=is_buy,
+                                                    price=price, quantity=quantity, cash_currency=self.__cash_currency,
+                                                    crypto_currency=self.__crypto_currency, gross_trade_value=value, net_trade_value=value - fee,
+                                                    fee=fee)
 
     def create_visual_trade_report(self):
         self.__plot_handler.create_visual_trade_report()
@@ -120,5 +121,4 @@ class TradeBotOutputHandler:
         self.__email_handler.send_email_with_attachment(
             email_subject=f"{self.__exchange_name}: Trade Number {self.__trade_bot_cache.successful_trades}",
             email_message=f'Review logs',
-            attachment_file_paths=[TradeBotUtils.get_trade_log_path(self.__exchange_name),
-                                   TradeBotUtils.get_trade_report_path(self.__exchange_name)])
+            attachment_file_paths=[TradeBotUtils.get_trade_log_path(self.__exchange_name), TradeBotUtils.get_trade_report_path(self.__exchange_name)])

@@ -35,8 +35,8 @@ class VolatilityTradeBot(ABC):
     def print_trading_formation(self, is_buy: bool):
         self.__trade_bot_output_handler.print_trading_formation(is_buy)
 
-    def print_and_store_trade_report(self, is_buy: bool, fee: float):
-        self.__trade_bot_output_handler.print_and_store_trade_report(is_buy, fee)
+    def print_and_store_trade_report(self, is_buy: bool, fee: float, order_id: str):
+        self.__trade_bot_output_handler.print_and_store_trade_report(is_buy, fee, order_id)
 
     def email_trade_reports(self):
         self.__trade_bot_output_handler.email_trade_reports()
