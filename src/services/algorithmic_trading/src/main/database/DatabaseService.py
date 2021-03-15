@@ -35,8 +35,7 @@ class DatabaseService:
                 ' quantity, crypto_currency, fee, gross_trade_value, net_trade_value) ' \
                 'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING;'
         data = (order_id, is_simulation, exchange.lower(), timestamp, trade_number, buy,
-                price, cash_currency.lower(), quantity, crypto_currency.lower(), fee, gross_trade_value,
-                net_trade_value)
+                price, cash_currency.lower(), quantity, crypto_currency.lower(), fee, gross_trade_value, net_trade_value)
 
         self.__execute_query(queries=[query],
                              data=data,

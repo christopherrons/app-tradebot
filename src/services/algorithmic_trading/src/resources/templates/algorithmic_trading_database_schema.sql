@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS trade_data.report (
   fee NUMERIC(20, 10) NOT NULL,
   gross_trade_value NUMERIC(20, 10) NOT NULL,
   net_trade_value NUMERIC(20, 10) NOT NULL,
-  PRIMARY KEY(exchange, datetime)
+  PRIMARY KEY(order_id, exchange, datetime)
 );
 
 CREATE TABLE IF NOT EXISTS trade_data.run_session (

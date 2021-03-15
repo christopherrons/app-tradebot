@@ -108,8 +108,8 @@ class BitstampApiImpl(ExchangeApi):
     def get_transaction_quantity(self, transaction: dict) -> float:
         return abs(float(transaction[f'{self.get_transaction_crypto_currency(transaction).lower()}']))
 
-    def get_transaction_gross_value(self, transaction: dict) -> float:
+    def get_transaction_net_value(self, transaction: dict) -> float:
         return self.get_transaction_price_per_quantity(transaction) * self.get_transaction_quantity(transaction)
 
-    def get_transaction_net_value(self, transaction: dict) -> float:
-        return self.get_transaction_gross_value(transaction) - self.get_transaction_fee_from_transaction_dict(transaction)
+    def get_transaction_gross_value(self, transaction: dict) -> float:
+        return self.get_transaction_net_value(transaction) + self.get_transaction_fee_from_transaction_dict(transaction)

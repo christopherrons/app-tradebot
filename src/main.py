@@ -112,6 +112,7 @@ def main(argv):
                                          crypto_currency=args.crypto_currency,
                                          api_key=TradeBotUtils.get_kraken_api_key(),
                                          api_secret=TradeBotUtils.get_kraken_api_secret())
+
             if args.init_database_from_exchange:
                 print(f"Initializing Database from {args.exchange}!")
                 closed_transactions = exchange_api.get_transactions()['closed']
@@ -172,14 +173,14 @@ def main(argv):
                                                      run_time_minutes=args.run_time_minutes,
                                                      print_interval=args.print_interval)
         else:
-            cache = TradeBotCache(initial_value=args.initial_value,
+            initial_value = 100
+            cache = TradeBotCache(initial_value=initial_value,
                                   cash_value=args.initial_value,
                                   interest=args.interest,
                                   account_bid_price=account_bid_price,
                                   account_ask_price=account_ask_price,
-                                  sell_quantity=args.initial_value / (
-                                          (1 - exchange_fee) * (account_ask_price / (
-                                          1 + args.interest))) if not account_ask_price == 0 else 0,
+                                  sell_quantity=initial_value / ((1 - exchange_fee) * (account_ask_price / (1 + args.interest)))
+                                  if not account_ask_price == 0 else 0,
                                   exchange_fee=exchange_fee,
                                   accrued_fees=0,
                                   success_ful_trades=0,
