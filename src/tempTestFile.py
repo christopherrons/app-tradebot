@@ -1,4 +1,4 @@
-from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 
 
 def main():
@@ -13,8 +13,8 @@ def main():
 
     # print(exchange_api.get_accrued_account_fees())
     # print(TradeBotUtils.get_information_log_path("t"))
-
-    print(TradeBotUtils.convert_epoch_time_to_timestamp('1615042047.4079'))
+    database_service = DatabaseService()
+    print(database_service.get_accrued_account_fees('kraken'))
 
 
 if __name__ == '__main__':

@@ -15,7 +15,6 @@
 # TODO: Consider websocket connection loss error
 # TODO: Should email handler be a utils class
 # TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage)
-# TODO: Add database storage?
 # TODO: Docker container
 
 # Nice to
@@ -23,7 +22,6 @@
 # TODO: Add relevant visualisations
 # TODO: Strategy for start price
 # TODO: Find smart way to set initial value other than memorizing
-# TODO: Create Analytics based on Account information
 
 import sys
 import traceback
