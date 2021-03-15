@@ -1,0 +1,2 @@
+Timestamp,is_simulation,exchange,Trade Number,Is Buy,Price [$],Quantity XRP,Gross Trade Value [$],Net Trade Value [$],Fee [$]
+2021-03-14 20:15:39.540324,True,Bitstamp,1,True,0.44743,222.3811545940147,100.0,99.5,0.5
