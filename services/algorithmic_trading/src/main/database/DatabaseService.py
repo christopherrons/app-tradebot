@@ -21,7 +21,7 @@ class DatabaseService:
             queries = sql_file.read().strip().split(';')
 
         self.__execute_query(queries=[f'{query};' for query in queries],
-                             data=(),
+                             data=tuple(),
                              message='Created Tables if not Exist')
 
     def insert_trade_session(self):
@@ -40,16 +40,39 @@ class DatabaseService:
 
         self.__execute_query(queries=[query],
                              data=data,
-                             message='Inserted Trade Report')
+                             message="Insert Trade Report")
+
+    def get_accrued_account_fees(self, exchange: str):
+        query = "SELECT SUM(fee) from trade_data.report WHERE simulation = false AND exchange = %s"
+        data = tuple(exchange)
+        return self.__execute_query(queries=[query],
+                                    data=data,
+                                    message="Get Accrued Account Fees")
+
+    def get_nr_successful_trades(self, exchange: str):
+        query = "SELECT MAX(trade_number) from trade_data.report WHERE simulation = false AND exchange = %s"
+        data = tuple(exchange)
+        return self.__execute_query(queries=[query],
+                                    data=data,
+                                    message="Get nr of Successful Trade")
+
+    def get_nr_successful_cycles(self, exchange: str):
+        query = "SELECT COUNT(trade_number) from trade_data.report WHERE simulation = false AND buy = false AND exchange = %s"
+        data = tuple(exchange)
+        return self.__execute_query(queries=[query],
+                                    data=data,
+                                    message="Get nr of Successful Cycles")
 
     def __execute_query(self, queries: list, data: Tuple, message: str):
         cursor = self.__conn.cursor()
+        result = ""
         for query in queries:
             if data != ():
-                cursor.execute(query, data)
+                result = cursor.execute(query, data)
             else:
-                cursor.execute(query)
+                result = cursor.execute(query)
             self.__conn.commit()
         cursor.close()
 
         print(f'\n--Query Executed: {message}\n')
+        return result

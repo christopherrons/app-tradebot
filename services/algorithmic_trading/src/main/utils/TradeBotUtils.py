@@ -16,8 +16,7 @@ class TradeBotUtils:
 
     @staticmethod
     def reset_logs(exchange_name: str):
-        log_files = [TradeBotUtils.get_trade_log_path(exchange_name),
-                     TradeBotUtils.get_information_log_path(exchange_name)]
+        log_files = [TradeBotUtils.get_trade_log_path(exchange_name), TradeBotUtils.get_information_log_path(exchange_name)]
         if log_files:
             for file in log_files:
                 with open(file, 'a+') as f:
@@ -25,23 +24,19 @@ class TradeBotUtils:
 
     @staticmethod
     def get_data_base_queries_path() -> str:
-        return os.path.join(os.path.dirname(__file__),
-                            '../../resources/templates/algorithmic_trading_database_schema.sql')
+        return os.path.join(os.path.dirname(__file__), '../../resources/templates/algorithmic_trading_database_schema.sql')
 
     @staticmethod
     def get_trade_report_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__),
-                            f"../../../target/generated/{exchange.lower()}_trade_report.html")
+        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trade_report.html")
 
     @staticmethod
     def get_trade_log_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__),
-                            f"../../../target/generated/{exchange.lower()}_successful_trade_log.csv")
+        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_successful_trade_log.csv")
 
     @staticmethod
     def get_information_log_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__),
-                            f"../../../target/generated/{exchange.lower()}_trading_formation_log.csv")
+        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trading_formation_log.csv")
 
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
@@ -198,5 +193,5 @@ class TradeBotUtils:
         return trading_pairs
 
     @staticmethod
-    def convert_epoch_time_to_timestamp(from_time:str) -> datetime:
+    def convert_epoch_time_to_timestamp(from_time: str) -> datetime:
         return datetime.fromtimestamp(float(from_time))

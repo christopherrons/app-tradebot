@@ -152,9 +152,9 @@ def main(argv):
                                   account_ask_price=account_ask_price,
                                   sell_quantity=exchange_api.get_account_quantity(),
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=exchange_api.get_accrued_account_fees(),
-                                  success_ful_trades=exchange_api.get_successful_trades(),
-                                  successful_cycles=exchange_api.get_successful_cycles())
+                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange),
+                                  success_ful_trades=database_service.get_nr_successful_trades(args.exchange),
+                                  successful_cycles=database_service.get_nr_successful_cycles(args.exchange))
 
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
                                                              database_service, args.cash_currency,

@@ -76,41 +76,6 @@ class BitstampApiImpl(ExchangeApi):
     def get_transactions(self) -> list:
         return APIUserTransactions(self.__customer_id, self.__api_key, self.__api_secret).call(limit=1000)
 
-    def get_accrued_account_fees(self) -> float:
-        accrued_fee = 0
-        for transaction in self.get_transactions():
-            if transaction['usd'] != 0:
-                if self._cash_currency.lower() == 'usd':
-                    accrued_fee += float(transaction['fee'])
-                else:
-                    accrued_fee += self.__currency_converter.convert_currency(value=float(transaction['fee']),
-                                                                              from_currency='usd',
-                                                                              to_currency=self._cash_currency)
-            else:
-                if self._cash_currency.lower() == 'eur':
-                    accrued_fee += float(transaction['fee'])
-                else:
-                    accrued_fee += self.__currency_converter.convert_currency(value=float(transaction['fee']),
-                                                                              from_currency='eur',
-                                                                              to_currency=self._cash_currency)
-
-        return accrued_fee
-
-    def get_successful_cycles(self) -> int:
-        successful_cycles = 0
-        for transaction in self.get_transactions():
-            if transaction['type'] == '2':
-                if float(transaction['usd']) > 0 or float(transaction['eur']) > 0:
-                    successful_cycles += 1
-        return successful_cycles
-
-    def get_successful_trades(self) -> int:
-        successful_trade = 0
-        for transaction in self.get_transactions():
-            if transaction['type'] == '2':
-                successful_trade += 1
-        return successful_trade
-
     def is_order_successful(self, order_id: str) -> bool:
         return self.get_order_status(order_id) != "Canceled"
 

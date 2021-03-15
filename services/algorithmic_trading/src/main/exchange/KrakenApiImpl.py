@@ -57,32 +57,6 @@ class KrakenApiImpl(ExchangeApi):
     def get_transactions(self) -> dict:
         return APIUserTransactions(self.__api_key, self.__api_secret).call()
 
-    def get_accrued_account_fees(self) -> float:
-        accrued_fee = 0
-        closed_transactions = self.get_transactions()['closed']
-        for transaction in closed_transactions.keys():
-            transaction_currency = closed_transactions[transaction]['descr']['pair']
-            print(transaction_currency)
-            if self.cash_currency in transaction_currency:
-                accrued_fee += float(closed_transactions[transaction]['fee'])
-            else:
-                accrued_fee += self.__currency_converter.convert_currency(
-                    value=float(closed_transactions[transaction]['fee']),
-                    from_currency='USD' if 'USD' in transaction_currency else 'EUR',
-                    to_currency=self.cash_currency)
-        return accrued_fee
-
-    def get_successful_cycles(self) -> int:
-        successful_cycles = 0
-        closed_transactions = self.get_transactions()['closed']
-        for transaction in closed_transactions.keys():
-            if closed_transactions[transaction]['descr']['type'] == 'sell':
-                successful_cycles += 1
-        return successful_cycles
-
-    def get_successful_trades(self) -> int:
-        return self.get_transactions()['count']
-
     def is_order_successful(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)
         return order_status != 'canceled' and order_status != 'expired'

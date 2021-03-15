@@ -20,8 +20,7 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         self.__exchange_api = exchange_api
 
     def execute_order(self) -> str:
-        return self.__exchange_api.execute_sell_order(self._trade_bot_cache.market_bid_price,
-                                                      self._trade_bot_cache.sell_quantity)
+        return self.__exchange_api.execute_sell_order(self._trade_bot_cache.market_bid_price, self._trade_bot_cache.sell_quantity)
 
     def is_order_executed(self, order_id: str) -> bool:
         while self.__is_order_status_open(order_id):

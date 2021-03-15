@@ -34,15 +34,6 @@ class ExchangeApi(ExchangeService, ABC):
     def get_transactions(self) -> dict: pass
 
     @abstractmethod
-    def get_accrued_account_fees(self) -> float: pass
-
-    @abstractmethod
-    def get_successful_cycles(self) -> int: pass
-
-    @abstractmethod
-    def get_successful_trades(self) -> int: pass
-
-    @abstractmethod
     def is_order_successful(self, order_id: str) -> bool: pass
 
     @abstractmethod
