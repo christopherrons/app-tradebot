@@ -15,11 +15,10 @@ class SqlError(object):
 class DatabaseService:
     def __init__(self):
         self.__conn = psycopg2.connect(
-            host="localhost",
+            host="db",
             database="postgres",
             user="postgres",
-            password="root321",  # TODO move to file
-            port='5432')
+            password="password")
         self.__database_table_queries_path = TradeBotUtils.get_data_base_queries_path()
         self.__currency_converter = CurrencyConverter()
 
@@ -109,3 +108,6 @@ class DatabaseService:
             cursor.execute(query)
         self.__conn.commit()
         cursor.close()
+
+    def close_connection(self):
+        self.__conn.close()

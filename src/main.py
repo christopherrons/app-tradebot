@@ -7,15 +7,13 @@
 #
 # ------------------------------------------------------------------------------
 # TODO: Clean up code
-# TODO: Add kraken api and make api calls possible for both kraken and bitstamp
-# TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Trade in EUR or USD? Check which market is the most liquid
-# TODO: Consider order could not be placed error from bitstamp
-# TODO: Consider websocket connection loss error
 # TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage)
-# TODO: Docker container
+# TODO: Remove sensitive information
+# TODO: Fix file names, directory structure and config paths
 
 # Nice to
+# TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Optimize with threading
 # TODO: Add relevant visualisations
 # TODO: Strategy for start price
@@ -49,7 +47,8 @@ def main(argv):
     arg_parser = ArgumentParser(description='Run a crypto trading bot with the bitstamp api.',
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
-    arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]', type=float) # TODO need to be converted to eur if required
+    arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]',
+                            type=float)  # TODO need to be converted to eur if required
     arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose exchange', type=str)
     arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'), help='Choose Cash Currency', type=str)
     arg_parser.add_argument('crypto_currency', choices=('XRP'), help='Choose CryptoCurrency', type=str)
@@ -77,10 +76,8 @@ def main(argv):
               f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
         if args.exchange == 'Bitstamp':
             exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
-            exchange_api = BitstampApiImpl(cash_currency=args.cash_currency,
-                                           crypto_currency=args.crypto_currency,
-                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(),
-                                           api_key=TradeBotUtils.get_bitstamp_api_key(),
+            exchange_api = BitstampApiImpl(cash_currency=args.cash_currency, crypto_currency=args.crypto_currency,
+                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(), api_key=TradeBotUtils.get_bitstamp_api_key(),
                                            api_secret=TradeBotUtils.get_bitstamp_api_secret())
             if args.init_database_from_exchange:
                 print(f"Initializing Database from {args.exchange}!")
@@ -106,10 +103,8 @@ def main(argv):
 
         else:
             exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
-            exchange_api = KrakenApiImpl(cash_currency=args.cash_currency,
-                                         crypto_currency=args.crypto_currency,
-                                         api_key=TradeBotUtils.get_kraken_api_key(),
-                                         api_secret=TradeBotUtils.get_kraken_api_secret())
+            exchange_api = KrakenApiImpl(cash_currency=args.cash_currency, crypto_currency=args.crypto_currency,
+                                         api_key=TradeBotUtils.get_kraken_api_key(), api_secret=TradeBotUtils.get_kraken_api_secret())
 
             if args.init_database_from_exchange:
                 print(f"Initializing Database from {args.exchange}!")
@@ -151,7 +146,8 @@ def main(argv):
                                   account_ask_price=account_ask_price,
                                   sell_quantity=exchange_api.get_account_quantity(),
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange, args.cash_currency, not args.is_not_simulation),
+                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange, args.cash_currency,
+                                                                                         not args.is_not_simulation),
                                   success_ful_trades=database_service.get_nr_successful_trades(args.exchange, not args.is_not_simulation),
                                   successful_cycles=database_service.get_nr_successful_cycles(args.exchange, not args.is_not_simulation))
 
@@ -160,16 +156,11 @@ def main(argv):
                                                              args.crypto_currency)
 
             trade_bot_runner = VolatilityTradeRunner(is_sell=args.is_sell,
-                                                     trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api,
-                                                                                                 exchange_websocket,
-                                                                                                 trade_bot_output_handler,
-                                                                                                 cache),
-                                                     trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api,
-                                                                                                   exchange_websocket,
-                                                                                                   trade_bot_output_handler,
-                                                                                                   cache),
-                                                     run_time_minutes=args.run_time_minutes,
-                                                     print_interval=args.print_interval)
+                                                     trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket,
+                                                                                                 trade_bot_output_handler, cache),
+                                                     trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api, exchange_websocket,
+                                                                                                   trade_bot_output_handler, cache),
+                                                     run_time_minutes=args.run_time_minutes, print_interval=args.print_interval)
         else:
             initial_value = 100
             cache = TradeBotCache(initial_value=initial_value,
@@ -184,14 +175,13 @@ def main(argv):
                                   success_ful_trades=0,
                                   successful_cycles=0)
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
-                                                             database_service, args.cash_currency,
-                                                             args.crypto_currency)
+                                                             database_service, args.cash_currency, args.crypto_currency)
 
             trade_bot_runner = VolatilityTradeRunner(is_sell=args.is_sell,
-                                                     trade_bot_buyer=SimulationVolatilityTradeBotBuyer(
-                                                         exchange_websocket, trade_bot_output_handler, cache),
-                                                     trade_bot_seller=SimulationVolatilityTradeBotSeller(
-                                                         exchange_websocket, trade_bot_output_handler, cache),
+                                                     trade_bot_buyer=SimulationVolatilityTradeBotBuyer(exchange_websocket, trade_bot_output_handler,
+                                                                                                       cache),
+                                                     trade_bot_seller=SimulationVolatilityTradeBotSeller(exchange_websocket, trade_bot_output_handler,
+                                                                                                         cache),
                                                      run_time_minutes=args.run_time_minutes,
                                                      print_interval=args.print_interval)
 
@@ -204,8 +194,7 @@ def main(argv):
     except Exception as error:
         print("\n--- ERROR ---")
         traceback.print_exc()
-        EmailHandler().send_email_message(email_subject=args.exchange,
-                                          email_message=str(error))
+        EmailHandler().send_email_message(email_subject=f'ERROR: {args.exchange}', email_message=str(error))
 
 
 if __name__ == '__main__':

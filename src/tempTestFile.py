@@ -20,10 +20,7 @@ def main():
     # print(TradeBotUtils.get_information_log_path("t"))
     currency_converter = CurrencyConverter()
     database_service = DatabaseService()
-    #  print(database_service.get_transaction_as_dataframe('bitstamp', False, 'eur'))
-
-    plotHandler = PlotHandler(100, 0.0015, 'bitstamp', 'usd', 'xrp', database_service, False)
-    plotHandler.plot_trade_values()
+    print(database_service.create_tables_if_not_exist())
 
 
 # print(currency_converter.convert_currency(10, 'usd', 'usd'))

@@ -5,7 +5,7 @@ from services.algorithmic_trading.src.main.calculators.CurrencyConverter import 
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
 from services.algorithmic_trading.src.main.exchange.utils.BitstampAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions, APIError
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
 from services.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -22,41 +22,20 @@ class BitstampApiImpl(ExchangeApi):
         self.__api_secret = bytes(api_secret, 'utf-8')
 
         self.__currency_converter = CurrencyConverter()
-        self.__api_order_tries = 25
 
         super().__init__(exchange_name="Bitstamp",
                          cash_currency=cash_currency,
                          crypto_currency=crypto_currency)
 
     def execute_sell_order(self, price: float, quantity: float) -> str:
-        order_id = ""
-        for i in range(0, self.__api_order_tries):
-            while True:
-                try:
-                    order_id = APISellLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(
-                        price=round(price, 5),
-                        amount=round(quantity, 8),
-                        fok_order=True)
-                except APIError:
-                    continue
-                break
-
-        return order_id
+        return APISellLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(price=round(price, 5),
+                                                                                             amount=round(quantity, 8),
+                                                                                             fok_order=True)
 
     def execute_buy_order(self, price: float, quantity: float) -> str:
-        order_id = ""
-        for i in range(0, self.__api_order_tries):
-            while True:
-                try:
-                    order_id = APIBuyLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(
-                        price=round(price, 5),
-                        amount=round(quantity, 8),
-                        fok_order=True)
-                except APIError:
-                    continue
-                break
-
-        return order_id
+        return APIBuyLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(price=round(price, 5),
+                                                                                            amount=round(quantity, 8),
+                                                                                            fok_order=True)
 
     def get_account_cash_value(self) -> float:
         return float(APIAccountCash(self.__customer_id, self.__api_key, self.__api_secret).call())
