@@ -1,5 +1,9 @@
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import CurrencyConverter
 from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
+from services.algorithmic_trading.src.main.output_handlers.PlotHandler import PlotHandler
 
 
 def main():
@@ -14,10 +18,15 @@ def main():
 
     # print(exchange_api.get_accrued_account_fees())
     # print(TradeBotUtils.get_information_log_path("t"))
-    database_service = DatabaseService()
-    print(database_service.get_transaction_net_value('bitstamp', False, True))
     currency_converter = CurrencyConverter()
-   # print(currency_converter.convert_currency(10, 'usd', 'usd'))
+    database_service = DatabaseService()
+    #  print(database_service.get_transaction_as_dataframe('bitstamp', False, 'eur'))
+
+    plotHandler = PlotHandler(100, 0.0015, 'bitstamp', 'usd', 'xrp', database_service, False)
+    plotHandler.plot_trade_values()
+
+
+# print(currency_converter.convert_currency(10, 'usd', 'usd'))
 
 
 if __name__ == '__main__':

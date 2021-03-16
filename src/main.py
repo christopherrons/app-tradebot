@@ -84,12 +84,13 @@ def main(argv):
                                            api_secret=TradeBotUtils.get_bitstamp_api_secret())
             if args.init_database_from_exchange:
                 print(f"Initializing Database from {args.exchange}!")
-                for idx, transaction in enumerate(reversed(exchange_api.get_transactions())):
+                trade_nr = 0
+                for transaction in reversed(exchange_api.get_transactions()):
                     if transaction['type'] == '2':
                         database_service.insert_trade_report(order_id=transaction['order_id'],
                                                              is_simulation=False, exchange='bitstamp',
                                                              timestamp=exchange_api.get_transaction_timestamp(transaction),
-                                                             trade_number=idx + 1,
+                                                             trade_number=trade_nr + 1,
                                                              buy=exchange_api.is_transaction_buy(transaction),
                                                              cash_currency=exchange_api.get_transaction_cash_currency(transaction),
                                                              crypto_currency=exchange_api.get_transaction_crypto_currency(transaction),
@@ -98,6 +99,7 @@ def main(argv):
                                                              quantity=exchange_api.get_transaction_quantity(transaction),
                                                              gross_trade_value=exchange_api.get_transaction_gross_value(transaction),
                                                              net_trade_value=exchange_api.get_transaction_net_value(transaction))
+                        trade_nr += 1
 
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
@@ -149,9 +151,9 @@ def main(argv):
                                   account_ask_price=account_ask_price,
                                   sell_quantity=exchange_api.get_account_quantity(),
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange, args.cash_currency, args.is_simulation),
-                                  success_ful_trades=database_service.get_nr_successful_trades(args.exchange, args.is_simulation),
-                                  successful_cycles=database_service.get_nr_successful_cycles(args.exchange, args.is_simulation))
+                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange, args.cash_currency, not args.is_not_simulation),
+                                  success_ful_trades=database_service.get_nr_successful_trades(args.exchange, not args.is_not_simulation),
+                                  successful_cycles=database_service.get_nr_successful_cycles(args.exchange, not args.is_not_simulation))
 
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
                                                              database_service, args.cash_currency,
