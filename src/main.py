@@ -49,7 +49,7 @@ def main(argv):
     arg_parser = ArgumentParser(description='Run a crypto trading bot with the bitstamp api.',
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
-    arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]', type=float)
+    arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]', type=float) # TODO need to be converted to eur if required
     arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose exchange', type=str)
     arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'), help='Choose Cash Currency', type=str)
     arg_parser.add_argument('crypto_currency', choices=('XRP'), help='Choose CryptoCurrency', type=str)
