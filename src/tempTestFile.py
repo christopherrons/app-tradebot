@@ -1,3 +1,4 @@
+from services.algorithmic_trading.src.main.calculators.CurrencyConverter import CurrencyConverter
 from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 
 
@@ -14,7 +15,9 @@ def main():
     # print(exchange_api.get_accrued_account_fees())
     # print(TradeBotUtils.get_information_log_path("t"))
     database_service = DatabaseService()
-    print(database_service.get_accrued_account_fees('kraken'))
+    print(database_service.get_transaction_net_value('bitstamp', False, True))
+    currency_converter = CurrencyConverter()
+   # print(currency_converter.convert_currency(10, 'usd', 'usd'))
 
 
 if __name__ == '__main__':

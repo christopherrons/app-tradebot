@@ -10,10 +10,8 @@
 # TODO: Add kraken api and make api calls possible for both kraken and bitstamp
 # TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Trade in EUR or USD? Check which market is the most liquid
-# TODO: Add log directory in generated files
 # TODO: Consider order could not be placed error from bitstamp
 # TODO: Consider websocket connection loss error
-# TODO: Should email handler be a utils class
 # TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage)
 # TODO: Docker container
 
@@ -151,9 +149,9 @@ def main(argv):
                                   account_ask_price=account_ask_price,
                                   sell_quantity=exchange_api.get_account_quantity(),
                                   exchange_fee=exchange_fee,
-                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange),
-                                  success_ful_trades=database_service.get_nr_successful_trades(args.exchange),
-                                  successful_cycles=database_service.get_nr_successful_cycles(args.exchange))
+                                  accrued_fees=database_service.get_accrued_account_fees(args.exchange, args.cash_currency, args.is_simulation),
+                                  success_ful_trades=database_service.get_nr_successful_trades(args.exchange, args.is_simulation),
+                                  successful_cycles=database_service.get_nr_successful_cycles(args.exchange, args.is_simulation))
 
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
                                                              database_service, args.cash_currency,
