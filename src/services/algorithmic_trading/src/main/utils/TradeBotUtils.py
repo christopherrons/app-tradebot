@@ -41,7 +41,7 @@ class TradeBotUtils:
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
         config = ConfigParser()
-        config_path = os.path.join(os.path.dirname(__file__), '../../resources/configs/.script-config.ini')
+        config_path = os.path.join(os.path.dirname(__file__), '../../resources/configs/script-config.ini')
         if not os.path.exists(config_path):
             raise ValueError(f'No configuration file exists. Expected file: {config_path}')
 
