@@ -12,7 +12,7 @@ Analysis and implementation of cryptocurrency tradebot. The application trades u
 
 ## Docker Run (Recommended)
 * sudo docker-compose up --build -d 
-* sudo docker-compose run app <args>
+* sudo docker-compose run app \<args\>
 * Use arg -h for input options and instructions: sudo docker-compose run app -h
 
 ## Native Run
