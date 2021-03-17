@@ -10,12 +10,12 @@ Analysis and implementation of cryptocurrency tradebot. The application trades u
 * Add your configs to src/services/algorithmic_trading/src/resources/configs/script-config.ini
 * Then run git update-index --assume-unchanged src/services/algorithmic_trading/src/resources/configs/script-config.ini 
 
-# Docker Run (Recommended)
+## Docker Run (Recommended)
 * sudo docker-compose up --build -d 
 * sudo docker-compose run app <args>
 * Use arg -h for input options and instructions: sudo docker-compose run app -h
 
-# Native Run
+## Native Run
 * Setup the postgres database. See the docker-compose.yaml for configs
 * pip3 install -r requirements.txt
 * From the src directory run: python main.py
