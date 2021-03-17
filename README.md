@@ -1,29 +1,22 @@
 # App-TradeBot
-Analysis and implementation of cryptocurrency tradebot.
+Analysis and implementation of cryptocurrency tradebot. The application trades using a simple volatility trading trategy. READ analysis and run a few simulation before running 
 
 ## Prerequisite 
 * Bitstamp Account or Kraken account
-* Active api-key connected to the account 
+* Gmail configured to allow less secure apps
+* Docker and Docker Compose OR python3.6+ and a postgressql database setup
 
-## Run script instructions
-* Run pip3 install -r requirements.txt to install relevant external libraries
-* Create a local script config file and add the following add the following information:
+## Configurations
+* Add your configs to src/services/algorithmic_trading/src/resources/configs/script-config.ini
+* Then run git update-index --assume-unchanged src/services/algorithmic_trading/src/resources/configs/script-config.ini 
 
+# Docker Run (Recommended)
+* sudo docker-compose up --build -d 
+* sudo docker-compose run app <args>
+* Use arg -h for input options and instructions: sudo docker-compose run app -h
 
-[Bitstamp] <br />
-   apiKey=apiKey <br />
-   customerID=customerID <br />
-   apiSecret=apiSecret <br />
-   
-[Kraken] <br />
-   apiKey=apiKey <br />
-   customerID=customerID <br />
-   apiSecret=apiSecret <br />
-
-[User] <br />
-   emailSource=email@gmail.com (has to be gmail with less secure apps configured to on) <br />
-   emailSourcePassword=password <br />
-   emailTarget=target@mail.com <br />
-
-Then add the path to the file to script_config_path under Paths in the file to script-config.ini file under algorithmic_trading/src/resources/configs.
-* Type main.py -h for script instructions 
+# Native Run
+* Setup the postgres database. See the docker-compose.yaml for configs
+* pip3 install -r requirements.txt
+* From the src directory run: python main.py
+* Use arg -h for input options and instructions: python main.py -h
