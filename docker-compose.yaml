@@ -19,6 +19,8 @@ services:
     build: .
     networks:
       - "backend-network"
+    volumes:
+      - ./src:/src
 volumes:
   db-data:
     driver: local

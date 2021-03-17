@@ -2,6 +2,7 @@ from datetime import datetime
 
 from services.algorithmic_trading.src.main.calculators.CurrencyConverter import \
     CurrencyConverter
+from services.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from services.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
 from services.algorithmic_trading.src.main.exchange.utils.KrakenAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
@@ -97,3 +98,20 @@ class KrakenApiImpl(ExchangeApi):
 
     def get_transaction_net_value(self, transaction: dict) -> float:
         return self.get_transaction_gross_value(transaction) - self.get_transaction_fee_from_transaction_dict(transaction)
+
+    def init_database_from_exchange(self, database_service: DatabaseService):
+        print(f"Initializing Database from Kraken!")
+        closed_transactions = self.get_transactions()['closed']
+        for idx, order_id in enumerate(closed_transactions.keys()):
+            database_service.insert_trade_report(order_id=order_id,
+                                                 is_simulation=False, exchange='kraken',
+                                                 timestamp=self.get_transaction_timestamp(closed_transactions[order_id]),
+                                                 trade_number=idx + 1,
+                                                 buy=self.is_transaction_buy(closed_transactions[order_id]),
+                                                 cash_currency=self.get_transaction_cash_currency(closed_transactions[order_id]),
+                                                 crypto_currency=self.get_transaction_crypto_currency(closed_transactions[order_id]),
+                                                 fee=self.get_transaction_fee_from_transaction_dict(closed_transactions[order_id]),
+                                                 price=self.get_transaction_price_per_quantity(closed_transactions[order_id]),
+                                                 quantity=self.get_transaction_quantity(closed_transactions[order_id]),
+                                                 gross_trade_value=self.get_transaction_gross_value(closed_transactions[order_id]),
+                                                 net_trade_value=self.get_transaction_net_value(closed_transactions[order_id]))

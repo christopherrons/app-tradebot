@@ -22,6 +22,8 @@ class DatabaseService:
         self.__database_table_queries_path = TradeBotUtils.get_data_base_queries_path()
         self.__currency_converter = CurrencyConverter()
 
+        self.create_tables_if_not_exist()
+
     def create_tables_if_not_exist(self):
         with open(self.__database_table_queries_path, 'r') as sql_file:
             queries = sql_file.read().strip().split(';')

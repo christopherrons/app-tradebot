@@ -27,7 +27,6 @@ class APIMixin(object):
     def call(self, headers, data):
         # Form request
         url = _API_URL + self.url
-        print(url)
         if self.method == 'get':
             response = requests.get(url, headers=headers, data=data).json()
         else:
@@ -79,7 +78,6 @@ class APIBalanceCall(APIAuthMixin):
 
 class APIAccountCash(APIBalanceCall):
     def _process_response(self, response):
-        print(response)
         return response['result']['ZUSD'] if 'ZUSD' in response['result'] else 0
 
 

@@ -6,10 +6,10 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
+# TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage) !!!!!!!!!!!!!!!
 # TODO: Clean up code
 # TODO: Trade in EUR or USD? Check which market is the most liquid
-# TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage)
-# TODO: Remove sensitive information
+# TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Fix file names, directory structure and config paths
 
 # Nice to
@@ -66,38 +66,18 @@ def main(argv):
     args = arg_parser.parse_args()
 
     try:
-
         TradeBotUtils.live_run_checker(args.is_not_simulation)
 
         database_service = DatabaseService()
-        database_service.create_tables_if_not_exist()
 
-        print(f"Exchange {args.exchange} is being used for trading"
-              f" {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
+        print(f"Exchange {args.exchange} is being used for trading {args.crypto_currency.upper()} in {args.cash_currency.upper()}\n")
         if args.exchange == 'Bitstamp':
             exchange_websocket = BitstampWebsocket(args.cash_currency, args.crypto_currency)
-            exchange_api = BitstampApiImpl(cash_currency=args.cash_currency, crypto_currency=args.crypto_currency,
-                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(), api_key=TradeBotUtils.get_bitstamp_api_key(),
+            exchange_api = BitstampApiImpl(cash_currency=args.cash_currency,
+                                           crypto_currency=args.crypto_currency,
+                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(),
+                                           api_key=TradeBotUtils.get_bitstamp_api_key(),
                                            api_secret=TradeBotUtils.get_bitstamp_api_secret())
-            if args.init_database_from_exchange:
-                print(f"Initializing Database from {args.exchange}!")
-                trade_nr = 0
-                for transaction in reversed(exchange_api.get_transactions()):
-                    if transaction['type'] == '2':
-                        database_service.insert_trade_report(order_id=transaction['order_id'],
-                                                             is_simulation=False, exchange='bitstamp',
-                                                             timestamp=exchange_api.get_transaction_timestamp(transaction),
-                                                             trade_number=trade_nr + 1,
-                                                             buy=exchange_api.is_transaction_buy(transaction),
-                                                             cash_currency=exchange_api.get_transaction_cash_currency(transaction),
-                                                             crypto_currency=exchange_api.get_transaction_crypto_currency(transaction),
-                                                             fee=exchange_api.get_transaction_fee_from_transaction_dict(transaction),
-                                                             price=exchange_api.get_transaction_price_per_quantity(transaction),
-                                                             quantity=exchange_api.get_transaction_quantity(transaction),
-                                                             gross_trade_value=exchange_api.get_transaction_gross_value(transaction),
-                                                             net_trade_value=exchange_api.get_transaction_net_value(transaction))
-                        trade_nr += 1
-
             exchange_fee = 0.005
             minimum_interest = 0.0100755031
 
@@ -105,28 +85,13 @@ def main(argv):
             exchange_websocket = KrakenWebsocket(args.cash_currency, args.crypto_currency)
             exchange_api = KrakenApiImpl(cash_currency=args.cash_currency, crypto_currency=args.crypto_currency,
                                          api_key=TradeBotUtils.get_kraken_api_key(), api_secret=TradeBotUtils.get_kraken_api_secret())
-
-            if args.init_database_from_exchange:
-                print(f"Initializing Database from {args.exchange}!")
-                closed_transactions = exchange_api.get_transactions()['closed']
-                for idx, order_id in enumerate(closed_transactions.keys()):
-                    database_service.insert_trade_report(order_id=order_id,
-                                                         is_simulation=False, exchange='kraken',
-                                                         timestamp=exchange_api.get_transaction_timestamp(closed_transactions[order_id]),
-                                                         trade_number=idx + 1,
-                                                         buy=exchange_api.is_transaction_buy(closed_transactions[order_id]),
-                                                         cash_currency=exchange_api.get_transaction_cash_currency(closed_transactions[order_id]),
-                                                         crypto_currency=exchange_api.get_transaction_crypto_currency(closed_transactions[order_id]),
-                                                         fee=exchange_api.get_transaction_fee_from_transaction_dict(closed_transactions[order_id]),
-                                                         price=exchange_api.get_transaction_price_per_quantity(closed_transactions[order_id]),
-                                                         quantity=exchange_api.get_transaction_quantity(closed_transactions[order_id]),
-                                                         gross_trade_value=exchange_api.get_transaction_gross_value(closed_transactions[order_id]),
-                                                         net_trade_value=exchange_api.get_transaction_net_value(closed_transactions[order_id]))
-
             exchange_fee = 0.0026
             minimum_interest = 0.0052203505
 
         TradeBotUtils.validate_args(args, minimum_interest)
+
+        if args.init_database_from_exchange:
+            exchange_api.init_database_from_exchange(database_service)
 
         if args.is_sell:
             account_bid_price = 0
@@ -152,8 +117,7 @@ def main(argv):
                                   successful_cycles=database_service.get_nr_successful_cycles(args.exchange, not args.is_not_simulation))
 
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
-                                                             database_service, args.cash_currency,
-                                                             args.crypto_currency)
+                                                             database_service, args.cash_currency, args.crypto_currency)
 
             trade_bot_runner = VolatilityTradeRunner(is_sell=args.is_sell,
                                                      trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket,
@@ -174,6 +138,7 @@ def main(argv):
                                   accrued_fees=0,
                                   success_ful_trades=0,
                                   successful_cycles=0)
+
             trade_bot_output_handler = TradeBotOutputHandler(not args.is_not_simulation, args.exchange, cache,
                                                              database_service, args.cash_currency, args.crypto_currency)
 
@@ -195,6 +160,10 @@ def main(argv):
         print("\n--- ERROR ---")
         traceback.print_exc()
         EmailHandler().send_email_message(email_subject=f'ERROR: {args.exchange}', email_message=str(error))
+
+
+def init_database():
+    pass
 
 
 if __name__ == '__main__':

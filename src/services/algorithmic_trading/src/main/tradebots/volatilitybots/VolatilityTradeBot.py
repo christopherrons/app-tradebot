@@ -27,7 +27,7 @@ class VolatilityTradeBot(ABC):
     def is_order_executed(self, order_id: str) -> bool: pass
 
     @abstractmethod
-    def update_cache(self, order_id: str): pass
+    def update_cache(self, order_id: str, fee: float): pass
 
     @abstractmethod
     def run_post_trade_batch(self, order_id: str): pass
