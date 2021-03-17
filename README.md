@@ -1,5 +1,5 @@
 # App-TradeBot
-Analysis and implementation of cryptocurrency tradebot. The application trades using a simple volatility trading trategy. READ analysis and run a few simulation before running 
+Analysis and implementation of cryptocurrency tradebot. The application trades using a simple volatility trading trategy. READ analysis and run a few simulation before running a Live run with real money. 
 
 ## Prerequisite 
 * Bitstamp Account or Kraken account
