@@ -19,14 +19,8 @@ CREATE TABLE IF NOT EXISTS trade_data.report (
   PRIMARY KEY(order_id, exchange, datetime)
 );
 
-CREATE TABLE IF NOT EXISTS trade_data.run_session (
-    trade_session UUID NOT NULL,
-    datetime TIMESTAMP NOT NULL,
-    initial_value NUMERIC(20, 10) NOT NULL,
-    account_cash_value NUMERIC(20, 10) NOT NULL,
-    cash_currency VARCHAR(100) NOT NULL,
-    account_quantity NUMERIC(20, 10) NOT NULL,
-    crypto_currency VARCHAR(100) NOT NULL,
-    nr_successful_trades INT NOT NULL,
-    nr_successful_cycles INT NOT NULL
+CREATE TABLE IF NOT EXISTS trade_data.initial_account_value(
+    exchange VARCHAR(100) NOT NULL PRIMARY KEY,
+    initial_account_value_usd NUMERIC(20, 10) NOT NULL,
+    initial_account_value_eur NUMERIC(20, 10) NOT NULL
 )

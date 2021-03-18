@@ -20,7 +20,8 @@ def main():
     # print(TradeBotUtils.get_information_log_path("t"))
     currency_converter = CurrencyConverter()
     database_service = DatabaseService()
-    print(database_service.create_tables_if_not_exist())
+    database_service.insert_or_update_initial_account_value('bitstamp', 100, 'usd')
+    print(database_service.get_initial_account_value('bitstamp', 'eur'))
 
 
 # print(currency_converter.convert_currency(10, 'usd', 'usd'))

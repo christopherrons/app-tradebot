@@ -17,7 +17,6 @@
 # TODO: Optimize with threading
 # TODO: Add relevant visualisations
 # TODO: Strategy for start price
-# TODO: Find smart way to set initial value other than memorizing
 
 import sys
 import traceback
@@ -47,11 +46,11 @@ def main(argv):
     arg_parser = ArgumentParser(description='Run a crypto trading bot with the bitstamp api.',
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
-    arg_parser.add_argument('initial_value', help='Specify the amount of cash that was invested from the beginning [$]',
-                            type=float)  # TODO need to be converted to eur if required
     arg_parser.add_argument('exchange', choices=('Bitstamp', 'Kraken'), help='Choose exchange', type=str)
     arg_parser.add_argument('cash_currency', choices=('USD', 'EUR'), help='Choose Cash Currency', type=str)
     arg_parser.add_argument('crypto_currency', choices=('XRP'), help='Choose CryptoCurrency', type=str)
+    arg_parser.add_argument('--override_initial_value', help='Override the stored initial value. Base it on the current session cash currency',
+                            type=float)
     arg_parser.add_argument('--is_sell', help='Specify if buy or sell', default=False, action='store_true')
     arg_parser.add_argument('--interest', default=0.015, help='Specify the interest gain [%%]', type=float)
     arg_parser.add_argument('--run_time_minutes', default=1000000, help='Specify the number of minutes the bot runs [min]', type=int)
@@ -104,7 +103,16 @@ def main(argv):
             TradeBotUtils.reset_logs(args.exchange)
 
         if args.is_not_simulation:
-            cache = TradeBotCache(initial_value=args.initial_value,
+            if args.override_initial_value:
+                database_service.insert_or_update_initial_account_value(args.exchange, args.override_initial_value, args.cash_currency)
+
+            initial_value = database_service.get_initial_account_value(args.exchange, args.cash_currency)
+            if initial_value == 0:
+                initial_value = exchange_api.get_account_cash_value() + \
+                                (exchange_api.get_account_quantity() * exchange_websocket.get_market_bid_price()) * (1 - exchange_fee)
+                database_service.insert_or_update_initial_account_value(args.exchange, initial_value, args.cash_currency)
+
+            cache = TradeBotCache(initial_value=initial_value,
                                   cash_value=exchange_api.get_account_cash_value(),
                                   interest=args.interest,
                                   account_bid_price=account_bid_price,
@@ -128,7 +136,7 @@ def main(argv):
         else:
             initial_value = 100
             cache = TradeBotCache(initial_value=initial_value,
-                                  cash_value=args.initial_value,
+                                  cash_value=initial_value,
                                   interest=args.interest,
                                   account_bid_price=account_bid_price,
                                   account_ask_price=account_ask_price,
@@ -160,10 +168,6 @@ def main(argv):
         print("\n--- ERROR ---")
         traceback.print_exc()
         EmailHandler().send_email_message(email_subject=f'ERROR: {args.exchange}', email_message=str(error))
-
-
-def init_database():
-    pass
 
 
 if __name__ == '__main__':

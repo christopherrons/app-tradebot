@@ -88,6 +88,23 @@ class DatabaseService:
         print(f'\n--Query Executed: Get Transaction as DataFrame\n')
         return transaction_df
 
+    def get_initial_account_value(self, exchange: str, cash_currency: str) -> float:
+        query = f"SELECT initial_account_value_{cash_currency.lower()} from trade_data.initial_account_value WHERE exchange = %s;"
+        data = [exchange]
+        result = self.__read_query(query=query, data=data)
+
+        print(f'\n--Query Executed: Get initial Account Value \n')
+        return result[0][0] if result else 0
+
+    def insert_or_update_initial_account_value(self, exchange: str, account_value: float, cash_currency: str):
+        query = "INSERT INTO trade_data.initial_account_value(exchange, initial_account_value_usd, initial_account_value_eur)" \
+                " VALUES(%s, %s, %s) ON CONFLICT DO NOTHING;"
+        data = [exchange, self.__currency_converter.convert_currency(account_value, cash_currency, 'usd'),
+                self.__currency_converter.convert_currency(account_value, cash_currency, 'eur')]
+        self.__write_query(query=query, data=data)
+
+        print(f'\n--Query Executed: Insert initial Account Value \n')
+
     def __read_to_dataframe(self, query: str) -> DataFrame:
         return sqlio.read_sql_query(query, self.__conn)
 
