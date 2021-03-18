@@ -23,6 +23,12 @@ class TradeBotUtils:
                     f.truncate(0)
 
     @staticmethod
+    def create_target_folder():
+        if not os.path.exists(os.path.join(os.path.dirname(__file__), f"../../../target")):
+            os.mkdir(os.path.join(os.path.dirname(__file__), f"../../../target"))
+            os.mkdir(os.path.join(os.path.dirname(__file__), f"../../../target/generated"))
+
+    @staticmethod
     def get_data_base_queries_path() -> str:
         return os.path.join(os.path.dirname(__file__), '../../resources/templates/algorithmic_trading_database_schema.sql')
 

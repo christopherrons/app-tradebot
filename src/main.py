@@ -67,6 +67,7 @@ def main(argv):
 
     try:
         TradeBotUtils.live_run_checker(args.is_not_simulation)
+        TradeBotUtils.create_target_folder()
 
         database_service = DatabaseService()
 
