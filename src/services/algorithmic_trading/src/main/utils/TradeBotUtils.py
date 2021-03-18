@@ -96,9 +96,6 @@ class TradeBotUtils:
 
     @staticmethod
     def validate_args(args, minimum_interest: float):
-        if args.initial_value < 1:
-            raise ValueError(f'Initial Value {args.initial_value} is to low. Minimum value is 1')
-
         if args.interest < minimum_interest:
             raise ValueError(f'Interest {args.interest} is to low. Minimum value is 0.{minimum_interest}')
 
