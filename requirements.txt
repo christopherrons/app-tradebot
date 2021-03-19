@@ -1,6 +1,6 @@
 websockets==8.1
-plotly==4.14.3
 pandas==1.1.5
-tabulate==0.8.7
 requests==2.18.4
+tabulate==0.8.7
+plotly==4.14.3
 psycopg2==2.8.6

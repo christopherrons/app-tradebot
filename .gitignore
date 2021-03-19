@@ -1,4 +1,4 @@
-src/services/algorithmic_trading/target/generated/
-src/services/algorithmic_trading/src/resources/configs/script-config.ini/
+src/applications/algorithmic_trading/target/generated/
+src/applications/algorithmic_trading/src/resources/configs/account-configs.ini/
 
 
