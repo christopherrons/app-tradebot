@@ -11,7 +11,6 @@
 # TODO: Trade in EUR or USD? Check which market is the most liquid
 # TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Fix file names, directory structure and config paths
-# TODO: Create a function of the sql rather then many queries
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around
@@ -88,8 +87,7 @@ def main(argv):
             exchange_api = KrakenApiImpl(cash_currency=args.cash_currency, crypto_currency=args.crypto_currency,
                                          api_key=TradeBotUtils.get_kraken_api_key(), api_secret=TradeBotUtils.get_kraken_api_secret())
             exchange_fee = 0.0026
-            minimum_interest = 0.0052203505
-
+            minimum_interest = 0.005220350
         TradeBotUtils.validate_args(args, minimum_interest)
 
         if args.init_database_from_exchange:
