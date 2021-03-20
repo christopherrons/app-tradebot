@@ -47,6 +47,10 @@ class VolatilityTrading:
         self.__configs.validate_configs()
         self.__live_run_checker()
         TradeBotUtils.create_target_folder()
+        if self.__configs.reset_database:
+            self.__database_service.drop_all_tables()
+
+        self.__database_service.create_tables_if_not_exist()
         self.__set_exchange_services()
 
         if self.__configs.is_reset_logs:
@@ -64,7 +68,7 @@ class VolatilityTrading:
 
     def __set_exchange_services(self):
         PrinterUtils.console_log(message=f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency}"
-              f" in {self.__configs.cash_currency}")
+                                         f" in {self.__configs.cash_currency}")
         if self.__configs.exchange == 'bitstamp':
             self.__exchange_websocket = BitstampWebsocket(self.__configs.cash_currency, self.__configs.crypto_currency)
             self.__exchange_api = BitstampApiImpl(cash_currency=self.__configs.cash_currency,
@@ -107,7 +111,13 @@ class VolatilityTrading:
                     PrinterUtils.console_log(message=f"Account Bid Price: {account_trade_price}")
 
     def __set_simulation_runner(self):
-        initial_value = 100
+        initial_value = self.__database_service.get_initial_account_value(self.__configs.exchange, self.__configs.is_live,
+                                                                          self.__configs.cash_currency)
+        if initial_value == 0:
+            initial_value = 100
+            self.__database_service.insert_or_update_initial_account_value(self.__configs.exchange, self.__configs.is_live, initial_value,
+                                                                           self.__configs.cash_currency)
+
         cache = TradeBotCache(initial_value=initial_value,
                               cash_value=initial_value,
                               interest=self.__configs.interest,
@@ -122,8 +132,8 @@ class VolatilityTrading:
                               success_ful_trades=0,
                               successful_cycles=0)
 
-        trade_bot_output_handler = TradeBotOutputHandler(self.__configs.is_live, self.__configs.exchange, cache,
-                                                         self.__database_service, self.__configs.cash_currency, self.__configs.crypto_currency)
+        trade_bot_output_handler = TradeBotOutputHandler(self.__configs.is_live, self.__configs.exchange, cache, self.__database_service,
+                                                         self.__configs.cash_currency, self.__configs.crypto_currency)
 
         self.__trade_bot_runner = VolatilityTradeRunner(is_sell=self.__configs.is_sell,
                                                         trade_bot_buyer=SimulationVolatilityTradeBotBuyer(self.__exchange_websocket,
@@ -137,15 +147,18 @@ class VolatilityTrading:
 
     def __set_live_trade_runner(self):
         if self.__configs.override_initial_value:
-            self.__database_service.insert_or_update_initial_account_value(self.__configs.exchange, self.__configs.override_initial_value,
-                                                                           self.__configs.cash_currency)
+            self.__database_service.insert_or_update_initial_account_value(self.__configs.exchange, self.__configs.is_live,
+                                                                           self.__configs.override_initial_value, self.__configs.cash_currency)
 
-        initial_value = self.__database_service.get_initial_account_value(self.__configs.exchange, self.__configs.cash_currency)
+        initial_value = self.__database_service.get_initial_account_value(self.__configs.exchange, self.__configs.is_live,
+                                                                          self.__configs.cash_currency)
         if initial_value == 0:
             initial_value = self.__exchange_api.get_account_cash_value() + \
                             (self.__exchange_api.get_account_quantity() * self.__exchange_websocket.get_market_bid_price()) * (
                                     1 - TradeBotUtils.get_exchange_fee(self.__configs.exchange))
-            self.__database_service.insert_or_update_initial_account_value(self.__configs.exchange, initial_value, self.__configs.cash_currency)
+
+            self.__database_service.insert_or_update_initial_account_value(self.__configs.exchange, self.__configs.is_live, initial_value,
+                                                                           self.__configs.cash_currency)
 
         cache = TradeBotCache(initial_value=initial_value,
                               cash_value=self.__exchange_api.get_account_cash_value(),

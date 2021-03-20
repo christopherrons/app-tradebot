@@ -13,7 +13,7 @@ def main():
     # TODO: How is order id returned
     # TODO: Check hwo to get the fee after trade
 
-    DatabaseService().insert_or_update_initial_account_value('bitstamp', 100, 'usd')
+    DatabaseService().drop_all_tables()
 
 
 

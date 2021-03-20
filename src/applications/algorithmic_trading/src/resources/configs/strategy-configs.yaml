@@ -8,7 +8,11 @@ volatility: # Override the Default value by adding a custom value.
     custom:   # Values: True/False
 
   init_database_from_exchange: # Description: Set to true to init database with data from the exchange. Only works for live runs
-    default: True
+    default: False
+    custom:   # Values: True/False
+
+  reset_database: # Description: Set to true to reset database
+    default: False
     custom:   # Values: True/False
 
   is_live: # Description: True if live trading.

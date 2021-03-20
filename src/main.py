@@ -29,7 +29,7 @@ def main(argv):
     arg_parser = ArgumentParser(description='Run a crypto trading bot with the bitstamp api.',
                                 formatter_class=TradeBotUtils.CustomFormatter,
                                 epilog='(C) 2021 \nAuthors: Christopher Herron and Thomas Brunner \nEmails: christopherherron09@gmail.com and tbrunner@kth.se')
-    arg_parser.add_argument('strategy', choices=('Volatility'), help='Choose Trading Strategy', type=str)
+    arg_parser.add_argument('strategy', choices=('Volatility',), help='Choose Trading Strategy', type=str)
     args = arg_parser.parse_args()
 
     if args.strategy == 'Volatility':

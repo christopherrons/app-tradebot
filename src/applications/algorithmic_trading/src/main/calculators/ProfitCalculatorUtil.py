@@ -12,12 +12,12 @@ class ProfitCalculatorUtil:
         return 100 * (cash_value / initial_value - 1)
 
     @staticmethod
-    def theoretical_cash_profit(initial_value: float, interest: float, successful_cycles: int) -> float:
-        return initial_value * (math.pow(interest, successful_cycles) - 1)
+    def theoretical_cash_profit(initial_value: float, net_interest: float, successful_cycles: int) -> float:
+        return initial_value * (math.pow(net_interest, successful_cycles) - 1)
 
     @staticmethod
-    def theoretical_percent_profit(initial_value: float, interest: float, successful_cycles: int) -> float:
-        return ProfitCalculatorUtil.theoretical_cash_profit(initial_value, interest, successful_cycles) / initial_value
+    def theoretical_percent_profit(initial_value: float, net_interest: float, successful_cycles: int) -> float:
+        return ProfitCalculatorUtil.theoretical_cash_profit(initial_value, net_interest, successful_cycles) / initial_value
 
     @staticmethod
     def net_position_profit(net_position_value: float, initial_value: float) -> float:

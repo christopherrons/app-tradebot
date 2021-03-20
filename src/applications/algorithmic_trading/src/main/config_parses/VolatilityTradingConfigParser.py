@@ -20,6 +20,10 @@ class VolatilityTradingConfigParser:
                 if volatility_configs['volatility']['init_database_from_exchange']['custom'] \
                 else volatility_configs['volatility']['init_database_from_exchange']['default']
 
+            self.__reset_database = volatility_configs['volatility']['reset_database']['custom'] \
+                if volatility_configs['volatility']['reset_database']['custom'] \
+                else volatility_configs['volatility']['reset_database']['default']
+
             self.__is_live = volatility_configs['volatility']['is_live']['custom'] \
                 if volatility_configs['volatility']['is_live']['custom'] \
                 else volatility_configs['volatility']['is_live']['default']
@@ -60,6 +64,10 @@ class VolatilityTradingConfigParser:
         if not isinstance(self.__init_database_from_exchange, bool):
             raise ValueError(
                 f'Config init_database_from_exchange requires booleans got: {self.__init_database_from_exchange} type {type(self.__init_database_from_exchange)}')
+
+        if not isinstance(self.__reset_database, bool):
+            raise ValueError(
+                f'Config reset_database requires booleans got: {self.__reset_database} type {type(self.__reset_database)}')
 
         if not isinstance(self.__is_live, bool):
             raise ValueError(f'Config is_not_simulation requires booleans got: {self.__is_live} type {type(self.__is_live)}')
@@ -107,6 +115,10 @@ class VolatilityTradingConfigParser:
     @property
     def init_database_from_exchange(self) -> bool:
         return self.__init_database_from_exchange
+
+    @property
+    def reset_database(self) -> bool:
+        return self.__reset_database
 
     @property
     def is_live(self) -> bool:

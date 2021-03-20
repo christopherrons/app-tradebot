@@ -20,7 +20,9 @@ CREATE TABLE IF NOT EXISTS trade_data.report (
 );
 
 CREATE TABLE IF NOT EXISTS trade_data.initial_account_value(
-    exchange VARCHAR(100) NOT NULL PRIMARY KEY,
+    exchange VARCHAR(100) NOT NULL,
+    live BOOLEAN NOT NULL,
     initial_account_value_usd NUMERIC(20, 10) NOT NULL,
-    initial_account_value_eur NUMERIC(20, 10) NOT NULL
+    initial_account_value_eur NUMERIC(20, 10) NOT NULL,
+    PRIMARY KEY(exchange, live)
 )

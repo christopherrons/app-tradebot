@@ -1,3 +1,4 @@
+import decimal
 from datetime import datetime
 
 import pandas.io.sql as sqlio
@@ -23,8 +24,6 @@ class DatabaseService:
         self.__database_table_queries_path = TradeBotUtils.get_data_base_queries_path()
         self.__currency_converter = CurrencyConverter()
 
-        self.create_tables_if_not_exist()
-
     def create_tables_if_not_exist(self):
         with open(self.__database_table_queries_path, 'r') as sql_file:
             queries = sql_file.read().strip().split(';')
@@ -32,6 +31,18 @@ class DatabaseService:
             self.__write_query(query=query, data=[])
 
         PrinterUtils.console_log(message=f'Query Executed: Created Tables if not Exist')
+
+    def drop_all_tables(self):
+        query = "SELECT table_name FROM information_schema.tables" \
+                " WHERE table_schema = %s"
+        data = ['trade_data']
+        table_names = self.__read_query(query, data)
+        table_names = ["trade_data." + table_name[0] for table_name in table_names]
+        separator = ', '
+        query = f"DROP TABLE {separator.join(table_names)}"
+        data = []
+        self.__write_query(query, data)
+        PrinterUtils.console_log(message=f'Query Executed: Drop all Tables')
 
     def insert_trade_report(self, is_live: bool, exchange: str, timestamp: datetime, order_id: str, trade_number: int, buy: bool,
                             price: float, cash_currency: str, quantity: float, crypto_currency: str, fee: float,
@@ -95,32 +106,41 @@ class DatabaseService:
             lambda x: x['net_trade_value'] if x['cash_currency'] == cash_currency else
             self.__currency_converter.convert_currency(value=x['net_trade_value'], from_currency=x['cash_currency'], to_currency=cash_currency),
             axis=1)
-
         PrinterUtils.console_log(message=f'Query Executed: Get Transaction as DataFrame')
         return transaction_df
 
-    def get_initial_account_value(self, exchange: str, cash_currency: str) -> float:
+    def get_initial_account_value(self, exchange: str, is_live: bool, cash_currency: str) -> float:
         query = f"SELECT initial_account_value_{cash_currency.lower()} from trade_data.initial_account_value" \
-                f"  WHERE exchange = %s;"
-        data = [exchange]
+                f" WHERE exchange = %s" \
+                f" AND live = %s;"
+        data = [exchange, is_live]
         result = self.__read_query(query=query, data=data)
 
         PrinterUtils.console_log(message=f'Query Executed: Get initial Account Value')
         return float(result[0][0]) if result else 0
 
-    def insert_or_update_initial_account_value(self, exchange: str, account_value: float, cash_currency: str):
-        query = "INSERT INTO trade_data.initial_account_value(exchange, initial_account_value_usd, initial_account_value_eur)" \
-                " VALUES(%s, %s, %s)" \
-                " ON CONFLICT (exchange) " \
+    def insert_or_update_initial_account_value(self, exchange: str, is_live: bool, account_value: float, cash_currency: str):
+        query = "INSERT INTO trade_data.initial_account_value(exchange, live, initial_account_value_usd, initial_account_value_eur)" \
+                " VALUES(%s, %s, %s, %s)" \
+                " ON CONFLICT (exchange, live) " \
                 " DO UPDATE" \
                 " SET" \
                 " initial_account_value_usd = excluded.initial_account_value_usd," \
                 " initial_account_value_eur = excluded.initial_account_value_eur;"
-        data = [exchange, self.__currency_converter.convert_currency(account_value, cash_currency, 'usd'),
+        data = [exchange, is_live, self.__currency_converter.convert_currency(account_value, cash_currency, 'usd'),
                 self.__currency_converter.convert_currency(account_value, cash_currency, 'eur')]
         self.__write_query(query=query, data=data)
 
         PrinterUtils.console_log(message=f'Query Executed: Insert initial Account Value')
+
+    def custom_read_query(self, query, data):
+        result = self.__read_query(query, data)[0][0]
+        if isinstance(result, decimal.Decimal):
+            return float(result)
+        if isinstance(result, str):
+            return str(result)
+        PrinterUtils.console_log(message=f'Custom Query Executed')
+        return result
 
     def __read_to_dataframe(self, query: str) -> DataFrame:
         return sqlio.read_sql_query(query, self.__conn)

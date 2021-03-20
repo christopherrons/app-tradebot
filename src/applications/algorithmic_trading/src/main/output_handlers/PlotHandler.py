@@ -1,24 +1,25 @@
 import plotly.express as px
 import plotly.graph_objects as go
+from pandas import DataFrame
 from plotly.graph_objs import Figure
 from plotly.subplots import make_subplots
 
-from applications.algorithmic_trading.src.main.calculators.ProfitCalculatorUtil import ProfitCalculatorUtil
 from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
 class PlotHandler:
-    def __init__(self, initial_value: float, interest: float, exchange: str, cash_currency: str, crypto_currency: str,
-                 database_service: DatabaseService,
-                 is_live: bool):
-        self.__initial_value = initial_value
-        self.__interest = 1 + interest
+    def __init__(self, exchange: str, cash_currency: str, crypto_currency: str, database_service: DatabaseService, is_live: bool):
         self.__exchange = exchange
         self.__cash_currency = cash_currency
         self.__crypto_currency = crypto_currency
         self.__database_service = database_service
         self.__is_live = is_live
+
+        self.__initial_value = database_service.custom_read_query(
+            query=f"SELECT initial_account_value_{cash_currency} FROM trade_data.initial_account_value"
+                  f" WHERE exchange = %s;",
+            data=[exchange])
 
         self.__currency_symbols = TradeBotUtils.get_cash_currency_symbols()
         self.__subplot_rows = 3
@@ -30,30 +31,25 @@ class PlotHandler:
         self.__save_report(fig1, fig2)
 
     def __plot_profits(self):
-        successful_cycles = [i for i in range(self.__database_service.get_nr_successful_cycles(self.__exchange, self.__is_live) + 1)]
+        successful_cycles = [i for i in range(1, self.__database_service.get_nr_successful_cycles(self.__exchange, self.__is_live) + 1)]
+        transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
         fig = make_subplots(rows=self.__subplot_rows, cols=self.__subplot_columns,
                             subplot_titles=(f'Cash Profit per Successful Cycle [{self.__currency_symbols[self.__cash_currency]}]',
                                             f'Percent Profit per Successful Cycle [%]'))
-        self.__plot_cash_profits(fig, successful_cycles)
-        self.__plot_percent_profits(fig, successful_cycles)
+        self.__plot_cash_profits(fig, successful_cycles, transaction_df)
+        self.__plot_percent_profits(fig, successful_cycles, transaction_df)
         return fig
 
-    def __plot_cash_profits(self, fig: Figure, successful_cycles: list):
-        theoretical_cash_profits = [ProfitCalculatorUtil.theoretical_cash_profit(initial_value=self.__initial_value,
-                                                                                 interest=self.__interest,
-                                                                                 successful_cycles=cycle) for cycle in successful_cycles]
-
-        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=theoretical_cash_profits,
-                                line_name='Theoretical', x_axis_title='Successfully Cycle',
+    def __plot_cash_profits(self, fig: Figure, successful_cycles: list, transaction_df: DataFrame):
+        cash_profits = transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].subtract(self.__initial_value)
+        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=cash_profits['net_trade_value'].to_list().sort(),
+                                line_name='Profit', x_axis_title='Successfully Cycle',
                                 y_axis_title=f'Profit [{self.__currency_symbols[self.__cash_currency]}]', mode='lines', row=1, col=1)
 
-    def __plot_percent_profits(self, fig: Figure, successful_cycles: list):
-        theoretical_percent_profits = [ProfitCalculatorUtil.theoretical_percent_profit(initial_value=self.__initial_value,
-                                                                                       interest=self.__interest,
-                                                                                       successful_cycles=cycle) for cycle in successful_cycles]
-
-        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=theoretical_percent_profits,
-                                line_name='Theoretical', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
+    def __plot_percent_profits(self, fig: Figure, successful_cycles: list, transaction_df: DataFrame):
+        percent_profits = transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].divide(self.__initial_value)
+        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=percent_profits['net_trade_value'].to_list().sort(),
+                                line_name='Profit', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
 
     def __plot_trade_values(self):
         transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
