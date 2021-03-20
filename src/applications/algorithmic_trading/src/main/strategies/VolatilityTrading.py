@@ -141,7 +141,6 @@ class VolatilityTrading:
                                                                            self.__configs.cash_currency)
 
         initial_value = self.__database_service.get_initial_account_value(self.__configs.exchange, self.__configs.cash_currency)
-        print(initial_value)
         if initial_value == 0:
             initial_value = self.__exchange_api.get_account_cash_value() + \
                             (self.__exchange_api.get_account_quantity() * self.__exchange_websocket.get_market_bid_price()) * (
