@@ -9,19 +9,19 @@ class VolatilityTradingConfigParser:
             volatility_configs = yaml.safe_load(f)
 
             self.__is_sell = volatility_configs['volatility']['is_sell']['custom'] \
-                if volatility_configs['volatility']['is_sell']['custom'] else \
-                volatility_configs['volatility']['is_sell']['default']
+                if volatility_configs['volatility']['is_sell']['custom'] \
+                else volatility_configs['volatility']['is_sell']['default']
 
             self.__is_reset_logs = volatility_configs['volatility']['is_reset_logs']['custom'] \
-                if volatility_configs['volatility']['is_reset_logs']['custom'] else \
-                volatility_configs['volatility']['is_reset_logs']['default']
+                if volatility_configs['volatility']['is_reset_logs']['custom'] \
+                else volatility_configs['volatility']['is_reset_logs']['default']
 
             self.__init_database_from_exchange = volatility_configs['volatility']['init_database_from_exchange']['custom'] \
-                if volatility_configs['volatility']['init_database_from_exchange']['custom'] else \
-                volatility_configs['volatility']['init_database_from_exchange']['default']
+                if volatility_configs['volatility']['init_database_from_exchange']['custom'] \
+                else volatility_configs['volatility']['init_database_from_exchange']['default']
 
-            self.__is_live = volatility_configs['volatility']['is_live']['custom'] if \
-                volatility_configs['volatility']['is_live']['custom'] \
+            self.__is_live = volatility_configs['volatility']['is_live']['custom'] \
+                if volatility_configs['volatility']['is_live']['custom'] \
                 else volatility_configs['volatility']['is_live']['default']
 
             self.__override_initial_value = volatility_configs['volatility']['override_initial_value']['custom']
@@ -31,8 +31,8 @@ class VolatilityTradingConfigParser:
                 volatility_configs['volatility']['print_interval']['default']
 
             self.__interest = volatility_configs['volatility']['interest']['custom'] \
-                if volatility_configs['volatility']['interest']['custom'] else \
-                volatility_configs['volatility']['interest']['default']
+                if volatility_configs['volatility']['interest']['custom'] \
+                else volatility_configs['volatility']['interest']['default']
 
             self.__exchange = volatility_configs['volatility']['exchange']['custom'] \
                 if volatility_configs['volatility']['exchange']['custom'] \
@@ -90,14 +90,11 @@ class VolatilityTradingConfigParser:
         if self.__cash_currency not in TradeBotUtils.get_permitted_cash_currencies():
             raise ValueError(f'Cash Currency {self.__cash_currency}  not in list {TradeBotUtils.get_permitted_cash_currencies()}')
 
-        if self.crypto_currency not in TradeBotUtils.get_permitted_crypto_currencies():
+        if self.__crypto_currency not in TradeBotUtils.get_permitted_crypto_currencies():
             raise ValueError(f'Crypto Currency {self.__crypto_currency} not in list {TradeBotUtils.get_permitted_crypto_currencies()}')
 
         if self.__interest < TradeBotUtils.get_minimum_interest(self.__exchange):
             raise ValueError(f'Interest {self.__interest} is lower than allowed {TradeBotUtils.get_minimum_interest(self.__exchange)}')
-
-        if self.crypto_currency not in TradeBotUtils.get_permitted_crypto_currencies():
-            raise ValueError(f'Exchange {self.__crypto_currency} in list {TradeBotUtils.get_permitted_crypto_currencies()}')
 
     @property
     def is_sell(self) -> bool:

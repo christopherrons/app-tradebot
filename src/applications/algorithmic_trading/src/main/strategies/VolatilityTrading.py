@@ -44,8 +44,8 @@ class VolatilityTrading:
             EmailHandler().send_email_message(email_subject=f'ERROR: {self.__configs.exchange}', email_message=str(error))
 
     def __run_setup_tasks(self):
-        self.__live_run_checker()
         self.__configs.validate_configs()
+        self.__live_run_checker()
         TradeBotUtils.create_target_folder()
         self.__set_exchange_services()
 
