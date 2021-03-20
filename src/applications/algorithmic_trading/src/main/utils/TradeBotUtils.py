@@ -68,15 +68,15 @@ class TradeBotUtils:
 
     @staticmethod
     def get_email_source() -> str:
-        return TradeBotUtils.get_script_config_attribute('User', 'emailSource')
+        return TradeBotUtils.get_script_config_attribute('user', 'emailSource')
 
     @staticmethod
     def get_email_source_password() -> str:
-        return TradeBotUtils.get_script_config_attribute('User', 'emailSourcePassword')
+        return TradeBotUtils.get_script_config_attribute('user', 'emailSourcePassword')
 
     @staticmethod
     def get_email_target() -> str:
-        return TradeBotUtils.get_script_config_attribute('User', 'emailTarget')
+        return TradeBotUtils.get_script_config_attribute('user', 'emailTarget')
 
     @staticmethod
     def get_kraken_api_secret() -> str:
@@ -132,27 +132,27 @@ class TradeBotUtils:
     @staticmethod
     def get_exchange_fee(exchange: str) -> float:
         with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
-            return yaml.load(f)['exchange'][exchange]['fee']
+            return yaml.safe_load(f)['exchange'][exchange]['fee']
 
     @staticmethod
     def get_minimum_interest(exchange: str) -> float:
         with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
-            return yaml.load(f)['exchange'][exchange]['minimum_interest']
+            return yaml.safe_load(f)['exchange'][exchange]['minimum_interest']
 
     @staticmethod
     def get_permitted_crypto_currencies() -> list:
         with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
-            return list(yaml.load(f)['currency']['crypto_currencies'].values())
+            return list(yaml.safe_load(f)['currency']['crypto_currencies'].values())
 
     @staticmethod
     def get_permitted_cash_currencies() -> list:
         with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
-            return list(yaml.load(f)['currency']['cash_currencies'].values())
+            return list(yaml.safe_load(f)['currency']['cash_currencies'].values())
 
     @staticmethod
     def get_permitted_exchanges() -> list:
         with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
-            return list(yaml.load(f)['exchange'].keys())
+            return list(yaml.safe_load(f)['exchange'].keys())
 
     @staticmethod
     def get_permitted_trade_pairs() -> list:

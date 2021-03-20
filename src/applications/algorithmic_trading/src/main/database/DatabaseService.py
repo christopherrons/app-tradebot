@@ -35,7 +35,7 @@ class DatabaseService:
     def insert_trade_report(self, is_live: bool, exchange: str, timestamp: datetime, order_id: str, trade_number: int, buy: bool,
                             price: float, cash_currency: str, quantity: float, crypto_currency: str, fee: float,
                             gross_trade_value: float, net_trade_value: float):
-        query = 'INSERT INTO trade_data.report(order_id, simulation, exchange,' \
+        query = 'INSERT INTO trade_data.report(order_id, live, exchange,' \
                 ' datetime, trade_number, buy, price, cash_currency,' \
                 ' quantity, crypto_currency, fee, gross_trade_value, net_trade_value) ' \
                 'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING;'
@@ -49,7 +49,7 @@ class DatabaseService:
     def get_accrued_account_fees(self, exchange: str, cash_currency: str, is_live: bool) -> float:
         accrued_fee = 0
         for currency in TradeBotUtils.get_permitted_cash_currencies():
-            query = "SELECT SUM(fee) from trade_data.report WHERE simulation = %s AND exchange = %s AND cash_currency = %s;"
+            query = "SELECT SUM(fee) from trade_data.report WHERE live = %s AND exchange = %s AND cash_currency = %s;"
             data = [is_live, exchange.lower(), currency.lower()]
             result = self.__read_query(query=query,
                                        data=data)[0][0]
@@ -62,7 +62,7 @@ class DatabaseService:
         return accrued_fee
 
     def get_nr_successful_trades(self, exchange: str, is_live: bool) -> int:
-        query = "SELECT MAX(trade_number) from trade_data.report WHERE simulation = %s AND exchange = %s;"
+        query = "SELECT MAX(trade_number) from trade_data.report WHERE live = %s AND exchange = %s;"
         data = [is_live, exchange.lower()]
         result = self.__read_query(query=query, data=data)[0][0]
 
@@ -70,14 +70,14 @@ class DatabaseService:
         return int(result) if result else 0
 
     def get_nr_successful_cycles(self, exchange: str, is_live: bool) -> int:
-        query = "SELECT COUNT(trade_number) from trade_data.report WHERE simulation = %s AND buy = false AND exchange = %s;"
+        query = "SELECT COUNT(trade_number) from trade_data.report WHERE live = %s AND buy = false AND exchange = %s;"
         data = [is_live, exchange.lower()]
         result = self.__read_query(query=query, data=data)[0][0]
         print(f'\n--Query Executed: Get nr of Successful Cycles\n')
         return int(result) if result else 0
 
     def get_transaction_as_dataframe(self, exchange: str, is_live: bool, cash_currency: str) -> DataFrame:  # TODO add currency converter
-        query = "SELECT buy, cash_currency, net_trade_value, trade_number from trade_data.report WHERE simulation = {} AND exchange = '{}';" \
+        query = "SELECT buy, cash_currency, net_trade_value, trade_number from trade_data.report WHERE live = {} AND exchange = '{}';" \
             .format(is_live, exchange.lower())
         transaction_df = self.__read_to_dataframe(query)
         transaction_df['net_trade_value'] = transaction_df.apply(

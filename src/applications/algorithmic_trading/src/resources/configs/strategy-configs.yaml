@@ -1,10 +1,10 @@
 volatility:
-  is_sell:   # Description: True if trading starts with selling.
+  is_sell: # Description: True if trading starts with selling.
     default: False
     custom:   # Values: True/False
 
-  is_reset_logs: # Description: True if trading starts with selling.
-    default: False
+  is_reset_logs: # Description: True if logs are reset at start of session.
+    default: True
     custom:   # Values: True/False
 
   init_database_from_exchange: # Description: Set to true to init database with data from the exchange.

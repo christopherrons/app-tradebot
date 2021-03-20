@@ -115,4 +115,3 @@ class KrakenApiImpl(ExchangeApi):
                                                  quantity=self.get_transaction_quantity(closed_transactions[order_id]),
                                                  gross_trade_value=self.get_transaction_gross_value(closed_transactions[order_id]),
                                                  net_trade_value=self.get_transaction_net_value(closed_transactions[order_id]))
-

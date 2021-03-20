@@ -112,4 +112,3 @@ class BitstampApiImpl(ExchangeApi):
                                                      gross_trade_value=self.get_transaction_gross_value(transaction),
                                                      net_trade_value=self.get_transaction_net_value(transaction))
             trade_nr += 1
-

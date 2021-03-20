@@ -15,8 +15,8 @@ class PlotHandler:
         self.__initial_value = initial_value
         self.__interest = 1 + interest
         self.__exchange = exchange
-        self.__cash_currency = cash_currency.upper()
-        self.__crypto_currency = crypto_currency.upper()
+        self.__cash_currency = cash_currency
+        self.__crypto_currency = crypto_currency
         self.__database_service = database_service
         self.__is_live = is_live
 

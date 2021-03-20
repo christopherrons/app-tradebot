@@ -44,7 +44,6 @@ class VolatilityTrading:
 
     def __run_setup_tasks(self):
         self.__configs.validate_configs()
-        self.__live_run_checker()
         TradeBotUtils.create_target_folder()
         self.__set_exchange_services()
 
@@ -57,13 +56,14 @@ class VolatilityTrading:
         self.__set_initial_trade_price()
 
         if self.__configs.is_live:
+            self.__live_run_checker()
             self.__set_live_trade_runner()
         else:
             self.__set_simulation_runner()
 
     def __set_exchange_services(self):
-        print(f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency.upper()}"
-              f" in {self.__configs.cash_currency.upper()}\n")
+        print(f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency}"
+              f" in {self.__configs.cash_currency}\n")
         if self.__configs.exchange == 'bitstamp':
             self.__exchange_websocket = BitstampWebsocket(self.__configs.cash_currency, self.__configs.crypto_currency)
             self.__exchange_api = BitstampApiImpl(cash_currency=self.__configs.cash_currency,
