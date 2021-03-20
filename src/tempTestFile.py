@@ -1,4 +1,5 @@
 from applications.algorithmic_trading.src.main.config_parses.VolatilityTradingConfigParser import VolatilityTradingConfigParser
+from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -12,7 +13,7 @@ def main():
     # TODO: How is order id returned
     # TODO: Check hwo to get the fee after trade
 
-    print(TradeBotUtils.get_exchange_fee('bitstamp'))
+    print(DatabaseService().insert_or_update_initial_account_value('bitstamp', 100, 'usd'))
 
 
 

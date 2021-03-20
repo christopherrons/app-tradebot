@@ -7,6 +7,7 @@ from applications.algorithmic_trading.src.main.exchange.ExchangeApi import Excha
 from applications.algorithmic_trading.src.main.exchange.utils.BitstampAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -74,7 +75,7 @@ class BitstampApiImpl(ExchangeApi):
     def get_transaction_crypto_currency(self, transaction: dict) -> str:
         for key in transaction.keys():
             for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
-                if key.upper() == crypto_currency and transaction[key] != 0:
+                if key.lower() == crypto_currency and transaction[key] != 0:
                     return key
         return 'fail'
 
@@ -95,7 +96,7 @@ class BitstampApiImpl(ExchangeApi):
         return self.get_transaction_net_value(transaction) + self.get_transaction_fee_from_transaction_dict(transaction)
 
     def init_database_from_exchange(self, database_service: DatabaseService):
-        print(f"Initializing Database from bitstamp!")
+        PrinterUtils.console_log(message=f"Initializing Database from bitstamp!")
         trade_nr = 0
         for transaction in reversed(self.get_transactions()):
             if transaction['type'] == '2':

@@ -5,6 +5,7 @@ from applications.algorithmic_trading.src.main.cache_storage.TradeBotCache impor
 from applications.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
 from applications.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
 from applications.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
     VolatilityTradeBotSeller
 
@@ -24,13 +25,13 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
 
     def is_order_executed(self, order_id: str) -> bool:
         while self.__is_order_status_open(order_id):
-            print(f"Order id {order_id} is still open")
+            PrinterUtils.console_log(message=f"Order id {order_id} is still open")
             time.sleep(10)
 
         if self.__is_order_executed(order_id):
             return True
         else:
-            print(f'\n--- {datetime.now()} - Order: {order_id} was not executed! \n')
+            PrinterUtils.console_log(message=f'{datetime.now()} - Order: {order_id} was not executed!')
             return False
 
     def run_post_trade_tasks(self, order_id: str):
@@ -38,7 +39,7 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         self.update_cache(order_id, fee)
         self.create_visual_trade_report()
         self.email_trade_reports()
-        print("Post Trade Task Finished!\n")
+        PrinterUtils.console_log(message="Post Trade Task Finished!")
 
     def update_cache(self, order_id: str, fee: float):
         self._trade_bot_cache.increment_successful_trades()

@@ -6,6 +6,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 
 
@@ -39,7 +40,7 @@ class EmailHandler:
         text = message.as_string()
         server.sendmail(self.__email_source, self.__email_target, text)
         server.quit()
-        print(f'---Email Sent: {datetime.now()}---')
+        PrinterUtils.console_log(message=f'Email Sent: {datetime.now()}')
 
     def send_email_with_attachment(self, email_subject: str, email_message: str, attachment_file_paths: list):
         message = self.__create_message(email_subject, email_message)

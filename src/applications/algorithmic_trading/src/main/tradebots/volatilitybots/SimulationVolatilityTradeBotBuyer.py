@@ -3,6 +3,7 @@ import time
 from applications.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
 from applications.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
 from applications.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import \
     VolatilityTradeBotBuyer
 
@@ -25,7 +26,7 @@ class SimulationVolatilityTradeBotBuyer(VolatilityTradeBotBuyer):
         self.update_cache(order_id, fee)
         self.create_visual_trade_report()
         self.email_trade_reports()
-        print("Post Trade Task Finished!\n")
+        PrinterUtils.console_log(message="Post Trade Task Finished!")
 
     def update_cache(self, order_id: str, fee: float):
         self._trade_bot_cache.increment_successful_trades()

@@ -9,7 +9,7 @@ class PrinterUtils:
     @staticmethod
     def print_data_as_tabulate(headers: list, output: list):
         tabulated_output = tabulate([output], headers=headers)
-        print(tabulated_output + "\n\n\n\n\n\n")
+        print("\n" + tabulated_output + "\n\n\n\n\n")
 
     @staticmethod
     def log_data(headers: list, output: list, file_path: str):
@@ -20,3 +20,8 @@ class PrinterUtils:
                 writer.writerow(output)
             else:
                 writer.writerow(output)
+
+    @staticmethod
+    def console_log(message: str):
+        print(f'\n-- {message} ')
+

@@ -10,6 +10,7 @@ from applications.algorithmic_trading.src.main.exchange.KrakenApiImpl import Kra
 from applications.algorithmic_trading.src.main.exchange.KrakenWebsocket import KrakenWebsocket
 from applications.algorithmic_trading.src.main.output_handlers.EmailHandler import EmailHandler
 from applications.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.runners.VolatilityTradeRunner import VolatilityTradeRunner
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotBuyer import LiveVolatilityTradeBotBuyer
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotSeller import LiveVolatilityTradeBotSeller
@@ -43,6 +44,7 @@ class VolatilityTrading:
             EmailHandler().send_email_message(email_subject=f'ERROR: {self.__configs.exchange}', email_message=str(error))
 
     def __run_setup_tasks(self):
+        self.__live_run_checker()
         self.__configs.validate_configs()
         TradeBotUtils.create_target_folder()
         self.__set_exchange_services()
@@ -56,14 +58,13 @@ class VolatilityTrading:
         self.__set_initial_trade_price()
 
         if self.__configs.is_live:
-            self.__live_run_checker()
             self.__set_live_trade_runner()
         else:
             self.__set_simulation_runner()
 
     def __set_exchange_services(self):
-        print(f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency}"
-              f" in {self.__configs.cash_currency}\n")
+        PrinterUtils.console_log(message=f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency}"
+              f" in {self.__configs.cash_currency}")
         if self.__configs.exchange == 'bitstamp':
             self.__exchange_websocket = BitstampWebsocket(self.__configs.cash_currency, self.__configs.crypto_currency)
             self.__exchange_api = BitstampApiImpl(cash_currency=self.__configs.cash_currency,
@@ -83,7 +84,7 @@ class VolatilityTrading:
         while is_invalid_account_trade_price:
             market_bid_price = self.__exchange_websocket.get_market_bid_price()
             market_ask_price = self.__exchange_websocket.get_market_ask_price()
-            print(f'Market bid: {market_bid_price} \nMarket ask: {market_ask_price}\n')
+            print(f'\nMarket bid: {market_bid_price} \nMarket ask: {market_ask_price}')
 
             if self.__configs.is_sell:
                 account_trade_price = float(input('Set start account ASK price: '))
@@ -91,9 +92,9 @@ class VolatilityTrading:
                 self.__account_ask_price = account_trade_price
                 is_invalid_account_trade_price = market_bid_price - account_trade_price > 0
                 if is_invalid_account_trade_price:
-                    print("ERROR: Account ask price has to be larger than market bid price.\n")
+                    PrinterUtils.console_log(message="ERROR: Account ask price has to be larger than market bid price.")
                 else:
-                    print(f"Account Ask Price: {account_trade_price}\n")
+                    PrinterUtils.console_log(message=f"Account Ask Price: {account_trade_price}")
 
             else:
                 account_trade_price = float(input('Set start account BID price: '))
@@ -101,9 +102,9 @@ class VolatilityTrading:
                 self.__account_ask_price = 0
                 is_invalid_account_trade_price = market_ask_price - account_trade_price < 0
                 if is_invalid_account_trade_price:
-                    print("ERROR: Account bid price has to be smaller than market ask price.\n")
+                    PrinterUtils.console_log(message="ERROR: Account bid price has to be smaller than market ask price.")
                 else:
-                    print(f"Account Bid Price: {account_trade_price}\n")
+                    PrinterUtils.console_log(message=f"Account Bid Price: {account_trade_price}")
 
     def __set_simulation_runner(self):
         initial_value = 100
@@ -140,6 +141,7 @@ class VolatilityTrading:
                                                                            self.__configs.cash_currency)
 
         initial_value = self.__database_service.get_initial_account_value(self.__configs.exchange, self.__configs.cash_currency)
+        print(initial_value)
         if initial_value == 0:
             initial_value = self.__exchange_api.get_account_cash_value() + \
                             (self.__exchange_api.get_account_quantity() * self.__exchange_websocket.get_market_bid_price()) * (
@@ -174,9 +176,9 @@ class VolatilityTrading:
     def __live_run_checker(self):
         if self.__configs.is_live:
             contract_pin = random.randint(10000, 99999)
-            contract = input(f"WARNING LIVE RUN. If you want to trade sign the contract by entering: {contract_pin}: ")
-            if contract != contract_pin:
-                print("ABORTING")
+            signature = int(input(f"\nWARNING LIVE RUN. If you want to trade sign the contract by entering: {contract_pin}: "))
+            if signature != int(contract_pin):
+                PrinterUtils.console_log(message="ABORTING")
                 exit()
             else:
-                print("Contracted signed! Live run accepted!\n")
+                PrinterUtils.console_log(message="Contracted signed! Live run accepted!")

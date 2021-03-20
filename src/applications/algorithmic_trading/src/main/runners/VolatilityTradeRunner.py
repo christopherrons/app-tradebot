@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import \
     VolatilityTradeBotBuyer
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
@@ -30,7 +31,7 @@ class VolatilityTradeRunner:
 
     def run(self):
         start_time = datetime.now()
-        print(f"Started trading at {start_time} and will ended at {self.__run_stop_time}\n")
+        PrinterUtils.console_log(message=f"Started trading at {start_time} and will ended at {self.__run_stop_time}")
 
         delta_minutes = start_time
         while not TradeBotUtils.is_run_time_passed(current_time=datetime.now(), run_stop_time=self.__run_stop_time):
@@ -44,7 +45,7 @@ class VolatilityTradeRunner:
                     self.__trade_bot.run_post_trade_tasks(order_id)
                     self.__switch_trader()
 
-        print(f"Started trading at {start_time} and ended at {datetime.now()}")
+        PrinterUtils.console_log(message=f"Started trading at {start_time} and ended at {datetime.now()}")
 
     def __switch_trader(self):
         if self.__trade_bot == self.__trade_bot_buyer:

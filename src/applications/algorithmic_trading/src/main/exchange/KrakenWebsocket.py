@@ -4,6 +4,7 @@ import json
 import websockets
 
 from applications.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
+from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 
 
 class KrakenWebsocket(ExchangeWebsocket):
@@ -28,9 +29,9 @@ class KrakenWebsocket(ExchangeWebsocket):
         super().__init__("kraken", cash_currency, crypto_currency)
 
     async def __async__connect(self):
-        print("Attempting connection to {}".format(self.__uri))
+        PrinterUtils.console_log(message="Attempting connection to {}".format(self.__uri))
         self.__websocket = await websockets.connect(self.__uri)
-        print("Connected\n")
+        PrinterUtils.console_log(message="Connected")
 
     def get_market_ask_quantity(self) -> float:
         return asyncio.get_event_loop().run_until_complete(self.__async_get_market_ask_quantity())

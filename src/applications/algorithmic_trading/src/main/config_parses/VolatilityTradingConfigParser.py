@@ -117,7 +117,7 @@ class VolatilityTradingConfigParser:
 
     @property
     def override_initial_value(self) -> float:
-        return abs(self.__override_initial_value)
+        return abs(self.__override_initial_value) if self.__override_initial_value else None
 
     @property
     def print_interval(self) -> float:
