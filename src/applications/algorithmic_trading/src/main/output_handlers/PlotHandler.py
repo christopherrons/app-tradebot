@@ -31,30 +31,33 @@ class PlotHandler:
         self.__save_report(fig1, fig2)
 
     def __plot_profits(self):
-        successful_cycles = [i for i in range(1, self.__database_service.get_nr_successful_cycles(self.__exchange, self.__is_live) + 1)]
         transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
         fig = make_subplots(rows=self.__subplot_rows, cols=self.__subplot_columns,
                             subplot_titles=(f'Cash Profit per Successful Cycle [{self.__currency_symbols[self.__cash_currency]}]',
                                             f'Percent Profit per Successful Cycle [%]'))
-        self.__plot_cash_profits(fig, successful_cycles, transaction_df)
-        self.__plot_percent_profits(fig, successful_cycles, transaction_df)
+        self.__plot_cash_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'])
+        self.__plot_percent_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'])
         return fig
 
-    def __plot_cash_profits(self, fig: Figure, successful_cycles: list, transaction_df: DataFrame):
-        cash_profits = transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].subtract(self.__initial_value)
-        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=cash_profits['net_trade_value'].to_list().sort(),
-                                line_name='Profit', x_axis_title='Successfully Cycle',
-                                y_axis_title=f'Profit [{self.__currency_symbols[self.__cash_currency]}]', mode='lines', row=1, col=1)
+    def __plot_cash_profits(self, fig: Figure, net_sell_values: DataFrame):
+        if not net_sell_values.empty:
+            nr_successful_cycles = net_sell_values.index.to_list()
+            cash_profits = net_sell_values.subtract(self.__initial_value).sort_values()
+            self.__create_line_plot(fig=fig, x_axis=nr_successful_cycles, y_axis=cash_profits,
+                                    line_name='Profit', x_axis_title='Successfully Cycle',
+                                    y_axis_title=f'Profit [{self.__currency_symbols[self.__cash_currency]}]', mode='lines', row=1, col=1)
 
-    def __plot_percent_profits(self, fig: Figure, successful_cycles: list, transaction_df: DataFrame):
-        percent_profits = transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].divide(self.__initial_value)
-        self.__create_line_plot(fig=fig, x_axis=successful_cycles, y_axis=percent_profits['net_trade_value'].to_list().sort(),
-                                line_name='Profit', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
+    def __plot_percent_profits(self, fig: Figure, net_sell_values: DataFrame):
+        if not net_sell_values.empty:
+            nr_successful_cycles = net_sell_values.index.to_list()
+            percent_profits = net_sell_values.divide(self.__initial_value).subtract(1).multiply(100).sort_values()
+            self.__create_line_plot(fig=fig, x_axis=nr_successful_cycles, y_axis=percent_profits,
+                                    line_name='Profit', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
 
     def __plot_trade_values(self):
         transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
         fig = px.scatter(transaction_df, x="trade_number", y="net_trade_value", color="buy",
-                         title=f'Trade Values [{self.__currency_symbols[self.__cash_currency]}]')
+                         title=f'Net Trade Values [{self.__currency_symbols[self.__cash_currency]}]')
         fig.update_xaxes(title_text='Successful Trade')
         fig.update_yaxes(title_text=f'Trade Value on {self.__exchange}]')
         return fig

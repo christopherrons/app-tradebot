@@ -6,17 +6,15 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Clean up main file, how do we deal with if we add another tradebot (e.g. arbitrage) !!!!!!!!!!!!!!!
 # TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
 # TODO: Remove sensitive information fromm docker files and database service class
-# TODO: Rename Is similation to is live run
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Optimize with threading
-# TODO: Add relevant visualisations
 # TODO: Strategy for start price
+# TODO: Create tax calculator based on trades
 
 import sys
 from argparse import ArgumentParser

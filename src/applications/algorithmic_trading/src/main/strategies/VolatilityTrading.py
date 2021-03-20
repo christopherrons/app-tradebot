@@ -67,8 +67,8 @@ class VolatilityTrading:
             self.__set_simulation_runner()
 
     def __set_exchange_services(self):
-        PrinterUtils.console_log(message=f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.cash_currency}"
-                                         f" in {self.__configs.cash_currency}")
+        PrinterUtils.console_log(message=f"Exchange {self.__configs.exchange} is being used for trading {self.__configs.crypto_currency}"
+                                         f" in {self.__configs.cash_currency} with interest: {self.__configs.interest*100}%")
         if self.__configs.exchange == 'bitstamp':
             self.__exchange_websocket = BitstampWebsocket(self.__configs.cash_currency, self.__configs.crypto_currency)
             self.__exchange_api = BitstampApiImpl(cash_currency=self.__configs.cash_currency,
@@ -123,9 +123,8 @@ class VolatilityTrading:
                               interest=self.__configs.interest,
                               account_bid_price=self.__account_bid_price,
                               account_ask_price=self.__account_ask_price,
-                              sell_quantity=initial_value / (
-                                      (1 - TradeBotUtils.get_exchange_fee(self.__configs.exchange)) * (
-                                      self.__account_ask_price / (1 + self.__configs.interest)))
+                              sell_quantity=initial_value / ((1 - TradeBotUtils.get_exchange_fee(self.__configs.exchange)) *
+                                                             (self.__account_ask_price / (1 + self.__configs.interest)))
                               if not self.__account_ask_price == 0 else 0,
                               exchange_fee=TradeBotUtils.get_exchange_fee(self.__configs.exchange),
                               accrued_fees=0,
@@ -137,11 +136,9 @@ class VolatilityTrading:
 
         self.__trade_bot_runner = VolatilityTradeRunner(is_sell=self.__configs.is_sell,
                                                         trade_bot_buyer=SimulationVolatilityTradeBotBuyer(self.__exchange_websocket,
-                                                                                                          trade_bot_output_handler,
-                                                                                                          cache),
+                                                                                                          trade_bot_output_handler, cache),
                                                         trade_bot_seller=SimulationVolatilityTradeBotSeller(self.__exchange_websocket,
-                                                                                                            trade_bot_output_handler,
-                                                                                                            cache),
+                                                                                                            trade_bot_output_handler, cache),
                                                         run_time_minutes=self.__configs.run_time_minutes,
                                                         print_interval=self.__configs.print_interval)
 
@@ -169,10 +166,8 @@ class VolatilityTrading:
                               exchange_fee=TradeBotUtils.get_exchange_fee(self.__configs.exchange),
                               accrued_fees=self.__database_service.get_accrued_account_fees(self.__configs.exchange, self.__configs.cash_currency,
                                                                                             self.__configs.is_live),
-                              success_ful_trades=self.__database_service.get_nr_successful_trades(self.__configs.exchange,
-                                                                                                  self.__configs.is_live),
-                              successful_cycles=self.__database_service.get_nr_successful_cycles(self.__configs.exchange,
-                                                                                                 self.__configs.is_live))
+                              success_ful_trades=self.__database_service.get_nr_successful_trades(self.__configs.exchange, self.__configs.is_live),
+                              successful_cycles=self.__database_service.get_nr_successful_cycles(self.__configs.exchange, self.__configs.is_live))
 
         trade_bot_output_handler = TradeBotOutputHandler(self.__configs.is_live, self.__configs.exchange, cache,
                                                          self.__database_service, self.__configs.cash_currency, self.__configs.crypto_currency)

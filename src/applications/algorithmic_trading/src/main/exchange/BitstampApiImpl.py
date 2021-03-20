@@ -103,7 +103,6 @@ class BitstampApiImpl(ExchangeApi):
                 database_service.insert_trade_report(order_id=transaction['order_id'],
                                                      is_live=True, exchange='bitstamp',
                                                      timestamp=self.get_transaction_timestamp(transaction),
-                                                     trade_number=trade_nr + 1,
                                                      buy=self.is_transaction_buy(transaction),
                                                      cash_currency=self.get_transaction_cash_currency(transaction),
                                                      crypto_currency=self.get_transaction_crypto_currency(transaction),

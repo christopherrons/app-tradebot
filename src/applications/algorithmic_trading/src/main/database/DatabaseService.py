@@ -44,14 +44,14 @@ class DatabaseService:
         self.__write_query(query, data)
         PrinterUtils.console_log(message=f'Query Executed: Drop all Tables')
 
-    def insert_trade_report(self, is_live: bool, exchange: str, timestamp: datetime, order_id: str, trade_number: int, buy: bool,
+    def insert_trade_report(self, is_live: bool, exchange: str, timestamp: datetime, order_id: str, buy: bool,
                             price: float, cash_currency: str, quantity: float, crypto_currency: str, fee: float,
                             gross_trade_value: float, net_trade_value: float):
         query = 'INSERT INTO trade_data.report(order_id, live, exchange,' \
-                ' datetime, trade_number, buy, price, cash_currency,' \
+                ' datetime, buy, price, cash_currency,' \
                 ' quantity, crypto_currency, fee, gross_trade_value, net_trade_value) ' \
-                'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING;'
-        data = [order_id, is_live, exchange.lower(), timestamp, trade_number, buy,
+                'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT DO NOTHING;'
+        data = [order_id, is_live, exchange.lower(), timestamp, buy,
                 price, cash_currency.lower(), quantity, crypto_currency.lower(), fee, gross_trade_value, net_trade_value]
 
         self.__write_query(query=query, data=data)

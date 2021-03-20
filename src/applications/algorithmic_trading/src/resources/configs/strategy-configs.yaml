@@ -1,4 +1,5 @@
-volatility: # Override the Default value by adding a custom value.
+# Override the Default value by adding a custom value.
+volatility:
   is_sell: # Description: True if trading starts with selling.
     default: False
     custom:   # Values: True/False
