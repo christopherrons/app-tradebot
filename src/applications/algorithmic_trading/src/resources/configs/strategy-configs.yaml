@@ -1,0 +1,39 @@
+volatility: # Override the Default value by adding a custom value.
+  is_sell: # Description: True if trading starts with selling.
+    default: False
+    custom:   # Values: True/False
+
+  is_reset_logs: # Description: True if logs are reset at start of session.
+    default: True
+    custom:   # Values: True/False
+
+  init_database_from_exchange: # Description: Set to true to init database with data from the exchange. Only works for live runs
+    default: True
+    custom:   # Values: True/False
+
+  is_live: # Description: True if live trading.
+    default: False
+    custom:   # Values: True/False
+
+  override_initial_value: # Description: Sets the initial value for the exchange in the database.
+    custom:  # Values: float
+
+  print_interval: # Description: Sets the print interval [min].
+    default: 0.1
+    custom:   # Values: float
+
+  interest: # Description: Sets the interest gained before selling.
+    default: 0.015
+    custom:   # Values: float
+
+  exchange: # Description: Set to true if trading starts with selling.
+    default: bitstamp
+    custom:   # Values: bitstamp/kraken
+
+  cash_currency: # Description: Sets the cash currency being traded.
+    default: usd
+    custom:   # Values: usd/eur
+
+  crypto_currency: # Description: Sets the crypto currency being traded.
+    default: xrp
+    custom:   # Values: xrp

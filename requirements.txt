@@ -1,6 +1,7 @@
+requests==2.18.4
 websockets==8.1
+tabulate==0.8.7
 plotly==4.14.3
 pandas==1.1.5
-tabulate==0.8.7
-requests==2.18.4
 psycopg2==2.8.6
+PyYAML==5.4.1

@@ -1,0 +1,15 @@
+currency:
+  crypto_currencies:
+    xrp: "xrp"
+  cash_currencies:
+    usd: "usd"
+
+exchange:
+  kraken:
+    minimum_interest: 0.0052203505
+    fee: 0.0026
+  bitstamp:
+    minimum_interest: 0.0100755031
+    fee: 0.005
+
+
