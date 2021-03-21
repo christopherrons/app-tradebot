@@ -97,12 +97,13 @@ class BitstampApiImpl(ExchangeApi):
 
     def init_database_from_exchange(self, database_service: DatabaseService):
         PrinterUtils.console_log(message=f"Initializing Database from bitstamp!")
-        trade_nr = 0
+        trade_nr = 1
         for transaction in reversed(self.get_transactions()):
             if transaction['type'] == '2':
                 database_service.insert_trade_report(order_id=transaction['order_id'],
                                                      is_live=True, exchange='bitstamp',
                                                      timestamp=self.get_transaction_timestamp(transaction),
+                                                     trade_number=trade_nr,
                                                      buy=self.is_transaction_buy(transaction),
                                                      cash_currency=self.get_transaction_cash_currency(transaction),
                                                      crypto_currency=self.get_transaction_crypto_currency(transaction),

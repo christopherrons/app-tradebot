@@ -107,6 +107,7 @@ class KrakenApiImpl(ExchangeApi):
             database_service.insert_trade_report(order_id=order_id,
                                                  is_live=True, exchange='kraken',
                                                  timestamp=self.get_transaction_timestamp(closed_transactions[order_id]),
+                                                 trade_number=idx + 1,
                                                  buy=self.is_transaction_buy(closed_transactions[order_id]),
                                                  cash_currency=self.get_transaction_cash_currency(closed_transactions[order_id]),
                                                  crypto_currency=self.get_transaction_crypto_currency(closed_transactions[order_id]),

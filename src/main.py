@@ -9,6 +9,7 @@
 # TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
 # TODO: Remove sensitive information fromm docker files and database service class
+# TODO: Switch trade_nr back to before as serial wont work
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around
