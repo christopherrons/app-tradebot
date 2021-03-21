@@ -32,7 +32,7 @@ volatility:
     custom:   # Values: float
 
   exchange: # Description: Sets the exchange used for trading.
-    default: bitstamp
+    default: kraken
     custom:   # Values: bitstamp/kraken
 
   cash_currency: # Description: Sets the cash currency being traded.
