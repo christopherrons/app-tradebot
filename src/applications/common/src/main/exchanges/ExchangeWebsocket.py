@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from applications.algorithmic_trading.src.main.exchange.ExchangeService import ExchangeService
+from applications.common.src.main.exchanges.ExchangeService import ExchangeService
 
 
 class ExchangeWebsocket(ExchangeService, ABC):

@@ -4,8 +4,8 @@ import json
 
 import websockets
 
-from applications.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
+from applications.common.src.main.exchanges.ExchangeWebsocket import ExchangeWebsocket
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class BitstampWebsocket(ExchangeWebsocket):

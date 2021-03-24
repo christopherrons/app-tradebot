@@ -83,7 +83,7 @@ class VolatilityTradingConfigParser:
             raise ValueError(f'Config interest requires booleans got: {self.__interest} type {type(self.__interest)}')
 
         if not isinstance(self.__exchange, str):
-            raise ValueError(f'Config exchange requires str got: {self.__exchange} type {type(self.__exchange)}')
+            raise ValueError(f'Config exchanges requires str got: {self.__exchange} type {type(self.__exchange)}')
 
         if not isinstance(self.__cash_currency, str):
             raise ValueError(f'Config cash_currency requires str got: {self.__cash_currency} type {type(self.__cash_currency)}')

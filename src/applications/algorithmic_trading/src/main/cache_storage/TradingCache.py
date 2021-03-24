@@ -1,4 +1,4 @@
-class TradeBotCache:
+class TradingCache:
 
     def __init__(self, initial_value: float,
                  cash_value: float,

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
 
-from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
-from applications.algorithmic_trading.src.main.exchange.ExchangeService import ExchangeService
+from applications.common.src.main.database import DatabaseService
+from applications.common.src.main.exchanges.ExchangeService import ExchangeService
 
 
 class ExchangeApi(ExchangeService, ABC):
@@ -68,4 +68,4 @@ class ExchangeApi(ExchangeService, ABC):
     def get_transaction_net_value(self, transaction: dict) -> float: pass
 
     @abstractmethod
-    def init_database_from_exchange(self, database_service: DatabaseService): pass
+    def init_trades_to_database_from_exchange(self, database_service: DatabaseService): pass

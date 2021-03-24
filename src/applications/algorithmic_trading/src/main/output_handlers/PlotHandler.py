@@ -4,8 +4,8 @@ from pandas import DataFrame
 from plotly.graph_objs import Figure
 from plotly.subplots import make_subplots
 
-from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.database import DatabaseService
 
 
 class PlotHandler:
@@ -31,12 +31,13 @@ class PlotHandler:
         self.__save_report(fig1, fig2)
 
     def __plot_profits(self):
-        transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
         fig = make_subplots(rows=self.__subplot_rows, cols=self.__subplot_columns,
                             subplot_titles=(f'Cash Profit per Successful Cycle [{self.__currency_symbols[self.__cash_currency]}]',
                                             f'Percent Profit per Successful Cycle [%]'))
-        self.__plot_cash_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'])
-        self.__plot_percent_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'])
+
+        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
+        self.__plot_cash_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].reset_index(drop=True))
+        self.__plot_percent_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].reset_index(drop=True))
         return fig
 
     def __plot_cash_profits(self, fig: Figure, net_sell_values: DataFrame):
@@ -55,7 +56,7 @@ class PlotHandler:
                                     line_name='Profit', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
 
     def __plot_trade_values(self):
-        transaction_df = self.__database_service.get_transaction_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
+        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency)
         fig = px.scatter(transaction_df, x="trade_number", y="net_trade_value", color="buy",
                          title=f'Net Trade Values [{self.__currency_symbols[self.__cash_currency]}]')
         fig.update_xaxes(title_text='Successful Trade')

@@ -1,20 +1,20 @@
 import time
 
-from applications.algorithmic_trading.src.main.cache_storage.TradeBotCache import TradeBotCache
-from applications.algorithmic_trading.src.main.exchange.ExchangeWebsocket import ExchangeWebsocket
-from applications.algorithmic_trading.src.main.output_handlers.TradeBotOutputHandler import TradeBotOutputHandler
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
+from applications.algorithmic_trading.src.main.cache_storage.TradingCache import TradingCache
+from applications.algorithmic_trading.src.main.output_handlers.TradingOutputHandler import TradingOutputHandler
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
     VolatilityTradeBotSeller
+from applications.common.src.main.exchanges import ExchangeWebsocket
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class SimulationVolatilityTradeBotSeller(VolatilityTradeBotSeller):
 
     def __init__(self,
                  exchange_websocket: ExchangeWebsocket,
-                 trade_bot_output_handler: TradeBotOutputHandler,
-                 trade_bot_cache: TradeBotCache):
-        super().__init__(exchange_websocket, trade_bot_output_handler, trade_bot_cache)
+                 trading_output_handler: TradingOutputHandler,
+                 trade_bot_cache: TradingCache):
+        super().__init__(exchange_websocket, trading_output_handler, trade_bot_cache)
 
     def execute_order(self) -> str:
         return "simulation"

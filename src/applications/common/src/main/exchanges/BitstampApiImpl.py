@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from applications.algorithmic_trading.src.main.calculators.CurrencyConverter import \
+from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
-from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
-from applications.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
-from applications.algorithmic_trading.src.main.exchange.utils.BitstampAPIUtils import \
+from applications.common.src.main.database import DatabaseService
+from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
+from applications.common.src.main.exchanges.utils.BitstampAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
-from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class BitstampApiImpl(ExchangeApi):
@@ -95,7 +95,7 @@ class BitstampApiImpl(ExchangeApi):
     def get_transaction_gross_value(self, transaction: dict) -> float:
         return self.get_transaction_net_value(transaction) + self.get_transaction_fee_from_transaction_dict(transaction)
 
-    def init_database_from_exchange(self, database_service: DatabaseService):
+    def init_trades_to_database_from_exchange(self, database_service: DatabaseService):
         PrinterUtils.console_log(message=f"Initializing Database from bitstamp!")
         trade_nr = 1
         for transaction in reversed(self.get_transactions()):
@@ -112,4 +112,4 @@ class BitstampApiImpl(ExchangeApi):
                                                      quantity=self.get_transaction_quantity(transaction),
                                                      gross_trade_value=self.get_transaction_gross_value(transaction),
                                                      net_trade_value=self.get_transaction_net_value(transaction))
-            trade_nr += 1
+                trade_nr += 1

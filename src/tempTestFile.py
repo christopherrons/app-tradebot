@@ -1,6 +1,4 @@
-from applications.algorithmic_trading.src.main.config_parses.VolatilityTradingConfigParser import VolatilityTradingConfigParser
-from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
-from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.exchanges.KrakenApiImpl import KrakenApiImpl
 
 
 def main():
@@ -13,8 +11,7 @@ def main():
     # TODO: How is order id returned
     # TODO: Check hwo to get the fee after trade
 
-    DatabaseService().drop_all_tables()
-
+    KrakenApiImpl().crypto_currency()
 
 
 # print(currency_converter.convert_currency(10, 'usd', 'usd'))
