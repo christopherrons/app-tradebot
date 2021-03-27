@@ -20,8 +20,8 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        USER_ID: $(id -u ${USER})
-        GROUP_ID: $(id -g ${USER})
+        USER_ID: ${USER_ID:-0}
+        GROUP_ID: ${GROUP_ID:-0}
     networks:
       - "backend-network"
     volumes:
