@@ -10,18 +10,12 @@
 # TODO: Trade in eur or usd? Check which market is the most liquid
 # TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Fix file permissions docker
-# TODO: USe pandas df to csv instead of appending
-# TODO Check all queries and see if they can be more general
 # TODO: Create tax report based on skatteverkt config
 # TODO: Config file vs args parser
-# TODO: Fix taxable account before push  + remove old branches
-
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around
-# TODO: Optimize with threading
 # TODO: Strategy for start price
-# TODO: Create tax calculator based on trades
 
 import sys
 from argparse import ArgumentParser

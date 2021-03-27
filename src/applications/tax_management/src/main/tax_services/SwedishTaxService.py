@@ -1,6 +1,7 @@
 import pandas as pd
 from pandas import DataFrame
 
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 from applications.tax_management.src.main.tax_services.TaxService import TaxService
 from applications.tax_management.src.main.utils.TaxManagementUtils import TaxManagementUtils
 
@@ -58,8 +59,10 @@ class SwedishTaxService(TaxService):
         calculated_transactions_df = pd.DataFrame(calculated_transactions, columns=headers)
         calculated_transactions_df.to_csv(TaxManagementUtils.get_tax_report_log_path("All"))
 
-        calculated_transactions_df = calculated_transactions_df.loc[calculated_transactions_df['Datum'].dt.year == self._year]
+        calculated_sell_transactions_df = calculated_transactions_df.loc[calculated_transactions_df['Händelse'] == "Sälj"]
+        calculated_transactions_df = calculated_sell_transactions_df.loc[calculated_sell_transactions_df['Datum'].dt.year == self._year]
         calculated_transactions_df.to_csv(TaxManagementUtils.get_tax_report_log_path(self._year))
+        PrinterUtils.console_log(message="Tax Report Saved")
 
     def __get_transactions(self) -> DataFrame:
         query = "SELECT * FROM tax_management.trades"

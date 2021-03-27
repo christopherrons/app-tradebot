@@ -11,15 +11,15 @@ The application trades using the specified trading strategy. The current availab
 
 ## Trading Account Configurations (Only used in live runs)
 * Add your account configs to src/services/algorithmic_trading/src/resources/configs/trading_account-configs.ini
-* Then run git update-index --assume-unchanged src/services/algorithmic_trading/src/resources/configs/trading_account-configs.ini 
+* Then run git update-index --assume-unchanged src/applications/algorithmic_trading/src/resources/configs/trading_account-configs.ini 
 
 ## Trading Strategy Configurations
 * Change default configs by altering src/services/algorithmic_trading/src/resources/configs/strategy-config.ini
-* Then run git update-index --assume-unchanged src/services/algorithmic_trading/src/resources/configs/strategy-config.ini 
+* Then run git update-index --assume-unchanged src/applications/algorithmic_trading/src/resources/configs/strategy-config.ini 
 
 ## Taxable Account Configurations (Only used in live runs)
 * Add your taxable accounts configs to src/services/tax_management/src/resources/configs/taxable_account-configs.yaml
-* Then run git update-index --assume-unchanged src/services/algorithmic_trading/src/resources/configs/taxable_account-configs.yaml
+* Then run git update-index --assume-unchanged src/applications/tax_management/src/resources/configs/taxable_account-configs.yaml
 
 ## Docker Run (Recommended)
 * sudo docker-compose build (only required first time)
