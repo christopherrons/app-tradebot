@@ -79,7 +79,7 @@ class KrakenApiImpl(ExchangeApi):
                 return cash_currency
         return 'fail'
 
-    def get_transaction_crypto_currency(self, transaction: dict) -> str:  # TODO FIX
+    def get_transaction_crypto_currency(self, transaction: dict) -> str:
         for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
             if crypto_currency in transaction['descr']['pair'].lower():
                 return crypto_currency

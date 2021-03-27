@@ -34,9 +34,9 @@ class TradeDataDao(DatabaseService):
             data = [is_live, exchange.lower(), currency.lower()]
             result = self.read_query(query=query, data=data)[0][0]
             if result:
-                accrued_fee += self.__currency_converter.convert_currency(value=float(result),
-                                                                          from_currency=currency,
-                                                                          to_currency=cash_currency)
+                accrued_fee += self._currency_converter.convert_currency(value=float(result),
+                                                                         from_currency=currency,
+                                                                         to_currency=cash_currency)
 
         PrinterUtils.console_log(message=f'Query Executed: Get Accrued Account Fees')
         return float(accrued_fee)
@@ -69,7 +69,7 @@ class TradeDataDao(DatabaseService):
         transaction_df = self.read_to_dataframe(query)
         transaction_df['net_trade_value'] = transaction_df.apply(
             lambda x: x['net_trade_value'] if x['cash_currency'] == cash_currency else
-            self.__currency_converter.convert_currency(value=x['net_trade_value'], from_currency=x['cash_currency'], to_currency=cash_currency),
+            self._currency_converter.convert_currency(value=x['net_trade_value'], from_currency=x['cash_currency'], to_currency=cash_currency),
             axis=1)
         PrinterUtils.console_log(message=f'Query Executed: Get Transaction as DataFrame')
         return transaction_df
@@ -92,8 +92,8 @@ class TradeDataDao(DatabaseService):
                 " SET" \
                 " initial_account_value_usd = excluded.initial_account_value_usd," \
                 " initial_account_value_eur = excluded.initial_account_value_eur;"
-        data = [exchange, is_live, self.__currency_converter.convert_currency(account_value, cash_currency, 'usd'),
-                self.__currency_converter.convert_currency(account_value, cash_currency, 'eur')]
+        data = [exchange, is_live, self._currency_converter.convert_currency(account_value, cash_currency, 'usd'),
+                self._currency_converter.convert_currency(account_value, cash_currency, 'eur')]
         self.write_query(query=query, data=data)
 
         PrinterUtils.console_log(message=f'Query Executed: Insert initial Account Value')

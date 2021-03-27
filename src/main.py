@@ -8,10 +8,12 @@
 # ------------------------------------------------------------------------------
 # TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
+    #TODO: Fix that all code can run using eur
 # TODO: Remove sensitive information fromm docker files and database service class
-# TODO: Fix file permissions docker
-# TODO: Create tax report based on skatteverkt config
+# TODO: Create tax report based on skatteverkets config
 # TODO: Config file vs args parser
+# TODO: All trades in same table?
+
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around
@@ -36,7 +38,6 @@ def main(argv):
 
     parse_tax_management = subparsers.add_parser('tax_management', help='Run tax management app')
     parse_tax_management.add_argument('year', help='Enter Tax Year', type=str)
-    parse_tax_management.add_argument('--init_database_from_exchange', default=False, help='Flag to init database form exchange', action="store_true")
     parse_tax_management.add_argument('tax_service', choices=('swedish',), help='Choose tax service', type=str)
 
     args = arg_parser.parse_args()

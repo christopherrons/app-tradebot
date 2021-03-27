@@ -19,7 +19,7 @@ class DatabaseService:
             database="postgres",
             user="postgres",
             password="password")
-        self.__currency_converter = CurrencyConverter()
+        self._currency_converter = CurrencyConverter()
 
     def run_queries_from_file(self, file_path):
         with open(file_path, 'r') as sql_file:

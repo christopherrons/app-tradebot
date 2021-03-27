@@ -21,6 +21,11 @@ The application trades using the specified trading strategy. The current availab
 * Add your taxable accounts configs to src/services/tax_management/src/resources/configs/taxable_account-configs.yaml
 * Then run git update-index --assume-unchanged src/applications/tax_management/src/resources/configs/taxable_account-configs.yaml
 
+## Linux Users Only
+Add your user and group ID to the .env file
+Get user id: id -u
+Get group id: id -g
+
 ## Docker Run (Recommended)
 * sudo docker-compose build (only required first time)
 * sudo docker-compose up -d (starts the postgres database)

@@ -107,8 +107,8 @@ class TradingOutputHandler:
         PrinterUtils.log_data(headers=headers, output=output,
                               file_path=TradeBotUtils.get_trade_log_path(self.__exchange_name))
 
-        self.__database_service.insert_trade_report(table_name="trade_data.report", order_id=order_id, is_live=self.__is_live,
-                                                    exchange=self.__exchange_name, trade_number=self.__trade_bot_cache.successful_trades,
+        self.__database_service.insert_trade_report(order_id=order_id, is_live=self.__is_live, exchange=self.__exchange_name,
+                                                    trade_number=self.__trade_bot_cache.successful_trades,
                                                     timestamp=datetime.now(), buy=is_buy, price=price, quantity=quantity,
                                                     cash_currency=self.__cash_currency, crypto_currency=self.__crypto_currency,
                                                     gross_trade_value=value, net_trade_value=value - fee, fee=fee)
