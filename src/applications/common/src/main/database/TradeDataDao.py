@@ -24,14 +24,15 @@ class TradeDataDao(DatabaseService):
 
         PrinterUtils.console_log(message=f'Query Executed: Insert Trade Report')
 
-    def get_accrued_account_fees(self, exchange: str, cash_currency: str, is_live: bool) -> float:
+    def get_accrued_account_fees(self, exchange: str, cash_currency: str, crypto_currency: str, is_live: bool) -> float:
         accrued_fee = 0
         for currency in TradeBotUtils.get_permitted_cash_currencies():
             query = "SELECT SUM(fee) from trade_data.report" \
                     " WHERE live = %s" \
                     " AND exchange = %s" \
-                    " AND cash_currency = %s;"
-            data = [is_live, exchange.lower(), currency.lower()]
+                    " AND cash_currency = %s" \
+                    " AND crypto_currency = %s;"
+            data = [is_live, exchange.lower(), currency.lower(), crypto_currency.lower()]
             result = self.read_query(query=query, data=data)[0][0]
             if result:
                 accrued_fee += self._currency_converter.convert_currency(value=float(result),
@@ -41,31 +42,34 @@ class TradeDataDao(DatabaseService):
         PrinterUtils.console_log(message=f'Query Executed: Get Accrued Account Fees')
         return float(accrued_fee)
 
-    def get_nr_successful_trades(self, exchange: str, is_live: bool) -> int:
+    def get_nr_successful_trades(self, exchange: str, crypto_currency: str, is_live: bool) -> int:
         query = "SELECT MAX(trade_number) from trade_data.report" \
                 " WHERE live = %s" \
-                " AND exchange = %s;"
-        data = [is_live, exchange.lower()]
+                " AND exchange = %s" \
+                " AND crypto_currency = %s;"
+        data = [is_live, exchange.lower(), crypto_currency.lower()]
         result = self.read_query(query=query, data=data)[0][0]
 
         PrinterUtils.console_log(message=f'Query Executed: Get nr of Successful Trade')
         return int(result) if result else 0
 
-    def get_nr_successful_cycles(self, exchange: str, is_live: bool) -> int:
+    def get_nr_successful_cycles(self, exchange: str, crypto_currency: str, is_live: bool) -> int:
         query = "SELECT COUNT(trade_number) from trade_data.report" \
                 " WHERE live = %s " \
                 " AND buy = %s" \
-                " AND exchange = %s;"
-        data = [is_live, False, exchange.lower()]
+                " AND exchange = %s" \
+                " AND crypto_currency = %s;"
+        data = [is_live, False, exchange.lower(), crypto_currency]
         result = self.read_query(query=query, data=data)[0][0]
         PrinterUtils.console_log(message=f'Query Executed: Get nr of Successful Cycles')
         return int(result) if result else 0
 
-    def get_transactions_as_dataframe(self, exchange: str, is_live: bool, cash_currency: str) -> DataFrame:
+    def get_transactions_as_dataframe(self, exchange: str, is_live: bool, cash_currency: str, crypto_currency: str) -> DataFrame:
         query = "SELECT buy, cash_currency, net_trade_value, trade_number from trade_data.report" \
                 " WHERE live = {}" \
-                " AND exchange = '{}';" \
-            .format(is_live, exchange.lower())
+                " AND exchange = '{}'" \
+                " AND crypto_currency = {};" \
+            .format(is_live, exchange.lower(), crypto_currency.lower())
         transaction_df = self.read_to_dataframe(query)
         transaction_df['net_trade_value'] = transaction_df.apply(
             lambda x: x['net_trade_value'] if x['cash_currency'] == cash_currency else

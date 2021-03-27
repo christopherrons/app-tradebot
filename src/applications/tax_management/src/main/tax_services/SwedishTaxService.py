@@ -7,8 +7,8 @@ from applications.tax_management.src.main.utils.TaxManagementUtils import TaxMan
 
 
 class SwedishTaxService(TaxService):
-    def __init__(self, year: str):
-        super().__init__(year)
+    def __init__(self, year: str, crypto_currency: str):
+        super().__init__(year, crypto_currency)
         self.__tax_percent = 0.3
 
     def create_yearly_tax_report(self):
@@ -65,7 +65,7 @@ class SwedishTaxService(TaxService):
         PrinterUtils.console_log(message="Tax Report Saved")
 
     def __get_transactions(self) -> DataFrame:
-        query = "SELECT * FROM tax_management.trades"
+        query = f"SELECT * FROM tax_management.trades WHERE crypto_currency = '{self._crypto_currency}'"
         transactions = self._database_service.custom_read_query_to_dataframe(query=query).sort_values(by=['datetime']).reset_index(drop=True)
         self.__convert_currencies(transactions)
         return transactions

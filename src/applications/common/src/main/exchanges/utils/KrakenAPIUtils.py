@@ -32,6 +32,7 @@ class APIMixin(object):
         else:
             response = requests.post(url, headers=headers, data=data).json()
         if isinstance(response, dict) and 'error' in response and response['error'] != []:
+            print(response)
             raise APIError(response['error'])
         new_response = self._process_response(response)
         if new_response is not None:
@@ -93,31 +94,31 @@ class APILimitOrder(APIAuthMixin):
 class APIBuyLimitOrder(APILimitOrder):
     def _process_response(self, response):
         print(response)
-        return response['id']
+        return response['result']['txid'][0]
 
 
 class APISellLimitOrder(APILimitOrder):
     def _process_response(self, response):
         print(response)
-        return response['id']
+        return response['result']['txid'][0]
 
 
 class APIOpenOrders(APIAuthMixin):
     url = '/0/private/OpenOrders'
 
-
-class APIOrderStatus(APIOpenOrders):
     def _process_response(self, response):
         return response['result']
 
 
-class APITransactionFee(APIOpenOrders):
+class APIQueryOrders(APIAuthMixin):
+    url = '/0/private/QueryOrders'
+
+
+class APIOrderStatus(APIQueryOrders):
     def _process_response(self, response):
-        return response['transactions'][0]['fee']
+        return list(response['result'].values())[0]['status']
 
 
-class APIUserTransactions(APIAuthMixin):
-    url = '/0/private/ClosedOrders'
-
+class APITransactionFee(APIQueryOrders):
     def _process_response(self, response):
-        return response['result']
+        return list(response['result'].values())[0]['fee']

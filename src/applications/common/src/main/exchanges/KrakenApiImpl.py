@@ -6,8 +6,8 @@ from applications.common.src.main.converters.CurrencyConverter import \
 from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.utils.KrakenAPIUtils import \
-    APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
+    APIBuyLimitOrder, APITransactionFee, \
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIQueryOrders, APIOrderStatus
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -28,14 +28,20 @@ class KrakenApiImpl(ExchangeApi):
                          crypto_currency=crypto_currency)
 
     def execute_sell_order(self, price: float, quantity: float) -> str:
-        return APISellLimitOrder(self.__api_key, self.__api_secret).call(price=round(price, 5),
-                                                                         amount=quantity,
-                                                                         fok_order=True)
+        return APISellLimitOrder(self.__api_key, self.__api_secret).call(pair=f"{self.crypto_currency.upper()}/{self.cash_currency.upper()}",
+                                                                         price=round(price, 5),
+                                                                         volume=quantity,
+                                                                         type="sell",
+                                                                         ordertype="limit",
+                                                                         oflags="post")
 
     def execute_buy_order(self, price: float, quantity: float) -> str:
-        return APIBuyLimitOrder(self.__api_key, self.__api_secret).call(price=round(price, 5),
-                                                                        amount=round(quantity, 8),
-                                                                        fok_order=True)
+        return APIBuyLimitOrder(self.__api_key, self.__api_secret).call(pair=f"{self.crypto_currency.upper()}/{self.cash_currency.upper()}",
+                                                                        price=round(price, 5),
+                                                                        volume=round(quantity, 8),
+                                                                        type="buy",
+                                                                        ordertype="limit",
+                                                                        oflags="post")
 
     def get_account_cash_value(self) -> float:
         return float(APIAccountCash(self.__api_key, self.__api_secret).call())
@@ -44,24 +50,20 @@ class KrakenApiImpl(ExchangeApi):
         return float(APIAccountQuantity(self.__api_key, self.__api_secret).call())
 
     def get_order_status(self, order_id: str) -> str:
-        orders = APIOrderStatus(self.__api_key, self.__api_secret).call(refid=order_id)
-        for status_keys in orders:
-            if order_id in orders[status_keys]:
-                return str(status_keys)
-        return "Not found"
+        return APIOrderStatus(self.__api_key, self.__api_secret).call(txid=order_id)
 
     def get_open_orders(self) -> list:
         return APIOpenOrders(self.__api_key, self.__api_secret).call()
 
     def get_transaction_fee(self, order_id: str) -> float:
-        return float(APITransactionFee(self.__api_key, self.__api_secret).call(userref=order_id))
+        return float(APITransactionFee(self.__api_key, self.__api_secret).call(txid=order_id))
 
     def get_transactions(self) -> dict:
-        return APIUserTransactions(self.__api_key, self.__api_secret).call()
+        return APIQueryOrders(self.__api_key, self.__api_secret).call()
 
     def is_order_successful(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)
-        return order_status != 'canceled' and order_status != 'expired'
+        return order_status != 'canceled' and order_status != 'expired' and order_status == "closed"
 
     def is_order_status_open(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)

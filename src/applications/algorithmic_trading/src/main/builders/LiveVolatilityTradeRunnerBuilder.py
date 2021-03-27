@@ -77,10 +77,13 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
                             exchange_fee=TradeBotUtils.get_exchange_fee(self._configs.exchange),
                             accrued_fees=self._database_service.get_accrued_account_fees(self._configs.exchange,
                                                                                          self._configs.cash_currency,
+                                                                                         self._configs.crypto_currency,
                                                                                          self._configs.is_live),
                             success_ful_trades=self._database_service.get_nr_successful_trades(self._configs.exchange,
+                                                                                               self._configs.crypto_currency,
                                                                                                self._configs.is_live),
                             successful_cycles=self._database_service.get_nr_successful_cycles(self._configs.exchange,
+                                                                                              self._configs.crypto_currency,
                                                                                               self._configs.is_live))
 
     def __get_tradebot_runner(self, trading_cache: TradingCache, exchange_api: ExchangeApi, trading_output_handler: TradingOutputHandler,

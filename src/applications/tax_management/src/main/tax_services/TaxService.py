@@ -8,8 +8,9 @@ from applications.tax_management.src.main.utils.TaxManagementUtils import TaxMan
 
 
 class TaxService(ABC):
-    def __init__(self, year: str):
+    def __init__(self, year: str, crypto_currency: str):
         self._year = int(year)
+        self._crypto_currency = crypto_currency
         self._database_service = TaxManagementDao()
         self._currency_converter = CurrencyConverter()
 

@@ -8,11 +8,10 @@
 # ------------------------------------------------------------------------------
 # TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
-    #TODO: Fix that all code can run using eur
+    #TODO: Fix that all code can run using eur/ or other crypto
 # TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Create tax report based on skatteverkets config
 # TODO: Config file vs args parser
-# TODO: All trades in same table?
 
 
 # Nice to
@@ -39,6 +38,7 @@ def main(argv):
     parse_tax_management = subparsers.add_parser('tax_management', help='Run tax management app')
     parse_tax_management.add_argument('year', help='Enter Tax Year', type=str)
     parse_tax_management.add_argument('tax_service', choices=('swedish',), help='Choose tax service', type=str)
+    parse_tax_management.add_argument('crypto_currency', choices=("xrp",), help='Enter Tax Year', type=str)
 
     args = arg_parser.parse_args()
 
@@ -48,7 +48,7 @@ def main(argv):
 
     elif args.subparser_name == "tax_management":
         if args.tax_service == "swedish":
-            SwedishTaxService(args.year).create_yearly_tax_report()
+            SwedishTaxService(args.year, args.crypto_currency).create_yearly_tax_report()
 
 
 if __name__ == '__main__':
