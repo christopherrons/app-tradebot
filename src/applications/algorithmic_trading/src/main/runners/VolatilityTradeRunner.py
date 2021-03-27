@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import \
     VolatilityTradeBotBuyer
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
     VolatilityTradeBotSeller
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class VolatilityTradeRunner:
@@ -35,9 +35,8 @@ class VolatilityTradeRunner:
 
         delta_minutes = start_time
         while not TradeBotUtils.is_run_time_passed(current_time=datetime.now(), run_stop_time=self.__run_stop_time):
-            if (datetime.now() - delta_minutes).seconds >= (self.__print_interval * 60):
-                self.__trade_bot.print_trading_formation(self.__trade_bot.is_buy())
-                delta_minutes = datetime.now()
+
+            delta_minutes = self.__print_trading_data(delta_minutes)
 
             if self.__trade_bot.is_account_price_matching_market_price():
                 order_id = self.__trade_bot.execute_order()
@@ -52,3 +51,9 @@ class VolatilityTradeRunner:
             self.__trade_bot = self.__trade_bot_seller
         else:
             self.__trade_bot = self.__trade_bot_buyer
+
+    def __print_trading_data(self, delta_minutes: datetime):
+        if (datetime.now() - delta_minutes).seconds >= (self.__print_interval * 60):
+            self.__trade_bot.print_trading_data(self.__trade_bot.is_buy())
+            return datetime.now()
+        return delta_minutes

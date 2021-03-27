@@ -1,10 +1,7 @@
 import argparse
 import os
-import smtplib
 from configparser import ConfigParser
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 import yaml
 
@@ -29,7 +26,7 @@ class TradeBotUtils:
             os.mkdir(os.path.join(os.path.dirname(__file__), f"../../../target/generated"))
 
     @staticmethod
-    def get_data_base_queries_path() -> str:
+    def get_algorithmic_trading_init_queries() -> str:
         return os.path.join(os.path.dirname(__file__), '../../resources/templates/algorithmic_trading_database_schema.sql')
 
     @staticmethod
@@ -42,7 +39,7 @@ class TradeBotUtils:
 
     @staticmethod
     def get_information_log_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trading_formation_log.csv")
+        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trading_data_log.csv")
 
     @staticmethod
     def get_strategy_config_path() -> str:
@@ -54,7 +51,7 @@ class TradeBotUtils:
 
     @staticmethod
     def get_account_config_path() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/configs/account-configs.ini')
+        return os.path.join(os.path.dirname(__file__), '../../resources/configs/trading_account-configs.ini')
 
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
@@ -101,26 +98,6 @@ class TradeBotUtils:
     @staticmethod
     def is_run_time_passed(current_time: datetime, run_stop_time: datetime) -> bool:
         return current_time > run_stop_time
-
-    @staticmethod
-    def send_error_has_occurred_email(exchange: str, error: str):
-        email_source = TradeBotUtils.get_email_source()
-        email_source_password = TradeBotUtils.get_email_source_password()
-        email_target = TradeBotUtils.get_email_target()
-
-        message = MIMEMultipart()
-        message['From'] = email_source
-        message['To'] = email_target
-        message['Subject'] = f"{exchange}: Error has occurred"
-        message.attach(MIMEText(f'{error}'))
-
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-
-        server.login(email_source, email_source_password)
-        text = message.as_string()
-        server.sendmail(email_source, email_target, text)
-        server.quit()
 
     @staticmethod
     def get_cash_currency_symbols() -> dict:

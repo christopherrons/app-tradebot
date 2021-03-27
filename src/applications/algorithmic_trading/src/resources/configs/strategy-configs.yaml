@@ -8,7 +8,7 @@ volatility:
     default: True
     custom:   # Values: True/False
 
-  init_database_from_exchange: # Description: Set to true to init database with data from the exchange. Only works for live runs
+  init_database_from_exchange: # Description: Set to true to init database with data from the exchanges. Only works for live runs
     default: False
     custom:   # Values: True/False
 
@@ -20,7 +20,7 @@ volatility:
     default: False
     custom:   # Values: True/False
 
-  override_initial_value: # Description: Sets the initial value for the exchange in the database.
+  override_initial_value: # Description: Sets the initial value for the exchanges in the database.
     custom:  # Values: float
 
   print_interval: # Description: Sets the print interval [min].
@@ -31,8 +31,8 @@ volatility:
     default: 0.015
     custom:   # Values: float
 
-  exchange: # Description: Sets the exchange used for trading.
-    default: kraken
+  exchange: # Description: Sets the exchanges used for trading.
+    default: bitstamp
     custom:   # Values: bitstamp/kraken
 
   cash_currency: # Description: Sets the cash currency being traded.

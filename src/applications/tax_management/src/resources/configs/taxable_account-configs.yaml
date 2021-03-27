@@ -1,0 +1,14 @@
+exchange:
+  bitstamp:
+    account_1:
+      customer_id: "customer_id"
+      api_key: "api_key"
+      api_secret: "api_secret"
+    account_2:
+      customer_id: "customer_id"
+      api_key: "api_key"
+      api_secret: "api_secret"
+  kraken:
+    account_1:
+      api_key: "api_key"
+      api_secret: "api_secret"

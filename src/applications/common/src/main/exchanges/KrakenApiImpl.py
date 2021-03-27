@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from applications.algorithmic_trading.src.main.calculators.CurrencyConverter import \
+from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
-from applications.algorithmic_trading.src.main.database.DatabaseService import DatabaseService
-from applications.algorithmic_trading.src.main.exchange.ExchangeApi import ExchangeApi
-from applications.algorithmic_trading.src.main.exchange.utils.KrakenAPIUtils import \
+from applications.common.src.main.database import DatabaseService
+from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
+from applications.common.src.main.exchanges.utils.KrakenAPIUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
-from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class KrakenApiImpl(ExchangeApi):
@@ -75,13 +75,13 @@ class KrakenApiImpl(ExchangeApi):
 
     def get_transaction_cash_currency(self, transaction: dict) -> str:
         for cash_currency in TradeBotUtils.get_permitted_cash_currencies():
-            if cash_currency in transaction['descr']['pair']:
+            if cash_currency in transaction['descr']['pair'].lower():
                 return cash_currency
         return 'fail'
 
-    def get_transaction_crypto_currency(self, transaction: dict) -> str:
+    def get_transaction_crypto_currency(self, transaction: dict) -> str:  # TODO FIX
         for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
-            if crypto_currency in transaction['descr']['pair']:
+            if crypto_currency in transaction['descr']['pair'].lower():
                 return crypto_currency
         return 'fail'
 
@@ -100,7 +100,7 @@ class KrakenApiImpl(ExchangeApi):
     def get_transaction_net_value(self, transaction: dict) -> float:
         return self.get_transaction_gross_value(transaction) - self.get_transaction_fee_from_transaction_dict(transaction)
 
-    def init_database_from_exchange(self, database_service: DatabaseService):
+    def init_trades_to_database_from_exchange(self, database_service: DatabaseService):
         PrinterUtils.console_log(message=f"Initializing Database from kraken!")
         closed_transactions = self.get_transactions()['closed']
         for idx, order_id in enumerate(closed_transactions.keys()):

@@ -6,8 +6,8 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-from applications.algorithmic_trading.src.main.output_handlers.utils.PrinterUtils import PrinterUtils
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
 class EmailHandler:

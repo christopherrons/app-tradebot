@@ -1,4 +1,5 @@
 src/applications/algorithmic_trading/target/generated/
-src/applications/algorithmic_trading/src/resources/configs/account-configs.ini/
+src/applications/tax_management/target/generated/
+src/applications/algorithmic_trading/src/resources/configs/trading_account-configs.ini/
 
 
