@@ -116,9 +116,17 @@ class APIQueryOrders(APIAuthMixin):
 
 class APIOrderStatus(APIQueryOrders):
     def _process_response(self, response):
+        print(response)
         return list(response['result'].values())[0]['status']
 
 
 class APITransactionFee(APIQueryOrders):
     def _process_response(self, response):
         return list(response['result'].values())[0]['fee']
+
+
+class APIClosedOrders(APIAuthMixin):
+    url = '/0/private/ClosedOrders'
+
+    def _process_response(self, response):
+        return response['result']['closed']

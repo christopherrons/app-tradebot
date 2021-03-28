@@ -7,7 +7,7 @@ from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.utils.KrakenAPIUtils import \
     APIBuyLimitOrder, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIQueryOrders, APIOrderStatus
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -59,7 +59,7 @@ class KrakenApiImpl(ExchangeApi):
         return float(APITransactionFee(self.__api_key, self.__api_secret).call(txid=order_id))
 
     def get_transactions(self) -> dict:
-        return APIQueryOrders(self.__api_key, self.__api_secret).call()
+        return APIClosedOrders(self.__api_key, self.__api_secret).call()
 
     def is_order_successful(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)
@@ -104,17 +104,20 @@ class KrakenApiImpl(ExchangeApi):
 
     def init_trades_to_database_from_exchange(self, database_service: DatabaseService):
         PrinterUtils.console_log(message=f"Initializing Database from kraken!")
-        closed_transactions = self.get_transactions()['closed']
+        closed_transactions = self.get_transactions()
+        trade_nr = 1
         for idx, order_id in enumerate(closed_transactions.keys()):
-            database_service.insert_trade_report(order_id=order_id,
-                                                 is_live=True, exchange='kraken',
-                                                 timestamp=self.get_transaction_timestamp(closed_transactions[order_id]),
-                                                 trade_number=idx + 1,
-                                                 buy=self.is_transaction_buy(closed_transactions[order_id]),
-                                                 cash_currency=self.get_transaction_cash_currency(closed_transactions[order_id]),
-                                                 crypto_currency=self.get_transaction_crypto_currency(closed_transactions[order_id]),
-                                                 fee=self.get_transaction_fee_from_transaction_dict(closed_transactions[order_id]),
-                                                 price=self.get_transaction_price_per_quantity(closed_transactions[order_id]),
-                                                 quantity=self.get_transaction_quantity(closed_transactions[order_id]),
-                                                 gross_trade_value=self.get_transaction_gross_value(closed_transactions[order_id]),
-                                                 net_trade_value=self.get_transaction_net_value(closed_transactions[order_id]))
+            if closed_transactions[order_id]['status'] == "closed":
+                database_service.insert_trade_report(order_id=order_id,
+                                                     is_live=True, exchange='kraken',
+                                                     timestamp=self.get_transaction_timestamp(closed_transactions[order_id]),
+                                                     trade_number=trade_nr,
+                                                     buy=self.is_transaction_buy(closed_transactions[order_id]),
+                                                     cash_currency=self.get_transaction_cash_currency(closed_transactions[order_id]),
+                                                     crypto_currency=self.get_transaction_crypto_currency(closed_transactions[order_id]),
+                                                     fee=self.get_transaction_fee_from_transaction_dict(closed_transactions[order_id]),
+                                                     price=self.get_transaction_price_per_quantity(closed_transactions[order_id]),
+                                                     quantity=self.get_transaction_quantity(closed_transactions[order_id]),
+                                                     gross_trade_value=self.get_transaction_gross_value(closed_transactions[order_id]),
+                                                     net_trade_value=self.get_transaction_net_value(closed_transactions[order_id]))
+                trade_nr += 1

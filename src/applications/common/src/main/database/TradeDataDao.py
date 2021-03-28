@@ -68,7 +68,7 @@ class TradeDataDao(DatabaseService):
         query = "SELECT buy, cash_currency, net_trade_value, trade_number from trade_data.report" \
                 " WHERE live = {}" \
                 " AND exchange = '{}'" \
-                " AND crypto_currency = {};" \
+                " AND crypto_currency = '{}';" \
             .format(is_live, exchange.lower(), crypto_currency.lower())
         transaction_df = self.read_to_dataframe(query)
         transaction_df['net_trade_value'] = transaction_df.apply(
