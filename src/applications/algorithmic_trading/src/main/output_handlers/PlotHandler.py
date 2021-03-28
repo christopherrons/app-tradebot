@@ -70,6 +70,6 @@ class PlotHandler:
         fig.update_yaxes(title_text=y_axis_title, row=row, col=col)
 
     def __save_report(self, fig1: Figure, fig2: Figure):
-        with open(TradeBotUtils.get_trade_report_path(self.__exchange), 'w+') as f:
+        with open(TradeBotUtils.get_generated_file_path(f"{self.__exchange.lower()}_trade_report.html"), 'w+') as f:
             f.write(fig1.to_html(full_html=False, include_plotlyjs='cdn'))
             f.write(fig2.to_html(full_html=False, include_plotlyjs='cdn'))

@@ -8,9 +8,8 @@ from applications.tax_management.src.main.utils.TaxManagementUtils import TaxMan
 
 
 class TaxService(ABC):
-    def __init__(self, year: str, crypto_currency: str):
+    def __init__(self, year: str):
         self._year = int(year)
-        self._crypto_currency = crypto_currency
         self._database_service = TaxManagementDao()
         self._currency_converter = CurrencyConverter()
 
@@ -19,7 +18,7 @@ class TaxService(ABC):
         pass
 
     def init_tax_management_database_schema(self):
-        self._database_service.run_queries_from_file(file_path=TaxManagementUtils.get_tax_management_init_queries())
+        self._database_service.run_queries_from_file(file_path=TaxManagementUtils.get_template_file_path("tax_management_database_schema.sql"))
 
     def insert_all_trades_to_database(self):
         trading_accounts = TaxManagementUtils.get_taxable_trading_accounts()

@@ -82,7 +82,7 @@ class TradingOutputHandler:
         headers.insert(1, "Is Buy")
         output.insert(1, is_buy)
         PrinterUtils.log_data(headers=headers, output=output,
-                              file_path=TradeBotUtils.get_information_log_path(self.__exchange_name))
+                              file_path=TradeBotUtils.get_generated_file_path(f"{self.__exchange_name.lower()}_trading_data_log.csv"))
 
     def print_and_store_trade_report(self, is_buy: bool, fee: float, order_id: str):
         if is_buy:
@@ -105,7 +105,7 @@ class TradingOutputHandler:
 
         PrinterUtils.print_data_as_tabulate(headers, output)
         PrinterUtils.log_data(headers=headers, output=output,
-                              file_path=TradeBotUtils.get_trade_log_path(self.__exchange_name))
+                              file_path=TradeBotUtils.get_generated_file_path(f"{self.__exchange_name.lower()}_successful_trade_log.csv"))
 
         self.__database_service.insert_trade_report(order_id=order_id, is_live=self.__is_live, exchange=self.__exchange_name,
                                                     trade_number=self.__trade_bot_cache.successful_trades,
@@ -120,4 +120,5 @@ class TradingOutputHandler:
         self.__email_handler.send_email_with_attachment(
             email_subject=f"{self.__exchange_name}: Trade Number {self.__trade_bot_cache.successful_trades}",
             email_message=f'Review logs',
-            attachment_file_paths=[TradeBotUtils.get_trade_log_path(self.__exchange_name), TradeBotUtils.get_trade_report_path(self.__exchange_name)])
+            attachment_file_paths=[TradeBotUtils.get_generated_file_path(f"{self.__exchange_name.lower()}_successful_trade_log.csv"),
+                                   TradeBotUtils.get_generated_file_path(f"{self.__exchange_name.lower()}_trade_report.html")])

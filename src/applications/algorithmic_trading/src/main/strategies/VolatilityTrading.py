@@ -45,7 +45,7 @@ class VolatilityTrading:
         if self.__configs.reset_database:
             self.__database_service.drop_schema_tables(schema=self.__database_schema)
 
-        self.__database_service.run_queries_from_file(file_path=TradeBotUtils.get_algorithmic_trading_init_queries())
+        self.__database_service.run_queries_from_file(file_path=TradeBotUtils.get_template_file_path("algorithmic_trading_database_schema.sql"))
 
         if self.__configs.is_reset_logs:
             TradeBotUtils.reset_logs(self.__configs.exchange)

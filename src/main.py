@@ -38,7 +38,6 @@ def main(argv):
     parse_tax_management = subparsers.add_parser('tax_management', help='Run tax management app')
     parse_tax_management.add_argument('year', help='Enter Tax Year', type=str)
     parse_tax_management.add_argument('tax_service', choices=('swedish',), help='Choose tax service', type=str)
-    parse_tax_management.add_argument('crypto_currency', choices=("xrp",), help='Enter Tax Year', type=str)
 
     args = arg_parser.parse_args()
 
@@ -48,7 +47,7 @@ def main(argv):
 
     elif args.subparser_name == "tax_management":
         if args.tax_service == "swedish":
-            SwedishTaxService(args.year, args.crypto_currency).create_yearly_tax_report()
+            SwedishTaxService(args.year).create_yearly_tax_report()
 
 
 if __name__ == '__main__':

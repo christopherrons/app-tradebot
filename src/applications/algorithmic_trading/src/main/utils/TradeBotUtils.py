@@ -13,7 +13,8 @@ class TradeBotUtils:
 
     @staticmethod
     def reset_logs(exchange_name: str):
-        log_files = [TradeBotUtils.get_trade_log_path(exchange_name), TradeBotUtils.get_information_log_path(exchange_name)]
+        log_files = [TradeBotUtils.get_generated_file_path(f"{exchange_name.lower()}_successful_trade_log.csv"),
+                     TradeBotUtils.get_generated_file_path(f"{exchange_name.lower()}_trading_data_log.csv")]
         if log_files:
             for file in log_files:
                 with open(file, 'a+') as f:
@@ -26,37 +27,21 @@ class TradeBotUtils:
             os.mkdir(os.path.join(os.path.dirname(__file__), f"../../../target/generated"))
 
     @staticmethod
-    def get_algorithmic_trading_init_queries() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/templates/algorithmic_trading_database_schema.sql')
+    def get_generated_file_path(file_name):
+        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{file_name}")
 
     @staticmethod
-    def get_trade_report_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trade_report.html")
+    def get_config_file_path(file_name):
+        return os.path.join(os.path.dirname(__file__), f'../../resources/configs/{file_name}')
 
     @staticmethod
-    def get_trade_log_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_successful_trade_log.csv")
-
-    @staticmethod
-    def get_information_log_path(exchange: str) -> str:
-        return os.path.join(os.path.dirname(__file__), f"../../../target/generated/{exchange.lower()}_trading_data_log.csv")
-
-    @staticmethod
-    def get_strategy_config_path() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/configs/strategy-configs.yaml')
-
-    @staticmethod
-    def get_exchange_config_path() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/configs/exchange-configs.yaml')
-
-    @staticmethod
-    def get_account_config_path() -> str:
-        return os.path.join(os.path.dirname(__file__), '../../resources/configs/trading_account-configs.ini')
+    def get_template_file_path(file_name):
+        return os.path.join(os.path.dirname(__file__), f'../../resources/templates/{file_name}')
 
     @staticmethod
     def get_script_config_attribute(parent: str, attribute: str) -> str:
         config = ConfigParser()
-        config_path = TradeBotUtils.get_account_config_path()
+        config_path = TradeBotUtils.get_config_file_path("trading_account-configs.ini")
         if not os.path.exists(config_path):
             raise ValueError(f'No configuration file exists. Expected file: {config_path}')
 
@@ -108,27 +93,27 @@ class TradeBotUtils:
 
     @staticmethod
     def get_exchange_fee(exchange: str) -> float:
-        with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("exchange-configs.yaml"), "r") as f:
             return yaml.safe_load(f)['exchange'][exchange]['fee']
 
     @staticmethod
     def get_minimum_interest(exchange: str) -> float:
-        with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("exchange-configs.yaml"), "r") as f:
             return yaml.safe_load(f)['exchange'][exchange]['minimum_interest']
 
     @staticmethod
     def get_permitted_crypto_currencies() -> list:
-        with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("exchange-configs.yaml"), "r") as f:
             return list(yaml.safe_load(f)['currency']['crypto_currencies'].values())
 
     @staticmethod
     def get_permitted_cash_currencies() -> list:
-        with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("exchange-configs.yaml"), "r") as f:
             return list(yaml.safe_load(f)['currency']['cash_currencies'].values())
 
     @staticmethod
     def get_permitted_exchanges() -> list:
-        with open(TradeBotUtils.get_exchange_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("exchange-configs.yaml"), "r") as f:
             return list(yaml.safe_load(f)['exchange'].keys())
 
     @staticmethod

@@ -5,7 +5,7 @@ from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeB
 
 class VolatilityTradingConfigParser:
     def __init__(self):
-        with open(TradeBotUtils.get_strategy_config_path(), "r") as f:
+        with open(TradeBotUtils.get_config_file_path("strategy-configs.yaml"), "r") as f:
             volatility_configs = yaml.safe_load(f)
 
             self.__is_sell = volatility_configs['volatility']['is_sell']['custom'] \
