@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 from applications.common.src.main.converters.CurrencyConverter import CurrencyConverter
 from applications.common.src.main.database.TaxManagementDao import TaxManagementDao
-from applications.common.src.main.exchanges.BitstampApiImpl import BitstampApiImpl
-from applications.common.src.main.exchanges.KrakenApiImpl import KrakenApiImpl
+from applications.common.src.main.exchanges.BitstampApi import BitstampApi
+from applications.common.src.main.exchanges.KrakenApi import KrakenApi
 from applications.tax_management.src.main.utils.TaxManagementUtils import TaxManagementUtils
 
 
@@ -27,14 +27,14 @@ class TaxService(ABC):
             for account in exchange_accounts.keys():
                 account_data = exchange_accounts[account]
                 if exchange == 'bitstamp':
-                    BitstampApiImpl(cash_currency="",
-                                    crypto_currency="",
-                                    customer_id=account_data["customer_id"],
-                                    api_key=account_data["api_key"],
-                                    api_secret=account_data["api_secret"]).init_trades_to_database_from_exchange(self._database_service)
+                    BitstampApi(cash_currency="",
+                                crypto_currency="",
+                                customer_id=account_data["customer_id"],
+                                api_key=account_data["api_key"],
+                                api_secret=account_data["api_secret"]).init_trades_to_database_from_exchange(self._database_service)
 
                 elif exchange == 'kraken':
-                    KrakenApiImpl(cash_currency="",
-                                  crypto_currency="",
-                                  api_key=account_data["api_key"],
-                                  api_secret=account_data["api_secret"]).init_trades_to_database_from_exchange(self._database_service)
+                    KrakenApi(cash_currency="",
+                              crypto_currency="",
+                              api_key=account_data["api_key"],
+                              api_secret=account_data["api_secret"]).init_trades_to_database_from_exchange(self._database_service)

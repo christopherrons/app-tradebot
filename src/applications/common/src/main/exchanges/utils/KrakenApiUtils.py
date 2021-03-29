@@ -32,7 +32,6 @@ class APIMixin(object):
         else:
             response = requests.post(url, headers=headers, data=data).json()
         if isinstance(response, dict) and 'error' in response and response['error'] != []:
-            print(response)
             raise APIError(response['error'])
         new_response = self._process_response(response)
         if new_response is not None:

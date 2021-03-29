@@ -11,7 +11,7 @@ from applications.common.src.main.exchanges.utils.KrakenApiUtils import \
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
-class KrakenApiImpl(ExchangeApi):
+class KrakenApi(ExchangeApi):
 
     def __init__(self,
                  cash_currency: str,

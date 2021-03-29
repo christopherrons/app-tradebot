@@ -18,7 +18,7 @@ class VolatilityTradeBot(ABC):
     def is_buy(self) -> bool: pass
 
     @abstractmethod
-    def is_account_price_matching_market_price(self) -> bool: pass
+    def is_account_order_matching_market_order(self) -> bool: pass
 
     @abstractmethod
     def execute_order(self) -> str: pass

@@ -7,10 +7,10 @@ from applications.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVola
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.LiveVolatilityTradeBotSeller import LiveVolatilityTradeBotSeller
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 from applications.common.src.main.database.TradeDataDao import TradeDataDao
-from applications.common.src.main.exchanges.BitstampApiImpl import BitstampApiImpl
+from applications.common.src.main.exchanges.BitstampApi import BitstampApi
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.ExchangeWebsocket import ExchangeWebsocket
-from applications.common.src.main.exchanges.KrakenApiImpl import KrakenApiImpl
+from applications.common.src.main.exchanges.KrakenApi import KrakenApi
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -33,16 +33,16 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
                                          f" in {self._configs.cash_currency} with interest: {self._configs.interest * 100}%")
 
         if self._configs.exchange == 'bitstamp':
-            exchange_api = BitstampApiImpl(cash_currency=self._configs.cash_currency,
-                                           crypto_currency=self._configs.crypto_currency,
-                                           customer_id=TradeBotUtils.get_bitstamp_customer_id(),
-                                           api_key=TradeBotUtils.get_bitstamp_api_key(),
-                                           api_secret=TradeBotUtils.get_bitstamp_api_secret())
+            exchange_api = BitstampApi(cash_currency=self._configs.cash_currency,
+                                       crypto_currency=self._configs.crypto_currency,
+                                       customer_id=TradeBotUtils.get_bitstamp_customer_id(),
+                                       api_key=TradeBotUtils.get_bitstamp_api_key(),
+                                       api_secret=TradeBotUtils.get_bitstamp_api_secret())
         else:
-            exchange_api = KrakenApiImpl(cash_currency=self._configs.cash_currency,
-                                         crypto_currency=self._configs.crypto_currency,
-                                         api_key=TradeBotUtils.get_kraken_api_key(),
-                                         api_secret=TradeBotUtils.get_kraken_api_secret())
+            exchange_api = KrakenApi(cash_currency=self._configs.cash_currency,
+                                     crypto_currency=self._configs.crypto_currency,
+                                     api_key=TradeBotUtils.get_kraken_api_key(),
+                                     api_secret=TradeBotUtils.get_kraken_api_secret())
 
         if self._configs.init_database_from_exchange:
             exchange_api.init_trades_to_database_from_exchange(database_service=self._database_service)

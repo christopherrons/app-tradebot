@@ -42,7 +42,7 @@ class VolatilityTradeRunner:
             delta_minutes = self.__print_trading_data(delta_minutes)
 
             try:
-                if self.__trade_bot.is_account_price_matching_market_price():
+                if self.__trade_bot.is_account_order_matching_market_order():
                     order_id = self.__trade_bot.execute_order()
                     if self.__trade_bot.is_order_executed(order_id):
                         self.__trade_bot.run_post_trade_tasks(order_id)

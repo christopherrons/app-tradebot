@@ -48,7 +48,7 @@ class VolatilityTradeRunnerBuilder:
         is_invalid_account_bid_price = True
         account_bid_price = 0
         while is_invalid_account_bid_price:
-            market_bid_price = exchange_websocket.get_market_bid_order()
+            market_bid_price = exchange_websocket.get_market_bid_price()
             market_ask_price = exchange_websocket.get_market_ask_price()
             print(f'\nMarket bid: {market_bid_price} \nMarket ask: {market_ask_price}')
 

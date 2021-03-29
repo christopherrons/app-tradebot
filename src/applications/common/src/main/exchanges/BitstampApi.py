@@ -11,7 +11,7 @@ from applications.common.src.main.exchanges.utils.BitstampApiUtils import \
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
-class BitstampApiImpl(ExchangeApi):
+class BitstampApi(ExchangeApi):
 
     def __init__(self,
                  cash_currency: str,

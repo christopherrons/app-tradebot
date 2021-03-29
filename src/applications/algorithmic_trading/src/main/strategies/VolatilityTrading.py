@@ -22,11 +22,10 @@ class VolatilityTrading:
         try:
             self.__run_setup_tasks()
             if self.__configs.is_live:
-                trade_runner_builder = LiveVolatilityTradeRunnerBuilder(self.__configs, self.__database_service)
+                trade_runner = LiveVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
             else:
-                trade_runner_builder = SimulationVolatilityTradeRunnerBuilder(self.__configs, self.__database_service)
+                trade_runner = SimulationVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
 
-            trade_runner = trade_runner_builder.build()
             trade_runner.run()
 
         except ValueError as error_message:

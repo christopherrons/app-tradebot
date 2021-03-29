@@ -14,7 +14,7 @@ class VolatilityTradeBotBuyer(VolatilityTradeBot, ABC):
                  trade_bot_cache: TradingCache):
         super().__init__(exchange_websocket, trading_output_handler, trade_bot_cache)
 
-    def is_account_price_matching_market_price(self) -> bool:
+    def is_account_order_matching_market_order(self) -> bool:
         market_ask_price, market_ask_quantity = self.get_market_ask_order()
         return self._trade_bot_cache.account_bid_price >= market_ask_price and self._trade_bot_cache.buy_quantity <= market_ask_quantity
 

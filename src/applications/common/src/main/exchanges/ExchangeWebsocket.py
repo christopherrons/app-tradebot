@@ -20,7 +20,7 @@ class ExchangeWebsocket(ExchangeService, ABC):
     async def __async__connect(self):
         PrinterUtils.console_log(message="Attempting connection to {}".format(self.__uri))
         self._websocket = await websockets.connect(self.__uri)
-        PrinterUtils.console_log(message=("Connected"))
+        PrinterUtils.console_log(message="Connected")
 
     def reconnect(self):
         self.__loop = asyncio.get_event_loop()
