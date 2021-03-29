@@ -25,12 +25,13 @@ class LiveVolatilityTradeBotBuyer(VolatilityTradeBotBuyer):
     def is_order_executed(self, order_id: str) -> bool:
         while self.__is_order_status_open(order_id):
             PrinterUtils.console_log(message=f"Order id {order_id} is still open")
-            time.sleep(10)
+            time.sleep(20)
 
         if self.__is_order_executed(order_id):
             return True
         else:
             PrinterUtils.console_log(message=f'{datetime.now()} - Order: {order_id} was not executed!')
+            time.sleep(5)
             return False
 
     def run_post_trade_tasks(self, order_id: str):

@@ -5,7 +5,7 @@ from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
 from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
-from applications.common.src.main.exchanges.utils.KrakenAPIUtils import \
+from applications.common.src.main.exchanges.utils.KrakenApiUtils import \
     APIBuyLimitOrder, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils

@@ -25,7 +25,7 @@ class TradingOutputHandler:
         self.__crypto_currency = crypto_currency
 
         self.__email_handler = EmailHandler()
-        self.__plot_handler = PlotHandler(exchange_name, cash_currency, crypto_currency, database_service, is_live)
+        self.__plot_handler = PlotHandler(exchange_name, cash_currency, crypto_currency, database_service, is_live, trade_bot_cache.initial_value)
         self.__currency_symbols = TradeBotUtils.get_cash_currency_symbols()
 
     def print_trading_data(self, is_buy: bool):

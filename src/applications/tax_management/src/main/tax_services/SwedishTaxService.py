@@ -56,7 +56,7 @@ class SwedishTaxService(TaxService):
 
             self.__save_tax_report(calculated_transactions, crypto_currency)
 
-    def __save_tax_report(self, calculated_transactions: list, crypto_currency:str):
+    def __save_tax_report(self, calculated_transactions: list, crypto_currency: str):
         headers = ["Datum", "Händelse", "Totalt Antal", "Total Omkostnadsbelopp [SEK]", "Genomsnittligt Omkostnadsbelopp [SEK]", "Vinst [SEK]",
                    "Skatt [SEK]", "", "Total Vinst [SEK]", "Total Skatt [SEK]"]
         calculated_transactions_df = pd.DataFrame(calculated_transactions, columns=headers)

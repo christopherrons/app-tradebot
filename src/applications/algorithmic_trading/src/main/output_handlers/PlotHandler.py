@@ -9,17 +9,14 @@ from applications.common.src.main.database import DatabaseService
 
 
 class PlotHandler:
-    def __init__(self, exchange: str, cash_currency: str, crypto_currency: str, database_service: DatabaseService, is_live: bool):
+    def __init__(self, exchange: str, cash_currency: str, crypto_currency: str, database_service: DatabaseService, is_live: bool,
+                 initial_value: float):
         self.__exchange = exchange
         self.__cash_currency = cash_currency
         self.__crypto_currency = crypto_currency
         self.__database_service = database_service
         self.__is_live = is_live
-
-        self.__initial_value = database_service.custom_read_query(
-            query=f"SELECT initial_account_value_{cash_currency} FROM trade_data.initial_account_value"
-                  f" WHERE exchange = %s;",
-            data=[exchange])
+        self.__initial_value = initial_value
 
         self.__currency_symbols = TradeBotUtils.get_cash_currency_symbols()
         self.__subplot_rows = 3
@@ -35,7 +32,8 @@ class PlotHandler:
                             subplot_titles=(f'Cash Profit per Successful Cycle [{self.__currency_symbols[self.__cash_currency]}]',
                                             f'Percent Profit per Successful Cycle [%]'))
 
-        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency, self.__crypto_currency)
+        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency,
+                                                                               self.__crypto_currency)
         self.__plot_cash_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].reset_index(drop=True))
         self.__plot_percent_profits(fig, transaction_df.loc[transaction_df['buy'] == False]['net_trade_value'].reset_index(drop=True))
         return fig
@@ -56,7 +54,8 @@ class PlotHandler:
                                     line_name='Profit', x_axis_title='Successful Cycle', y_axis_title='Profit [%]', mode='lines', row=2, col=1)
 
     def __plot_trade_values(self):
-        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency, self.__crypto_currency)
+        transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency,
+                                                                               self.__crypto_currency)
         fig = px.scatter(transaction_df, x="trade_number", y="net_trade_value", color="buy",
                          title=f'Net Trade Values [{self.__currency_symbols[self.__cash_currency]}]')
         fig.update_xaxes(title_text='Successful Trade')

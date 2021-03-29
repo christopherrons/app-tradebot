@@ -15,14 +15,13 @@ class VolatilityTradeBotBuyer(VolatilityTradeBot, ABC):
         super().__init__(exchange_websocket, trading_output_handler, trade_bot_cache)
 
     def is_account_price_matching_market_price(self) -> bool:
-        market_ask_price = self.get_market_ask_price()
-        market_ask_quantity = self._exchange_websocket.get_market_ask_quantity()
+        market_ask_price, market_ask_quantity = self.get_market_ask_order()
         return self._trade_bot_cache.account_bid_price >= market_ask_price and self._trade_bot_cache.buy_quantity <= market_ask_quantity
 
-    def get_market_ask_price(self) -> float:
-        market_ask_price = self._exchange_websocket.get_market_ask_price()
+    def get_market_ask_order(self) -> tuple:
+        market_ask_price, market_ask_quantity = self._exchange_websocket.get_market_ask_order()
         self._trade_bot_cache.market_ask_price = market_ask_price
-        return market_ask_price
+        return market_ask_price, market_ask_quantity
 
     def is_buy(self) -> bool:
         return True

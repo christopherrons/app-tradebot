@@ -32,6 +32,9 @@ class VolatilityTradeBot(ABC):
     @abstractmethod
     def run_post_trade_tasks(self, order_id: str): pass
 
+    def reconnect_websocket(self):
+        self._exchange_websocket.reconnect()
+
     def print_trading_data(self, is_buy: bool):
         self.__trading_output_handler.print_trading_data(is_buy)
 

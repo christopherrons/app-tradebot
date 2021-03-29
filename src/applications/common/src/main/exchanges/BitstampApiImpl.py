@@ -5,7 +5,7 @@ from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
 from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
-from applications.common.src.main.exchanges.utils.BitstampAPIUtils import \
+from applications.common.src.main.exchanges.utils.BitstampApiUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils

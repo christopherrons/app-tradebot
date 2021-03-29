@@ -8,11 +8,11 @@
 # ------------------------------------------------------------------------------
 # TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
-    #TODO: Fix that all code can run using eur/ or other crypto
+# TODO: Fix that all code can run using eur/ or other crypto
 # TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Create tax report based on skatteverkets config
-# TODO: Config file vs args parser
-
+# TODO: Config file vs args parser??!?!?
+# TODO: Fix websocket return quantity and price in separate calls
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around

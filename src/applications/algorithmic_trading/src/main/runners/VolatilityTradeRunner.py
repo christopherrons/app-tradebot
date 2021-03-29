@@ -1,4 +1,7 @@
+import time
 from datetime import datetime, timedelta
+
+import websockets
 
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotBuyer import \
     VolatilityTradeBotBuyer
@@ -38,11 +41,16 @@ class VolatilityTradeRunner:
 
             delta_minutes = self.__print_trading_data(delta_minutes)
 
-            if self.__trade_bot.is_account_price_matching_market_price():
-                order_id = self.__trade_bot.execute_order()
-                if self.__trade_bot.is_order_executed(order_id):
-                    self.__trade_bot.run_post_trade_tasks(order_id)
-                    self.__switch_trader()
+            try:
+                if self.__trade_bot.is_account_price_matching_market_price():
+                    order_id = self.__trade_bot.execute_order()
+                    if self.__trade_bot.is_order_executed(order_id):
+                        self.__trade_bot.run_post_trade_tasks(order_id)
+                        self.__switch_trader()
+            except websockets.exceptions.ConnectionClosedError:
+                PrinterUtils.console_log(message=f"{datetime.now()}: Attempting to Reconnect Websocket")
+                time.sleep(10)
+                self.__trade_bot.reconnect_websocket()
 
         PrinterUtils.console_log(message=f"Started trading at {start_time} and ended at {datetime.now()}")
 
