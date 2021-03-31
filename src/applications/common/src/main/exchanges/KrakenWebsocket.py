@@ -60,7 +60,7 @@ class KrakenWebsocket(ExchangeWebsocket):
         return self.get_market_bid_order()[1]
 
     def get_market_ask_price(self) -> float:
-        return self.get_market_bid_order()[0]
+        return self.get_market_ask_order()[0]
 
     def get_market_ask_quantity(self) -> float:
-        return self.get_market_bid_order()[1]
+        return self.get_market_ask_order()[1]

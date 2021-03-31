@@ -8,8 +8,7 @@ def main():
                                  'xrp',
                              TradeBotUtils.get_kraken_api_key(),
                              TradeBotUtils.get_kraken_api_secret())
-    websocket = KrakenWebsocket('usd', 'xrp')
-    websocket.reconnect()
+    print(exchange_api.is_order_status_open("O2JRT4-FGEFL-XZQJNJ"))
 
 
 if __name__ == '__main__':
