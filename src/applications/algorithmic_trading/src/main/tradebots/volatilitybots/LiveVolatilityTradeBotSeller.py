@@ -24,6 +24,7 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         return self.__exchange_api.execute_sell_order(self._trade_bot_cache.market_bid_price, self._trade_bot_cache.sell_quantity)
 
     def is_order_executed(self, order_id: str) -> bool:
+        time.sleep(5)
         while self.__is_order_status_open(order_id):
             PrinterUtils.console_log(message=f"Order id {order_id} is still open")
             time.sleep(20)

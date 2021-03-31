@@ -115,6 +115,7 @@ class APIQueryOrders(APIAuthMixin):
 
 class APIOrderStatus(APIQueryOrders):
     def _process_response(self, response):
+        print(response)
         return list(response['result'].values())[0]['status']
 
 
