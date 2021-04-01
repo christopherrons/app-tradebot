@@ -1,4 +1,3 @@
-from applications.algorithmic_trading.src.main.cache_storage.TradingCache import TradingCache
 from applications.algorithmic_trading.src.main.config_parses.VolatilityTradingConfigParser import VolatilityTradingConfigParser
 from applications.algorithmic_trading.src.main.output_handlers.TradingOutputHandler import TradingOutputHandler
 from applications.common.src.main.database.TradeDataDao import TradeDataDao
@@ -61,6 +60,6 @@ class VolatilityTradeRunnerBuilder:
 
         return account_bid_price
 
-    def get_tradebot_output_handler(self, trading_cache: TradingCache) -> TradingOutputHandler:
-        return TradingOutputHandler(self._configs.is_live, self._configs.exchange, trading_cache, self._database_service, self._configs.cash_currency,
+    def get_tradebot_output_handler(self) -> TradingOutputHandler:
+        return TradingOutputHandler(self._configs.is_live, self._configs.exchange, self._database_service, self._configs.cash_currency,
                                     self._configs.crypto_currency)

@@ -1,7 +1,7 @@
 import time
 from datetime import datetime
 
-from applications.algorithmic_trading.src.main.cache_storage.TradingCache import TradingCache
+from applications.algorithmic_trading.src.main.cache.TradingCache import trading_cache
 from applications.algorithmic_trading.src.main.output_handlers.TradingOutputHandler import TradingOutputHandler
 from applications.algorithmic_trading.src.main.tradebots.volatilitybots.VolatilityTradeBotSeller import \
     VolatilityTradeBotSeller
@@ -15,13 +15,12 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
     def __init__(self,
                  exchange_api: ExchangeApi,
                  exchange_websocket: ExchangeWebsocket,
-                 trading_output_handler: TradingOutputHandler,
-                 trade_bot_cache: TradingCache):
-        super().__init__(exchange_websocket, trading_output_handler, trade_bot_cache)
+                 trading_output_handler: TradingOutputHandler):
+        super().__init__(exchange_websocket, trading_output_handler)
         self.__exchange_api = exchange_api
 
     def execute_order(self) -> str:
-        return self.__exchange_api.execute_sell_order(self._trade_bot_cache.market_bid_price, self._trade_bot_cache.sell_quantity)
+        return self.__exchange_api.execute_sell_order(trading_cache.market_bid_price, trading_cache.sell_quantity)
 
     def is_order_executed(self, order_id: str) -> bool:
         time.sleep(5)
@@ -44,12 +43,12 @@ class LiveVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         PrinterUtils.console_log(message="Post Trade Task Finished!")
 
     def update_cache(self, order_id: str, fee: float):
-        self._trade_bot_cache.increment_successful_trades()
-        self._trade_bot_cache.increment_successful_cycles()
-        self._trade_bot_cache.accrued_fee = fee
+        trading_cache.successful_trades = trading_cache.successful_trades + 1
+        trading_cache.successful_cycles = trading_cache.successful_cycles + 1
+        trading_cache.accrued_fee = fee
         self.print_and_store_trade_report(self.is_buy(), fee, order_id)
-        self._trade_bot_cache.sell_quantity = self.__exchange_api.get_account_quantity()
-        self._trade_bot_cache.cash_value = self.__exchange_api.get_account_cash_value()
+        trading_cache.sell_quantity = self.__exchange_api.get_account_quantity()
+        trading_cache.cash_value = self.__exchange_api.get_account_cash_value()
         self.update_bid_price()
 
     def __is_order_executed(self, order_id: str) -> bool:

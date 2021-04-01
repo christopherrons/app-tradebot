@@ -1,5 +1,5 @@
 from applications.algorithmic_trading.src.main.builders.VolatilityTradeRunnerBuilder import VolatilityTradeRunnerBuilder
-from applications.algorithmic_trading.src.main.cache_storage.TradingCache import TradingCache
+from applications.algorithmic_trading.src.main.cache.TradingCache import trading_cache
 from applications.algorithmic_trading.src.main.config_parses.VolatilityTradingConfigParser import VolatilityTradingConfigParser
 from applications.algorithmic_trading.src.main.output_handlers.TradingOutputHandler import TradingOutputHandler
 from applications.algorithmic_trading.src.main.runners.VolatilityTradeRunner import VolatilityTradeRunner
@@ -24,9 +24,9 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
         initial_value = self.__get_initial_value(exchange_websocket, exchange_api)
         account_ask_price = self.get_initial_ask_price(exchange_websocket)
         account_bid_price = self.get_initial_bid_price(exchange_websocket)
-        trading_cache = self.__get_trading_cache(initial_value, exchange_api, account_bid_price, account_ask_price)
-        trading_output_handler = self.get_tradebot_output_handler(trading_cache)
-        return self.__get_tradebot_runner(trading_cache, exchange_api, trading_output_handler, exchange_websocket)
+        self.__get_init_cache(initial_value, exchange_api, account_bid_price, account_ask_price)
+        trading_output_handler = self.get_tradebot_output_handler()
+        return self.__get_tradebot_runner(exchange_api, trading_output_handler, exchange_websocket)
 
     def __get_exchange_api(self) -> ExchangeApi:
         PrinterUtils.console_log(message=f"Exchange {self._configs.exchange} Api is being used for trading {self._configs.crypto_currency}"
@@ -66,32 +66,26 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
                                                                           self._configs.cash_currency)
         return initial_value
 
-    def __get_trading_cache(self, initial_value: float, exchange_api: ExchangeApi, account_bid_price: float,
-                            account_ask_price: float) -> TradingCache:
-        return TradingCache(initial_value=initial_value,
-                            cash_value=exchange_api.get_account_cash_value(),
-                            interest=self._configs.interest,
-                            account_bid_price=account_bid_price,
-                            account_ask_price=account_ask_price,
-                            sell_quantity=exchange_api.get_account_quantity(),
-                            exchange_fee=TradeBotUtils.get_exchange_fee(self._configs.exchange),
-                            accrued_fees=self._database_service.get_accrued_account_fees(self._configs.exchange,
-                                                                                         self._configs.cash_currency,
-                                                                                         self._configs.crypto_currency,
-                                                                                         self._configs.is_live),
-                            success_ful_trades=self._database_service.get_nr_successful_trades(self._configs.exchange,
-                                                                                               self._configs.crypto_currency,
-                                                                                               self._configs.is_live),
-                            successful_cycles=self._database_service.get_nr_successful_cycles(self._configs.exchange,
-                                                                                              self._configs.crypto_currency,
-                                                                                              self._configs.is_live))
+    def __get_init_cache(self, initial_value: float, exchange_api: ExchangeApi, account_bid_price: float,
+                         account_ask_price: float):
+        trading_cache.initial_value = initial_value
+        trading_cache.cash_value = exchange_api.get_account_cash_value()
+        trading_cache.interest = self._configs.interest
+        trading_cache.account_bid_price = account_bid_price
+        trading_cache.account_ask_price = account_ask_price
+        trading_cache.sell_quantity = exchange_api.get_account_quantity()
+        trading_cache.exchange_fee = TradeBotUtils.get_exchange_fee(self._configs.exchange)
+        trading_cache.accrued_fee = self._database_service.get_accrued_account_fees(self._configs.exchange, self._configs.cash_currency,
+                                                                                    self._configs.crypto_currency, self._configs.is_live)
+        trading_cache.successful_trades = self._database_service.get_nr_successful_trades(self._configs.exchange, self._configs.crypto_currency,
+                                                                                          self._configs.is_live)
+        trading_cache.successful_cycles = self._database_service.get_nr_successful_cycles(self._configs.exchange, self._configs.crypto_currency,
+                                                                                          self._configs.is_live)
 
-    def __get_tradebot_runner(self, trading_cache: TradingCache, exchange_api: ExchangeApi, trading_output_handler: TradingOutputHandler,
+    def __get_tradebot_runner(self, exchange_api: ExchangeApi, trading_output_handler: TradingOutputHandler,
                               exchange_websocket: ExchangeWebsocket) -> VolatilityTradeRunner:
         return VolatilityTradeRunner(is_sell=self._configs.is_sell,
-                                     trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket, trading_output_handler,
-                                                                                 trading_cache),
-                                     trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api, exchange_websocket, trading_output_handler,
-                                                                                   trading_cache),
+                                     trade_bot_buyer=LiveVolatilityTradeBotBuyer(exchange_api, exchange_websocket, trading_output_handler),
+                                     trade_bot_seller=LiveVolatilityTradeBotSeller(exchange_api, exchange_websocket, trading_output_handler),
                                      run_time_minutes=self._configs.run_time_minutes,
                                      print_interval=self._configs.print_interval)
