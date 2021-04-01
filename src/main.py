@@ -13,6 +13,7 @@
 # TODO: Create tax report based on skatteverkets config
 # TODO: Config file vs args parser??!?!?
 # TODO: Fix websocket return quantity and price in separate calls
+# TODO: CHange currency convert api
 
 # Nice to
 # TODO: If possible trigger evant based on websocket rather than other way around

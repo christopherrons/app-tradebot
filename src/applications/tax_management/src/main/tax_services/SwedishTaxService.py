@@ -18,7 +18,7 @@ class SwedishTaxService(TaxService):
         self.tax_calculations()
 
     def tax_calculations(self):
-        PrinterUtils.console_log("\nCalculating!")
+        PrinterUtils.console_log("Calculating!")
         all_transactions = self.__get_transactions()
         for crypto_currency in all_transactions.crypto_currency.unique():
             transactions = all_transactions[all_transactions["crypto_currency"] == crypto_currency]
@@ -48,6 +48,9 @@ class SwedishTaxService(TaxService):
                         total_overhead_value -= avg_overhead_value * transaction['quantity']
                         profit = transaction['net_trade_value'] - transaction['quantity'] * avg_overhead_value
                         total_profit += profit
+                print(transaction["quantity"])
+                print(total_quantity)
+                print("")
 
                 calculated_transactions.append(
                     [transaction['datetime'], "Köp" if transaction["buy"] else "Sälj", total_quantity, total_overhead_value,
