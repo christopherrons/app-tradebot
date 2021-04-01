@@ -47,10 +47,8 @@ class VolatilityTradeRunner:
                     if self.__trade_bot.is_order_executed(order_id):
                         self.__trade_bot.run_post_trade_tasks(order_id)
                         self.__switch_trader()
-            except websockets.exceptions.ConnectionClosedError:
-                PrinterUtils.console_log(message=f"{datetime.now()}: Attempting to Reconnect Websocket")
-                time.sleep(10)
-                self.__trade_bot.reconnect_websocket()
+            except (websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK):
+                self.__reconnect_websocket()
 
         PrinterUtils.console_log(message=f"Started trading at {start_time} and ended at {datetime.now()}")
 
@@ -65,3 +63,9 @@ class VolatilityTradeRunner:
             self.__trade_bot.print_trading_data(self.__trade_bot.is_buy())
             return datetime.now()
         return delta_minutes
+
+    def __reconnect_websocket(self):
+        wait_time_in_seconds = 120
+        PrinterUtils.console_log(message=f"{datetime.now()}: Attempting to Reconnect Websocket in {wait_time_in_seconds} seconds")
+        time.sleep(wait_time_in_seconds)
+        self.__trade_bot.reconnect_websocket()
