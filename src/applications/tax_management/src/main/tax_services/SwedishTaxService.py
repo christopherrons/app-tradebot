@@ -21,8 +21,8 @@ class SwedishTaxService(TaxService):
         PrinterUtils.console_log("Calculating!")
         all_transactions = self.__get_transactions()
         for crypto_currency in all_transactions.crypto_currency.unique():
-            transactions = all_transactions[all_transactions["crypto_currency"] == crypto_currency]
-            self.__log_transactions(transactions, crypto_currency)
+            transactions = all_transactions[all_transactions["crypto_currency"] == crypto_currency].reset_index(drop=True)
+            self.__save_transactions(transactions, crypto_currency)
 
             total_overhead_value = 0
             avg_overhead_value = 0
@@ -48,9 +48,6 @@ class SwedishTaxService(TaxService):
                         total_overhead_value -= avg_overhead_value * transaction['quantity']
                         profit = transaction['net_trade_value'] - transaction['quantity'] * avg_overhead_value
                         total_profit += profit
-                print(transaction["quantity"])
-                print(total_quantity)
-                print("")
 
                 calculated_transactions.append(
                     [transaction['datetime'], "Köp" if transaction["buy"] else "Sälj", total_quantity, total_overhead_value,
@@ -63,8 +60,12 @@ class SwedishTaxService(TaxService):
         headers = ["Datum", "Händelse", "Totalt Antal", "Total Omkostnadsbelopp [SEK]", "Genomsnittligt Omkostnadsbelopp [SEK]", "Vinst [SEK]",
                    "Skatt [SEK]", "", "Total Vinst [SEK]", "Total Skatt [SEK]"]
         calculated_transactions_df = pd.DataFrame(calculated_transactions, columns=headers)
+        calculated_transactions_df.index.name = 'Transaktions Nr'
         calculated_transactions_df.to_csv(TaxManagementUtils.get_generated_file_path(f"tax_report_{crypto_currency}_all.csv"))
 
+        self.__save_tax_report_yearly_sales_per_crypto_currency(calculated_transactions_df, crypto_currency)
+
+    def __save_tax_report_yearly_sales_per_crypto_currency(self, calculated_transactions_df: DataFrame, crypto_currency: str):
         calculated_sell_transactions_df = calculated_transactions_df.loc[calculated_transactions_df['Händelse'] == "Sälj"]
         calculated_transactions_df = calculated_sell_transactions_df.loc[calculated_sell_transactions_df['Datum'].dt.year == self._year]
         calculated_transactions_df.to_csv(TaxManagementUtils.get_generated_file_path(f"tax_report_{crypto_currency}_{self._year}.csv"))
@@ -76,7 +77,8 @@ class SwedishTaxService(TaxService):
         self.__convert_currencies(transactions)
         return transactions
 
-    def __log_transactions(self, transactions: DataFrame, crypto_currency: str):
+    def __save_transactions(self, transactions: DataFrame, crypto_currency: str):
+        transactions.index.name = 'Transaktions Nr'
         transactions.to_csv(TaxManagementUtils.get_generated_file_path(f"transaction_log_{crypto_currency}.csv"))
 
     def __convert_currencies(self, transactions: DataFrame):

@@ -23,4 +23,4 @@ class PrinterUtils:
 
     @staticmethod
     def console_log(message: str):
-        print(f'\n-- {message} ')
+        print(f'\n-- {message}')
