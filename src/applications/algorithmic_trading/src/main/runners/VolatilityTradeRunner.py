@@ -60,7 +60,7 @@ class VolatilityTradeRunner:
 
     def __print_trading_data(self, delta_minutes: datetime):
         if (datetime.now() - delta_minutes).seconds >= (self.__print_interval * 60):
-            self.__trade_bot.print_trading_data(self.__trade_bot.is_buy())
+            self.__trade_bot._print_trading_data(self.__trade_bot.is_buy())
             return datetime.now()
         return delta_minutes
 

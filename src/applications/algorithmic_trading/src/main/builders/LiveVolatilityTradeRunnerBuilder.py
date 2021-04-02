@@ -19,13 +19,13 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
         super().__init__(configs, database_service)
 
     def build(self) -> VolatilityTradeRunner:
-        exchange_websocket = self.get_exchange_websocket()
+        exchange_websocket = self._get_exchange_websocket()
         exchange_api = self.__get_exchange_api()
         initial_value = self.__get_initial_value(exchange_websocket, exchange_api)
-        account_ask_price = self.get_initial_ask_price(exchange_websocket)
-        account_bid_price = self.get_initial_bid_price(exchange_websocket)
-        self.__get_init_cache(initial_value, exchange_api, account_bid_price, account_ask_price)
-        trading_output_handler = self.get_tradebot_output_handler()
+        account_ask_price = self._get_initial_ask_price(exchange_websocket)
+        account_bid_price = self._get_initial_bid_price(exchange_websocket)
+        self.__init_cache(initial_value, exchange_api, account_bid_price, account_ask_price)
+        trading_output_handler = self._get_tradebot_output_handler()
         return self.__get_tradebot_runner(exchange_api, trading_output_handler, exchange_websocket)
 
     def __get_exchange_api(self) -> ExchangeApi:
@@ -66,8 +66,7 @@ class LiveVolatilityTradeRunnerBuilder(VolatilityTradeRunnerBuilder):
                                                                           self._configs.cash_currency)
         return initial_value
 
-    def __get_init_cache(self, initial_value: float, exchange_api: ExchangeApi, account_bid_price: float,
-                         account_ask_price: float):
+    def __init_cache(self, initial_value: float, exchange_api: ExchangeApi, account_bid_price: float, account_ask_price: float):
         trading_cache.initial_value = initial_value
         trading_cache.cash_value = exchange_api.get_account_cash_value()
         trading_cache.interest = self._configs.interest

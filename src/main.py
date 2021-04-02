@@ -6,16 +6,14 @@
 # email: christopherherron09@gmail.com, tbrunner@kth.se
 #
 # ------------------------------------------------------------------------------
-# TODO: Clean up code
 # TODO: Trade in eur or usd? Check which market is the most liquid
 # TODO: Fix that all code can run using eur/ or other crypto
 # TODO: Remove sensitive information fromm docker files and database service class
 # TODO: Create tax report based on skatteverkets config
 # TODO: Config file vs args parser??!?!?
-# TODO: Fix websocket return quantity and price in separate calls
-# TODO: CHange currency convert api
+# TODO: Fix how trade number is stored
 
-# Nice to
+# Nice to have
 # TODO: If possible trigger evant based on websocket rather than other way around
 # TODO: Strategy for start price
 

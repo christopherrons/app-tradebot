@@ -31,14 +31,14 @@ class VolatilityTradeBot(ABC):
     def reconnect_websocket(self):
         self._exchange_websocket.reconnect()
 
-    def print_trading_data(self, is_buy: bool):
+    def _print_trading_data(self, is_buy: bool):
         self.__trading_output_handler.print_trading_data(is_buy)
 
-    def print_and_store_trade_report(self, is_buy: bool, fee: float, order_id: str):
+    def _print_and_store_trade_report(self, is_buy: bool, fee: float, order_id: str):
         self.__trading_output_handler.print_and_store_trade_report(is_buy, fee, order_id)
 
-    def email_trade_reports(self):
+    def _email_trade_reports(self):
         self.__trading_output_handler.email_trade_reports()
 
-    def create_visual_trade_report(self):
+    def _create_visual_trade_report(self):
         self.__trading_output_handler.create_visual_trade_report()

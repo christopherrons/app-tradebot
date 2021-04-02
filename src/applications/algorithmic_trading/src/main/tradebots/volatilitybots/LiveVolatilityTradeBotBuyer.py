@@ -37,17 +37,17 @@ class LiveVolatilityTradeBotBuyer(VolatilityTradeBotBuyer):
     def run_post_trade_tasks(self, order_id: str):
         fee = self.__exchange_api.get_transaction_fee(order_id)
         self.update_cache(order_id, fee)
-        self.create_visual_trade_report()
-        self.email_trade_reports()
+        self._create_visual_trade_report()
+        self._email_trade_reports()
         PrinterUtils.console_log(message="Post Trade Task Finished!")
 
     def update_cache(self, order_id: str, fee: float):
         trading_cache.successful_trades = trading_cache.successful_trades + 1
         trading_cache.accrued_fee = fee
-        self.print_and_store_trade_report(self.is_buy(), fee, order_id)
+        self._print_and_store_trade_report(self.is_buy(), fee, order_id)
         trading_cache.sell_quantity = self.__exchange_api.get_account_quantity()
         trading_cache.cash_value = self.__exchange_api.get_account_cash_value()
-        self.update_ask_price()
+        self._update_ask_price()
 
     def __is_order_executed(self, order_id: str) -> bool:
         return self.__exchange_api.is_order_successful(order_id)

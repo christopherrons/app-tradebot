@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS trade_data.report (
   live BOOLEAN NOT NULL,
   exchange VARCHAR(100) NOT NULL,
   datetime TIMESTAMP NOT NULL,
-  trade_number INT NOT NULL,
+  account_trade_number INT NOT NULL,
   buy BOOLEAN NOT NULL,
   price NUMERIC (20, 10) NOT NULL,
   cash_currency VARCHAR(100) NOT NULL,

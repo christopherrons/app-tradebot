@@ -12,7 +12,7 @@ class VolatilityTradeRunnerBuilder:
         self._configs = configs
         self._database_service = database_service
 
-    def get_exchange_websocket(self) -> ExchangeWebsocket:
+    def _get_exchange_websocket(self) -> ExchangeWebsocket:
         PrinterUtils.console_log(message=f"Exchange {self._configs.exchange} WebSocket is being used for trading {self._configs.crypto_currency}"
                                          f" in {self._configs.cash_currency}")
         if self._configs.exchange == 'bitstamp':
@@ -20,7 +20,7 @@ class VolatilityTradeRunnerBuilder:
         else:
             return KrakenWebsocket(self._configs.cash_currency, self._configs.crypto_currency)
 
-    def get_initial_ask_price(self, exchange_websocket: ExchangeWebsocket) -> float:
+    def _get_initial_ask_price(self, exchange_websocket: ExchangeWebsocket) -> float:
         if not self._configs.is_sell:
             return 0
 
@@ -40,7 +40,7 @@ class VolatilityTradeRunnerBuilder:
 
         return account_ask_price
 
-    def get_initial_bid_price(self, exchange_websocket: ExchangeWebsocket) -> float:
+    def _get_initial_bid_price(self, exchange_websocket: ExchangeWebsocket) -> float:
         if self._configs.is_sell:
             return 0
 
@@ -60,6 +60,6 @@ class VolatilityTradeRunnerBuilder:
 
         return account_bid_price
 
-    def get_tradebot_output_handler(self) -> TradingOutputHandler:
+    def _get_tradebot_output_handler(self) -> TradingOutputHandler:
         return TradingOutputHandler(self._configs.is_live, self._configs.exchange, self._database_service, self._configs.cash_currency,
                                     self._configs.crypto_currency)

@@ -99,7 +99,7 @@ class BitstampApi(ExchangeApi):
         PrinterUtils.console_log(message=f"Initializing Database from bitstamp!")
         trade_nr = 1
         for transaction in reversed(self.get_transactions()):
-            if transaction['type'] == '2':
+            if self.__is_successful_order(transaction):
                 database_service.insert_trade_report(order_id=transaction['order_id'],
                                                      is_live=True, exchange='bitstamp',
                                                      timestamp=self.get_transaction_timestamp(transaction),
@@ -113,3 +113,6 @@ class BitstampApi(ExchangeApi):
                                                      gross_trade_value=self.get_transaction_gross_value(transaction),
                                                      net_trade_value=self.get_transaction_net_value(transaction))
                 trade_nr += 1
+
+    def __is_successful_order(self, transaction: dict) -> bool:
+        return transaction['type'] == '2'

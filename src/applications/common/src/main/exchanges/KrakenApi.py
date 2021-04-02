@@ -107,7 +107,7 @@ class KrakenApi(ExchangeApi):
         closed_transactions = self.get_transactions()
         trade_nr = 1
         for idx, order_id in enumerate(closed_transactions.keys()):
-            if closed_transactions[order_id]['status'] == "closed":
+            if self.__is_successful_order(closed_transactions, order_id):
                 database_service.insert_trade_report(order_id=order_id,
                                                      is_live=True, exchange='kraken',
                                                      timestamp=self.get_transaction_timestamp(closed_transactions[order_id]),
@@ -121,3 +121,6 @@ class KrakenApi(ExchangeApi):
                                                      gross_trade_value=self.get_transaction_gross_value(closed_transactions[order_id]),
                                                      net_trade_value=self.get_transaction_net_value(closed_transactions[order_id]))
                 trade_nr += 1
+
+    def __is_successful_order(self, closed_transactions: dict, order_id: str) -> bool:
+        return closed_transactions[order_id]['status'] == "closed"

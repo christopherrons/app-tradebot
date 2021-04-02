@@ -4,6 +4,7 @@ import traceback
 from applications.algorithmic_trading.src.main.builders.LiveVolatilityTradeRunnerBuilder import LiveVolatilityTradeRunnerBuilder
 from applications.algorithmic_trading.src.main.builders.SimulationVolatilityTradeRunnerBuilder import SimulationVolatilityTradeRunnerBuilder
 from applications.algorithmic_trading.src.main.config_parses.VolatilityTradingConfigParser import VolatilityTradingConfigParser
+from applications.algorithmic_trading.src.main.runners.VolatilityTradeRunner import VolatilityTradeRunner
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 from applications.common.src.main.database.TradeDataDao import TradeDataDao
 from applications.common.src.main.email.EmailHandler import EmailHandler
@@ -15,19 +16,12 @@ class VolatilityTrading:
     def __init__(self):
         self.__configs = VolatilityTradingConfigParser()
         self.__database_service = TradeDataDao()
-
         self.__database_schema = "trade_data"
 
     def run(self):
         try:
             self.__run_setup_tasks()
-            if self.__configs.is_live:
-                trade_runner = LiveVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
-            else:
-                trade_runner = SimulationVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
-
-            trade_runner.run()
-
+            self.__get_trade_runner().run()
         except ValueError as error_message:
             print(error_message)
         except KeyboardInterrupt:
@@ -36,6 +30,12 @@ class VolatilityTrading:
             print("\n--- ERROR ---")
             traceback.print_exc()
             EmailHandler().send_email_message(email_subject=f'ERROR: {self.__configs.exchange}', email_message=str(error))
+
+    def __get_trade_runner(self) -> VolatilityTradeRunner:
+        if self.__configs.is_live:
+            return LiveVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
+        else:
+            return SimulationVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
 
     def __run_setup_tasks(self):
         self.__configs.validate_configs()
