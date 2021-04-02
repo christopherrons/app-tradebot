@@ -34,5 +34,3 @@ class SimulationVolatilityTradeBotSeller(VolatilityTradeBotSeller):
         self.print_and_store_trade_report(self.is_buy(), fee, str(int(time.time() * 1e6)))
         self.update_bid_price()
         trading_cache.cash_value = trading_cache.net_position_value
-        trading_cache.gross_position_value = 0
-        trading_cache.net_position_value = 0

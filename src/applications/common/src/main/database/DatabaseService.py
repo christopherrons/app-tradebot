@@ -56,7 +56,7 @@ class DatabaseService:
     def read_to_dataframe(self, query: str) -> DataFrame:
         return sqlio.read_sql_query(query, self.__conn)
 
-    def read_query(self, query: str, data: list):
+    def read_query(self, query: str, data: list) -> list:
         cursor = self.__conn.cursor()
         if data:
             cursor.execute(query, data)
