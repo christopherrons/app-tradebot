@@ -1,3 +1,5 @@
+import math
+
 import pandas as pd
 from pandas import DataFrame
 
@@ -51,8 +53,8 @@ class SwedishTaxService(TaxService):
 
                 calculated_transactions.append(
                     [transaction['datetime'], "Köp" if transaction["buy"] else "Sälj", total_quantity, total_overhead_value,
-                     avg_overhead_value, "" if profit == 0 else profit,
-                     "" if profit == 0 else profit * self.__tax_percent, "", total_profit, total_profit * self.__tax_percent])
+                     avg_overhead_value, "" if profit <= math.pow(10, -5) else profit,
+                     "" if profit <= math.pow(10, -5) else profit * self.__tax_percent, "", total_profit, total_profit * self.__tax_percent])
 
             self.__save_tax_report(calculated_transactions, crypto_currency)
 

@@ -106,9 +106,8 @@ class TradingOutputHandler:
                               file_path=TradeBotUtils.get_generated_file_path(f"{self.__exchange_name.lower()}_successful_trade_log.csv"))
 
         self.__database_service.insert_trade_report(order_id=order_id, is_live=self.__is_live, exchange=self.__exchange_name,
-                                                    trade_number=trading_cache.successful_trades,
-                                                    timestamp=datetime.now(), buy=is_buy, price=price, quantity=quantity,
-                                                    cash_currency=self.__cash_currency, crypto_currency=self.__crypto_currency,
+                                                    trade_number=trading_cache.successful_trades, timestamp=datetime.now(), buy=is_buy, price=price,
+                                                    quantity=quantity, cash_currency=self.__cash_currency, crypto_currency=self.__crypto_currency,
                                                     gross_trade_value=value, net_trade_value=value - fee, fee=fee)
 
     def create_visual_trade_report(self):
