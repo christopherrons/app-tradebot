@@ -15,6 +15,9 @@ class APIMixin(object):
     url = None
     method = 'get'
 
+    def __init__(self, url):
+        self.url = url
+
     def _process_response(self, response):
         """
         Allows customized response to be returned.
@@ -40,10 +43,11 @@ class APIMixin(object):
 class APIAuthMixin(APIMixin):
     method = 'post'
 
-    def __init__(self, customer_id, api_key, api_secret):
+    def __init__(self, customer_id: bytes, api_key: bytes, api_secret: bytes, url: str):
         self.customer_id = customer_id
         self.api_key = api_key
         self.api_secret = api_secret
+        super().__init__(url)
 
     def get_nonce(self):
         return bytes(str(int(time.time() * 1e6)), 'utf-8')
@@ -61,26 +65,17 @@ class APIAuthMixin(APIMixin):
         return super(APIAuthMixin, self).call(**params)
 
 
-class APIOpenOrdersCall(APIAuthMixin):
-    url = 'v2/open_orders/'
-
-
-class APIBalanceCall(APIAuthMixin):
-    url = 'v2/balance/'
-
-
-class APIAccountCash(APIBalanceCall):
+class APIAccountCash(APIAuthMixin):
     def _process_response(self, response):
-        return response['usd_balance']
+        return response
 
 
-class APIAccountQuantity(APIBalanceCall):
+class APIAccountQuantity(APIAuthMixin):
     def _process_response(self, response):
-        return response['xrp_available']
+        return response
 
 
 class APIBuyLimitOrder(APIAuthMixin):
-    url = 'v2/buy/xrpusd/'
 
     def _process_response(self, response):
         print(response)
@@ -88,36 +83,27 @@ class APIBuyLimitOrder(APIAuthMixin):
 
 
 class APISellLimitOrder(APIAuthMixin):
-    url = 'v2/sell/xrpusd/'
-
     def _process_response(self, response):
         print(response)
         return response['id']
 
 
 class APIOrderStatus(APIAuthMixin):
-    url = 'v2/order_status/'
-
     def _process_response(self, response):
         return response['status']
 
 
 class APIOpenOrders(APIAuthMixin):
-    url = 'v2/open_orders/all/'
-
     def _process_response(self, response):
         return response
 
 
 class APITransactionFee(APIAuthMixin):
-    url = 'v2/order_status/'
 
     def _process_response(self, response):
         return response['transactions'][0]['fee']
 
 
 class APIUserTransactions(APIAuthMixin):
-    url = 'v2/user_transactions/'
-
     def _process_response(self, response):
         return response

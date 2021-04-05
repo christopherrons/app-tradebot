@@ -78,12 +78,12 @@ class APIBalanceCall(APIAuthMixin):
 
 class APIAccountCash(APIBalanceCall):
     def _process_response(self, response):
-        return response['result']['ZUSD'] if 'ZUSD' in response['result'] else 0
+        return response['result']
 
 
 class APIAccountQuantity(APIBalanceCall):
     def _process_response(self, response):
-        return response['result']['XXRP'] if 'XXRP' in response['result'] else 0
+        return response['result']
 
 
 class APILimitOrder(APIAuthMixin):

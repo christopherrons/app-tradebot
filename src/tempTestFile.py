@@ -9,10 +9,7 @@ def main():
                              'xrp',
                              TradeBotUtils.get_kraken_api_key(),
                              TradeBotUtils.get_kraken_api_secret())
-    # print(exchange_api.is_order_status_open("O2JRT4-FGEFL-XZQJNJ"))
-    r = redis.Redis(host='redis', port=6379, db=0)
-    r.set("Town", "stockholm")
-    print(r.get("Town"))
+    print(exchange_api.get_account_cash_value())
 
 
 if __name__ == '__main__':

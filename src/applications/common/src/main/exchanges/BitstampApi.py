@@ -30,32 +30,35 @@ class BitstampApi(ExchangeApi):
                          crypto_currency=crypto_currency)
 
     def execute_sell_order(self, price: float, quantity: float) -> str:
-        return APISellLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(price=round(price, 5),
-                                                                                             amount=round(quantity, 8),
-                                                                                             fok_order=True)
+        return APISellLimitOrder(self.__customer_id, self.__api_key, self.__api_secret, f'v2/sell/{self.crypto_currency}{self.cash_currency}/').call(
+            price=round(price, 5),
+            amount=round(quantity, 8),
+            fok_order=True)
 
     def execute_buy_order(self, price: float, quantity: float) -> str:
-        return APIBuyLimitOrder(self.__customer_id, self.__api_key, self.__api_secret).call(price=round(price, 5),
-                                                                                            amount=round(quantity, 8),
-                                                                                            fok_order=True)
+        return APIBuyLimitOrder(self.__customer_id, self.__api_key, self.__api_secret, f'v2/buy/{self.crypto_currency}{self.cash_currency}//').call(
+            price=round(price, 5),
+            amount=round(quantity, 8),
+            fok_order=True)
 
     def get_account_cash_value(self) -> float:
-        return float(APIAccountCash(self.__customer_id, self.__api_key, self.__api_secret).call())
+        return float(APIAccountCash(self.__customer_id, self.__api_key, self.__api_secret, 'v2/balance/').call()[f'{self.cash_currency}_balance'])
 
     def get_account_quantity(self) -> float:
-        return float(APIAccountQuantity(self.__customer_id, self.__api_key, self.__api_secret).call())
+        return float(
+            APIAccountQuantity(self.__customer_id, self.__api_key, self.__api_secret, 'v2/balance/').call()[f'{self.crypto_currency}_available'])
 
     def get_order_status(self, order_id: str) -> str:
-        return APIOrderStatus(self.__customer_id, self.__api_key, self.__api_secret).call(id=order_id)
+        return APIOrderStatus(self.__customer_id, self.__api_key, self.__api_secret, 'v2/order_status/').call(id=order_id)
 
     def get_open_orders(self) -> list:
-        return APIOpenOrders(self.__customer_id, self.__api_key, self.__api_secret).call()
+        return APIOpenOrders(self.__customer_id, self.__api_key, self.__api_secret, 'v2/open_orders/all/').call()
 
     def get_transaction_fee(self, order_id: str) -> float:
-        return float(APITransactionFee(self.__customer_id, self.__api_key, self.__api_secret).call(id=order_id))
+        return float(APITransactionFee(self.__customer_id, self.__api_key, self.__api_secret, 'v2/order_status/').call(id=order_id))
 
     def get_transactions(self) -> list:
-        return APIUserTransactions(self.__customer_id, self.__api_key, self.__api_secret).call(limit=1000)
+        return APIUserTransactions(self.__customer_id, self.__api_key, self.__api_secret, 'v2/user_transactions/').call(limit=1000)
 
     def is_order_successful(self, order_id: str) -> bool:
         return self.get_order_status(order_id) != "Canceled"

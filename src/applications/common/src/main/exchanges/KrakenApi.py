@@ -22,6 +22,10 @@ class KrakenApi(ExchangeApi):
         self.__api_secret = str(api_secret)
 
         self.__currency_converter = CurrencyConverter()
+        self.__kraken_currency_names = {
+            "xrp": "XXRP",
+            "usd": "ZUSD"
+        }
 
         super().__init__(exchange_name="kraken",
                          cash_currency=cash_currency,
@@ -44,10 +48,10 @@ class KrakenApi(ExchangeApi):
                                                                         oflags="post")
 
     def get_account_cash_value(self) -> float:
-        return float(APIAccountCash(self.__api_key, self.__api_secret).call())
+        return float(APIAccountCash(self.__api_key, self.__api_secret).call()[self.__kraken_currency_names[self.cash_currency.lower()]])
 
     def get_account_quantity(self) -> float:
-        return float(APIAccountQuantity(self.__api_key, self.__api_secret).call())
+        return float(APIAccountQuantity(self.__api_key, self.__api_secret).call()[self.__kraken_currency_names[self.crypto_currency.lower()]])
 
     def get_order_status(self, order_id: str) -> str:
         return APIOrderStatus(self.__api_key, self.__api_secret).call(txid=order_id)
