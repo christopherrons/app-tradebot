@@ -50,6 +50,8 @@ class VolatilityTradingConfigParser:
                 if volatility_configs['volatility']['crypto_currency']['custom'] \
                 else volatility_configs['volatility']['crypto_currency']['default']
 
+        self.validate_configs()
+
     def validate_configs(self):
         self.__validate_data_types()
         self.__validate_values()

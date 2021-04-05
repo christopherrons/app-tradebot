@@ -38,7 +38,6 @@ class VolatilityTrading:
             return SimulationVolatilityTradeRunnerBuilder(self.__configs, self.__database_service).build()
 
     def __run_setup_tasks(self):
-        self.__configs.validate_configs()
         self.__live_run_checker()
         TradeBotUtils.create_target_folder()
         if self.__configs.reset_database:
