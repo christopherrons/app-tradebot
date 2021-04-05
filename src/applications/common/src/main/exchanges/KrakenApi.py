@@ -110,7 +110,7 @@ class KrakenApi(ExchangeApi):
         PrinterUtils.console_log(message=f"Initializing Database from kraken!")
         closed_transactions = self.get_transactions()
         trade_nr = 1
-        for idx, order_id in enumerate(closed_transactions.keys()):
+        for idx, order_id in enumerate(reversed(list(closed_transactions.keys()))):
             if self.__is_successful_order(closed_transactions, order_id):
                 database_service.insert_trade_report(order_id=order_id,
                                                      is_live=True, exchange='kraken',

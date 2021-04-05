@@ -6,7 +6,7 @@ class CurrencyConverter:
         self.__base_url = 'https://api.ratesapi.io/api/'
         self.__base_currency = "?base=SEK"
 
-    def convert_currency(self, value: float, from_currency: str, to_currency: str, date="latest") -> float:
+    def convert_currency_from_api(self, value: float, from_currency: str, to_currency: str, date="latest") -> float:
         if from_currency == to_currency:
             return value
 
@@ -17,3 +17,7 @@ class CurrencyConverter:
             return value / latest_rates_in_sek[from_currency.upper()]
         else:
             return value * latest_rates_in_sek[to_currency.upper()]
+
+    @staticmethod
+    def convert_currency_from_rate(value: float, rate: float) -> float:
+        return value * rate
