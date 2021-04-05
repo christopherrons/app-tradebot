@@ -56,7 +56,7 @@ class PlotHandler:
     def __plot_trade_values(self):
         transaction_df = self.__database_service.get_transactions_as_dataframe(self.__exchange, self.__is_live, self.__cash_currency,
                                                                                self.__crypto_currency)
-        fig = px.scatter(transaction_df, x="trade_number", y="net_trade_value", color="buy",
+        fig = px.scatter(transaction_df, x="account_trade_number", y="net_trade_value", color="buy",
                          title=f'Net Trade Values [{self.__currency_symbols[self.__cash_currency]}]')
         fig.update_xaxes(title_text='Successful Trade')
         fig.update_yaxes(title_text=f'Trade Value on {self.__exchange}]')
