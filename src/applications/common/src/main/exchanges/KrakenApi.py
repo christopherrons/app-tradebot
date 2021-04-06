@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
@@ -63,7 +64,26 @@ class KrakenApi(ExchangeApi):
         return float(APITransactionFee(self.__api_key, self.__api_secret).call(txid=order_id))
 
     def get_transactions(self) -> dict:
-        return APIClosedOrders(self.__api_key, self.__api_secret).call()
+        transactions = dict()
+        end_time = time.time()
+        while True:
+            result = APIClosedOrders(self.__api_key, self.__api_secret).call(start=0,
+                                                                             end=end_time)
+            if result:
+                transactions.update(result)
+                end_time = self.__get_earliest_timestamp_from_transactions(result, end_time)
+            else:
+                break
+            time.sleep(1)
+
+        return transactions
+
+    def __get_earliest_timestamp_from_transactions(self, result: dict, end_time: float):
+        for order_id in result.keys():
+            transaction_end_time = result[order_id]['closetm']
+            if transaction_end_time < end_time:
+                end_time = transaction_end_time
+        return end_time
 
     def is_order_successful(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)

@@ -12,10 +12,14 @@ class TaxService(ABC):
         self._year = int(year)
         self._database_service = TaxManagementDao()
         self._currency_converter = CurrencyConverter()
+        self.__reserved_xrp_requirement = 20
 
     @abstractmethod
     def tax_calculations(self):
         pass
+
+    def reserved_xrp(self):
+        return TaxManagementUtils.get_number_of_trading_exchanges() * self.__reserved_xrp_requirement
 
     def init_tax_management_database_schema(self):
         self._database_service.run_queries_from_file(file_path=TaxManagementUtils.get_template_file_path("tax_management_database_schema.sql"))

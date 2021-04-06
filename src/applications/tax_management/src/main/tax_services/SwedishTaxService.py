@@ -20,40 +20,34 @@ class SwedishTaxService(TaxService):
         self.tax_calculations()
 
     def tax_calculations(self):
-        PrinterUtils.console_log("Calculating!")
         all_transactions = self.__get_transactions()
         for crypto_currency in all_transactions.crypto_currency.unique():
+            PrinterUtils.console_log(f"Calculating for {crypto_currency}! --")
             transactions = all_transactions[all_transactions["crypto_currency"] == crypto_currency].reset_index(drop=True)
             self.__save_transactions(transactions, crypto_currency)
 
             total_overhead_value = 0
             avg_overhead_value = 0
-            total_quantity = 0
+            total_quantity = -self.reserved_xrp() if crypto_currency == "xrp" else 0
             total_profit = 0
             overhead_value_calculations = []
             k4_values = []
             for idx in transactions.index.values:
                 transaction = transactions.iloc[idx]
 
-                if idx == 0:
+                if transaction['buy']:
                     total_quantity += transaction["quantity"]
                     total_overhead_value += transaction['net_trade_value']
                     avg_overhead_value = total_overhead_value / total_quantity
                     profit = 0
                 else:
-                    if transaction['buy']:
-                        total_quantity += transaction["quantity"]
-                        total_overhead_value += transaction['net_trade_value']
-                        avg_overhead_value = total_overhead_value / total_quantity
-                        profit = 0
-                    else:
-                        total_quantity -= transaction["quantity"]
-                        total_overhead_value -= avg_overhead_value * transaction['quantity']
-                        profit = transaction['net_trade_value'] - transaction['quantity'] * avg_overhead_value
-                        total_profit += profit
-                        if transaction["quantity"] >= math.pow(10, -5):
-                            k4_values.append([transaction['datetime'], crypto_currency, transaction["quantity"], transaction['net_trade_value'],
-                                              transaction["quantity"] * avg_overhead_value])
+                    total_quantity -= transaction["quantity"]
+                    total_overhead_value -= avg_overhead_value * transaction['quantity']
+                    profit = transaction['net_trade_value'] - transaction['quantity'] * avg_overhead_value
+                    total_profit += profit
+                    if transaction["quantity"] >= math.pow(10, -5):
+                        k4_values.append([transaction['datetime'], crypto_currency, transaction["quantity"], transaction['net_trade_value'],
+                                          transaction["quantity"] * avg_overhead_value])
 
                 overhead_value_calculations.append(
                     [transaction['datetime'], "Köp" if transaction["buy"] else "Sälj", total_quantity, total_overhead_value,
@@ -61,6 +55,16 @@ class SwedishTaxService(TaxService):
                      "" if profit <= math.pow(10, -5) else profit * self.__tax_percent, "", total_profit, total_profit * self.__tax_percent])
 
             self.__save_tax_report(k4_values, overhead_value_calculations, crypto_currency)
+            self.__print_current_values(total_quantity, total_overhead_value, avg_overhead_value, total_profit)
+
+    def __print_current_values(self, total_quantity: float, total_overhead_value: float, avg_overhead_value: float,
+                               total_profit: float):
+        PrinterUtils.console_log(f"Current Values:")
+        PrinterUtils.console_log(f"Total Quantity: {total_quantity}")
+        PrinterUtils.console_log(f"Total Overhead Value: {total_overhead_value}")
+        PrinterUtils.console_log(f"Average Overhead value: {avg_overhead_value}")
+        PrinterUtils.console_log(f"Total Profit: {total_profit}")
+        PrinterUtils.console_log(f"Total Tax: {total_profit * self.__tax_percent}")
 
     def __save_tax_report(self, k4_values: list, overhead_value_calculations: list, crypto_currency: str):
         self.__save_k4(k4_values, crypto_currency)
@@ -89,6 +93,7 @@ class SwedishTaxService(TaxService):
         PrinterUtils.console_log(message=f"Tax Report Saved for {crypto_currency}")
 
     def __get_transactions(self) -> DataFrame:
+        PrinterUtils.console_log("Fetching Transactions from Database")
         query = f"SELECT * FROM tax_management.trades"
         transactions = self._database_service.custom_read_query_to_dataframe(query=query).sort_values(by=['datetime']).reset_index(drop=True)
         self.__convert_currencies(transactions)

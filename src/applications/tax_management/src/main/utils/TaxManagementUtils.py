@@ -24,6 +24,10 @@ class TaxManagementUtils:
         return os.path.join(os.path.dirname(__file__), f'../../resources/templates/{file_name}')
 
     @staticmethod
+    def get_number_of_trading_exchanges():
+        return len(TaxManagementUtils.get_taxable_trading_accounts().keys())
+
+    @staticmethod
     def get_taxable_trading_accounts() -> dict:
         with open(TaxManagementUtils.get_config_file_path("taxable_account-configs.yaml"), "r") as f:
             return yaml.safe_load(f)['exchange']

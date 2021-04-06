@@ -9,7 +9,10 @@ def main():
                              'xrp',
                              TradeBotUtils.get_kraken_api_key(),
                              TradeBotUtils.get_kraken_api_secret())
-    print(exchange_api.get_account_cash_value())
+    tr = exchange_api.get_transactions()
+
+    for key in tr.keys():
+        print(key)
 
 
 if __name__ == '__main__':
