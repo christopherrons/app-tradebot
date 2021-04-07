@@ -59,12 +59,9 @@ class SwedishTaxService(TaxService):
 
     def __print_current_values(self, total_quantity: float, total_overhead_value: float, avg_overhead_value: float,
                                total_profit: float):
-        PrinterUtils.console_log(f"Current Values:")
-        PrinterUtils.console_log(f"Total Quantity: {total_quantity}")
-        PrinterUtils.console_log(f"Total Overhead Value: {total_overhead_value}")
-        PrinterUtils.console_log(f"Average Overhead value: {avg_overhead_value}")
-        PrinterUtils.console_log(f"Total Profit: {total_profit}")
-        PrinterUtils.console_log(f"Total Tax: {total_profit * self.__tax_percent}")
+        headers = ["Total Quantity", "Total Overhead Value","Average Overhead value", "Total Profit", "Total Tax"]
+        output = [total_quantity, total_overhead_value, avg_overhead_value, total_profit, total_profit * self.__tax_percent]
+        PrinterUtils.print_data_as_tabulate(headers=headers, output=output)
 
     def __save_tax_report(self, k4_values: list, overhead_value_calculations: list, crypto_currency: str):
         self.__save_k4(k4_values, crypto_currency)
