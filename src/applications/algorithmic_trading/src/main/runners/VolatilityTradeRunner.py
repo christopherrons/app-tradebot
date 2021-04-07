@@ -47,7 +47,7 @@ class VolatilityTradeRunner:
                     if self.__trade_bot.is_order_executed(order_id):
                         self.__trade_bot.run_post_trade_tasks(order_id)
                         self.__switch_trader()
-            except (websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK):
+            except (websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK, websockets.exceptions.InvalidStatusCode):
                 self.__reconnect_websocket()
 
         PrinterUtils.console_log(message=f"Started trading at {start_time} and ended at {datetime.now()}")
