@@ -8,7 +8,7 @@ from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.utils.KrakenApiUtils import \
     APIBuyLimitOrder, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders, APIOrderCancelReason
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -25,7 +25,8 @@ class KrakenApi(ExchangeApi):
         self.__currency_converter = CurrencyConverter()
         self.__kraken_currency_names = {
             "xrp": "XXRP",
-            "usd": "ZUSD"
+            "usd": "ZUSD",
+            "xlm": "XXLM"
         }
 
         super().__init__(exchange_name="kraken",
@@ -52,7 +53,10 @@ class KrakenApi(ExchangeApi):
         return float(APIAccountCash(self.__api_key, self.__api_secret).call()[self.__kraken_currency_names[self.cash_currency.lower()]])
 
     def get_account_quantity(self) -> float:
-        return float(APIAccountQuantity(self.__api_key, self.__api_secret).call()[self.__kraken_currency_names[self.crypto_currency.lower()]])
+        quantities = APIAccountQuantity(self.__api_key, self.__api_secret).call()
+        return float(quantities[self.__kraken_currency_names[self.crypto_currency.lower()]]) \
+            if self.__kraken_currency_names[self.crypto_currency.lower()] in quantities.keys() \
+            else 0
 
     def get_order_status(self, order_id: str) -> str:
         return APIOrderStatus(self.__api_key, self.__api_secret).call(txid=order_id)
@@ -75,7 +79,6 @@ class KrakenApi(ExchangeApi):
             else:
                 break
             time.sleep(1)
-
         return transactions
 
     def __get_earliest_timestamp_from_transactions(self, result: dict, end_time: float):
@@ -87,7 +90,13 @@ class KrakenApi(ExchangeApi):
 
     def is_order_successful(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)
-        return order_status != 'canceled' and order_status != 'expired' and order_status == "closed"
+        if order_status != 'canceled':
+            cancel_reason = APIOrderCancelReason(self.__api_key, self.__api_secret).call(txid=order_id)
+            if cancel_reason == "Out of funds":
+                return True
+            else:
+                return False
+        return order_status != 'expired' and order_status == "closed"
 
     def is_order_status_open(self, order_id: str) -> bool:
         order_status = self.get_order_status(order_id)
@@ -147,4 +156,6 @@ class KrakenApi(ExchangeApi):
                 trade_nr += 1
 
     def __is_successful_order(self, closed_transactions: dict, order_id: str) -> bool:
-        return closed_transactions[order_id]['status'] == "closed"
+        return closed_transactions[order_id]['status'] == "closed" \
+               or closed_transactions[order_id]['status'] == "canceled" \
+               and closed_transactions[order_id]['reason'] == "Out of funds"

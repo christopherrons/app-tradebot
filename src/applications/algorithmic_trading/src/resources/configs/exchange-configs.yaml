@@ -2,6 +2,8 @@ currency:
   crypto_currencies:
     xrp: "xrp"
     btc: "btc"
+    xml: "xlm"
+    xdg: "xdg"
   cash_currencies:
     usd: "usd"
     eur: "eur"

@@ -1,3 +1,4 @@
+from datetime import date
 import math
 
 import pandas as pd
@@ -21,6 +22,7 @@ class SwedishTaxService(TaxService):
 
     def tax_calculations(self):
         all_transactions = self.__get_transactions()
+        k4_values = []
         for crypto_currency in all_transactions.crypto_currency.unique():
             PrinterUtils.console_log(f"Calculating for {crypto_currency}! --")
             transactions = all_transactions[all_transactions["crypto_currency"] == crypto_currency].reset_index(drop=True)
@@ -31,7 +33,6 @@ class SwedishTaxService(TaxService):
             total_quantity = -self.reserved_xrp() if crypto_currency == "xrp" else 0
             total_profit = 0
             overhead_value_calculations = []
-            k4_values = []
             for idx in transactions.index.values:
                 transaction = transactions.iloc[idx]
 
@@ -50,28 +51,32 @@ class SwedishTaxService(TaxService):
                                           transaction["quantity"] * avg_overhead_value])
 
                 overhead_value_calculations.append(
-                    [transaction['datetime'], "Köp" if transaction["buy"] else "Sälj", total_quantity, total_overhead_value,
-                     avg_overhead_value, "" if profit <= math.pow(10, -5) else profit,
-                     "" if profit <= math.pow(10, -5) else profit * self.__tax_percent, "", total_profit, total_profit * self.__tax_percent])
+                    [transaction['datetime'],
+                     "Köp" if transaction["buy"] else "Sälj",
+                     total_quantity, total_overhead_value,
+                     avg_overhead_value,
+                     "" if profit <= math.pow(10, -5) else profit,
+                     "" if profit <= math.pow(10, -5) else profit * self.__tax_percent, "", total_profit, total_profit * self.__tax_percent]
+                )
 
-            self.__save_tax_report(k4_values, overhead_value_calculations, crypto_currency)
+            self.__save_overhead_value_calulations(overhead_value_calculations, crypto_currency)
             self.__print_current_values(total_quantity, total_overhead_value, avg_overhead_value, total_profit)
+
+        if k4_values:
+            self.__save_k4(k4_values)
 
     def __print_current_values(self, total_quantity: float, total_overhead_value: float, avg_overhead_value: float,
                                total_profit: float):
-        headers = ["Total Quantity", "Total Overhead Value","Average Overhead value", "Total Profit", "Total Tax"]
-        output = [total_quantity, total_overhead_value, avg_overhead_value, total_profit, total_profit * self.__tax_percent]
+        headers = ["Date", "Total Quantity", "Total Overhead Value","Average Overhead value", "Total Profit", "Total Tax"]
+        output = [date.today(), total_quantity, total_overhead_value, avg_overhead_value, total_profit, total_profit * self.__tax_percent]
+        PrinterUtils.console_log(message=f"Current State --")
         PrinterUtils.print_data_as_tabulate(headers=headers, output=output)
 
-    def __save_tax_report(self, k4_values: list, overhead_value_calculations: list, crypto_currency: str):
-        self.__save_k4(k4_values, crypto_currency)
-        self.__save_overhead_value_calulations(overhead_value_calculations, crypto_currency)
-
-    def __save_k4(self, k4_values: list, crypto_currency: str):
+    def __save_k4(self, k4_values: list):
         headers = ["Datum", "Beteckning", "Antal", "Försäljningspris", "Omkostnadsbelopp"]
         k4_values_df = pd.DataFrame(k4_values, columns=headers)
-        k4_values_df = k4_values_df.loc[k4_values_df['Datum'].dt.year == self._year]
-        k4_values_df.to_csv(TaxManagementUtils.get_generated_file_path(f"k4_{crypto_currency}_{self._year}.csv"))
+        k4_df = k4_values_df.loc[k4_values_df['Datum'].dt.year == self._year]
+        k4_df.to_csv(TaxManagementUtils.get_generated_file_path(f"k4_{self._year}.csv"))
 
     def __save_overhead_value_calulations(self, overhead_value_calculations: list, crypto_currency: str):
         headers = ["Datum", "Händelse", "Totalt Antal", "Total Omkostnadsbelopp [SEK]", "Genomsnittligt Omkostnadsbelopp [SEK]", "Vinst [SEK]",
@@ -87,7 +92,7 @@ class SwedishTaxService(TaxService):
         overhead_value_calculations_df = calculated_sell_transactions_df.loc[calculated_sell_transactions_df['Datum'].dt.year == self._year]
         overhead_value_calculations_df.to_csv(
             TaxManagementUtils.get_generated_file_path(f"overhead_value_calculations_sales_{crypto_currency}_{self._year}.csv"))
-        PrinterUtils.console_log(message=f"Tax Report Saved for {crypto_currency}")
+        PrinterUtils.console_log(message=f"Tax Report {self._year} Saved for {crypto_currency}")
 
     def __get_transactions(self) -> DataFrame:
         PrinterUtils.console_log("Fetching Transactions from Database")
@@ -101,6 +106,7 @@ class SwedishTaxService(TaxService):
         transactions.to_csv(TaxManagementUtils.get_generated_file_path(f"transaction_log_{crypto_currency}.csv"))
 
     def __convert_currencies(self, transactions: DataFrame):
+        PrinterUtils.console_log(message="Converting values to SEK")
         columns_to_convert = ['fee', "gross_trade_value", "net_trade_value"]
         for column in columns_to_convert:
             transactions[column] = transactions.apply(lambda x: x[column] if x['cash_currency'] == 'sek'

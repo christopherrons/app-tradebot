@@ -118,6 +118,11 @@ class APIOrderStatus(APIQueryOrders):
         return list(response['result'].values())[0]['status']
 
 
+class APIOrderCancelReason(APIQueryOrders):
+    def _process_response(self, response):
+        return list(response['result'].values())[0]['reason']
+
+
 class APITransactionFee(APIQueryOrders):
     def _process_response(self, response):
         return list(response['result'].values())[0]['fee']
