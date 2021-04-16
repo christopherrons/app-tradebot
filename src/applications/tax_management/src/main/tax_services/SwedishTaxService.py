@@ -38,7 +38,7 @@ class SwedishTaxService(TaxService):
 
                 if transaction['buy']:
                     total_quantity += transaction["quantity"]
-                    total_overhead_value += transaction['net_trade_value']
+                    total_overhead_value += transaction['gross_trade_value']
                     avg_overhead_value = total_overhead_value / total_quantity
                     profit = 0
                 else:
@@ -111,11 +111,13 @@ class SwedishTaxService(TaxService):
     def __convert_currencies(self, transactions: DataFrame):
         PrinterUtils.console_log(message="Converting values to SEK")
         columns_to_convert = ['fee', "gross_trade_value", "net_trade_value"]
+        conversion_fee = 0.02
         for column in columns_to_convert:
             transactions[column] = transactions.apply(lambda x:
                                                       x[column] if x['cash_currency'] == 'sek'
-                                                      else self._currency_converter.convert_currency_from_api(value=x[column],
-                                                                                                              from_currency=x['cash_currency'],
-                                                                                                              to_currency='sek',
-                                                                                                              date=x['datetime'].strftime(
-                                                                                                                  "%Y-%m-%d")), axis=1)
+                                                      else (1 - conversion_fee) * self._currency_converter.convert_currency_from_api(
+                                                          value=x[column],
+                                                          from_currency=x['cash_currency'],
+                                                          to_currency='sek',
+                                                          date=x['datetime'].strftime("%Y-%m-%d")),
+                                                      axis=1)
