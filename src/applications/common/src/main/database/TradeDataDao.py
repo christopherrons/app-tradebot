@@ -73,7 +73,8 @@ class TradeDataDao(DatabaseService):
         transaction_df = self.read_to_dataframe(query)
         transaction_df['net_trade_value'] = transaction_df.apply(
             lambda x: x['net_trade_value'] if x['cash_currency'] == cash_currency else
-            self._currency_converter.convert_currency_from_api(value=x['net_trade_value'], from_currency=x['cash_currency'], to_currency=cash_currency),
+            self._currency_converter.convert_currency_from_api(value=x['net_trade_value'], from_currency=x['cash_currency'],
+                                                               to_currency=cash_currency),
             axis=1)
         PrinterUtils.console_log(message=f'Query Executed: Get Transaction as DataFrame')
         return transaction_df

@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
 from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
 from applications.common.src.main.database import DatabaseService
@@ -8,6 +7,7 @@ from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.utils.BitstampApiUtils import \
     APIBuyLimitOrder, APIOrderStatus, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIUserTransactions
+from applications.common.src.main.exchanges.utils.ExchangeUtils import ExchangeUtils
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -70,14 +70,14 @@ class BitstampApi(ExchangeApi):
         return transaction['datetime']
 
     def is_transaction_buy(self, transaction: dict) -> bool:
-        return True if float(transaction['usd']) < 0 or float(transaction['eur']) < 0 else False
+        return True if float(transaction['usd']) <= 0 or float(transaction['eur']) <= 0 else False
 
     def get_transaction_cash_currency(self, transaction: dict) -> str:
         return 'usd' if transaction['usd'] != 0 else 'eur'
 
     def get_transaction_crypto_currency(self, transaction: dict) -> str:
         for key in transaction.keys():
-            for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
+            for crypto_currency in ExchangeUtils.get_permitted_crypto_currencies():
                 if key.lower() == crypto_currency and transaction[key] != 0:
                     return key
         return 'fail'

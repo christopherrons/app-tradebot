@@ -4,6 +4,8 @@ currency:
     btc: "btc"
     xml: "xlm"
     xdg: "xdg"
+    sc: "sc"
+    link: "link"
   cash_currencies:
     usd: "usd"
     eur: "eur"

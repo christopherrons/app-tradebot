@@ -1,5 +1,5 @@
-from datetime import date
 import math
+from datetime import date
 
 import pandas as pd
 from pandas import DataFrame
@@ -67,7 +67,7 @@ class SwedishTaxService(TaxService):
 
     def __print_current_values(self, total_quantity: float, total_overhead_value: float, avg_overhead_value: float,
                                total_profit: float):
-        headers = ["Date", "Total Quantity", "Total Overhead Value","Average Overhead value", "Total Profit", "Total Tax"]
+        headers = ["Date", "Total Quantity", "Total Overhead Value", "Average Overhead value", "Total Profit", "Total Tax"]
         output = [date.today(), total_quantity, total_overhead_value, avg_overhead_value, total_profit, total_profit * self.__tax_percent]
         PrinterUtils.console_log(message=f"Current State --")
         PrinterUtils.print_data_as_tabulate(headers=headers, output=output)
@@ -109,6 +109,9 @@ class SwedishTaxService(TaxService):
         PrinterUtils.console_log(message="Converting values to SEK")
         columns_to_convert = ['fee', "gross_trade_value", "net_trade_value"]
         for column in columns_to_convert:
-            transactions[column] = transactions.apply(lambda x: x[column] if x['cash_currency'] == 'sek'
-            else self._currency_converter.convert_currency_from_api(value=x[column], from_currency=x['cash_currency'], to_currency='sek',
+            transactions[column] = transactions.apply(lambda x: x[column]
+            if x['cash_currency'] == 'sek'
+            else self._currency_converter.convert_currency_from_api(value=x[column],
+                                                                    from_currency=x['cash_currency'],
+                                                                    to_currency='sek',
                                                                     date=x['datetime'].strftime("%Y-%m-%d")), axis=1)

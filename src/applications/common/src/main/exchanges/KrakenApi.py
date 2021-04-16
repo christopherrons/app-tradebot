@@ -6,6 +6,7 @@ from applications.common.src.main.converters.CurrencyConverter import \
     CurrencyConverter
 from applications.common.src.main.database import DatabaseService
 from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
+from applications.common.src.main.exchanges.utils.ExchangeUtils import ExchangeUtils
 from applications.common.src.main.exchanges.utils.KrakenApiUtils import \
     APIBuyLimitOrder, APITransactionFee, \
     APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders, APIOrderCancelReason
@@ -109,13 +110,13 @@ class KrakenApi(ExchangeApi):
         return False if transaction['descr']['type'] == 'sell' else True
 
     def get_transaction_cash_currency(self, transaction: dict) -> str:
-        for cash_currency in TradeBotUtils.get_permitted_cash_currencies():
+        for cash_currency in ExchangeUtils.get_permitted_cash_currencies():
             if cash_currency in transaction['descr']['pair'].lower():
                 return cash_currency
         return 'fail'
 
     def get_transaction_crypto_currency(self, transaction: dict) -> str:
-        for crypto_currency in TradeBotUtils.get_permitted_crypto_currencies():
+        for crypto_currency in ExchangeUtils.get_permitted_crypto_currencies():
             if crypto_currency in transaction['descr']['pair'].lower():
                 return crypto_currency
         return 'fail'

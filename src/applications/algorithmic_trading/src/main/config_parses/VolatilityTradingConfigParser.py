@@ -1,6 +1,7 @@
 import yaml
 
 from applications.algorithmic_trading.src.main.utils.TradeBotUtils import TradeBotUtils
+from applications.common.src.main.exchanges.utils.ExchangeUtils import ExchangeUtils
 
 
 class VolatilityTradingConfigParser:
@@ -94,17 +95,17 @@ class VolatilityTradingConfigParser:
             raise ValueError(f'Config crypto_currency requires str got: {self.__crypto_currency} type {type(self.__crypto_currency)}')
 
     def __validate_values(self):
-        if self.__exchange not in TradeBotUtils.get_permitted_exchanges():
-            raise ValueError(f'Exchange {self.__exchange} not in list {TradeBotUtils.get_permitted_exchanges()}')
+        if self.__exchange not in ExchangeUtils.get_permitted_exchanges():
+            raise ValueError(f'Exchange {self.__exchange} not in list {ExchangeUtils.get_permitted_exchanges()}')
 
-        if self.__cash_currency not in TradeBotUtils.get_permitted_cash_currencies():
-            raise ValueError(f'Cash Currency {self.__cash_currency}  not in list {TradeBotUtils.get_permitted_cash_currencies()}')
+        if self.__cash_currency not in ExchangeUtils.get_permitted_cash_currencies():
+            raise ValueError(f'Cash Currency {self.__cash_currency}  not in list {ExchangeUtils.get_permitted_cash_currencies()}')
 
-        if self.__crypto_currency not in TradeBotUtils.get_permitted_crypto_currencies():
-            raise ValueError(f'Crypto Currency {self.__crypto_currency} not in list {TradeBotUtils.get_permitted_crypto_currencies()}')
+        if self.__crypto_currency not in ExchangeUtils.get_permitted_crypto_currencies():
+            raise ValueError(f'Crypto Currency {self.__crypto_currency} not in list {ExchangeUtils.get_permitted_crypto_currencies()}')
 
-        if self.__interest < TradeBotUtils.get_minimum_interest(self.__exchange):
-            raise ValueError(f'Interest {self.__interest} is lower than allowed {TradeBotUtils.get_minimum_interest(self.__exchange)}')
+        if self.__interest < ExchangeUtils.get_minimum_interest(self.__exchange):
+            raise ValueError(f'Interest {self.__interest} is lower than allowed {ExchangeUtils.get_minimum_interest(self.__exchange)}')
 
     @property
     def is_sell(self) -> bool:
