@@ -9,7 +9,7 @@ from applications.common.src.main.exchanges.ExchangeApi import ExchangeApi
 from applications.common.src.main.exchanges.utils.ExchangeUtils import ExchangeUtils
 from applications.common.src.main.exchanges.utils.KrakenApiUtils import \
     APIBuyLimitOrder, APITransactionFee, \
-    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders, APIOrderCancelReason
+    APIAccountQuantity, APIAccountCash, APISellLimitOrder, APIOpenOrders, APIOrderStatus, APIClosedOrders, APIOrderCancelReason, APIQueryLedger
 from applications.common.src.main.utils.PrinterUtils import PrinterUtils
 
 
@@ -76,15 +76,83 @@ class KrakenApi(ExchangeApi):
                                                                              end=end_time)
             if result:
                 transactions.update(result)
-                end_time = self.__get_earliest_timestamp_from_transactions(result, end_time)
+                end_time = self.__get_earliest_timestamp_from_transactions(result, end_time, 'closetm')
             else:
                 break
-            time.sleep(1)
+            time.sleep(1.5)
+        transactions.update(self.__get_card_payments())
         return transactions
 
-    def __get_earliest_timestamp_from_transactions(self, result: dict, end_time: float):
+    def __get_card_payments(self) -> dict:
+        return self.__combine_received_and_send_transactions()
+
+    def __combine_received_and_send_transactions(self) -> dict:
+        ledger_entries = self.__query_ledger()
+        transactions = dict()
+        for key in ledger_entries.keys():
+            if ledger_entries[key]['type'] == 'receive':
+                if ledger_entries[key]['refid'] in transactions.keys():
+                    transactions[ledger_entries[key]['refid']] = {**{
+                        'refid': ledger_entries[key]['refid'],
+                        'status': 'closed',
+                        'opentm': ledger_entries[key]['time'],
+                        'closetm': ledger_entries[key]['time'],
+                        'vol': float(ledger_entries[key]['amount']),
+                        'crypto_currency': ledger_entries[key]['asset'],
+                        'type': 'buy'
+                    }, **transactions[ledger_entries[key]['refid']]}
+                else:
+                    transactions[ledger_entries[key]['refid']] = {
+                        'refid': ledger_entries[key]['refid'],
+                        'status': 'closed',
+                        'opentm': ledger_entries[key]['time'],
+                        'closetm': ledger_entries[key]['time'],
+                        'vol': float(ledger_entries[key]['amount']),
+                        'crypto_currency': ledger_entries[key]['asset'],
+                        'type': 'buy'
+                    }
+
+            elif ledger_entries[key]['type'] == 'spend':
+                card_purchase_fee = 1.05
+                if ledger_entries[key]['refid'] in transactions.keys():
+                    transactions[ledger_entries[key]['refid']] = {**{
+                        'fee': ledger_entries[key]['fee'],
+                        'cost': card_purchase_fee * abs(float(ledger_entries[key]['amount'])),
+                        'cash_currency': ledger_entries[key]['asset'].replace(".HOLD", ""),
+                    }, **transactions[ledger_entries[key]['refid']]}
+                else:
+                    transactions[ledger_entries[key]['refid']] = {
+                        'fee': ledger_entries[key]['fee'],
+                        'cost': abs(float(ledger_entries[key]['amount'])),
+                        'cash_currency': ledger_entries[key]['asset'].replace(".HOLD", ""),
+                    }
+
+        for key in transactions.keys():
+            transactions[key]['descr'] = {
+                'pair': transactions[key]['crypto_currency'] + transactions[key]['cash_currency'],
+                'price': transactions[key]['cost'] / transactions[key]['vol'],
+                'type': 'buy'
+            }
+
+        return transactions
+
+    def __query_ledger(self) -> dict:
+        ledger_entries = dict()
+        end_time = time.time()
+        while True:
+            result = APIQueryLedger(self.__api_key, self.__api_secret).call(start=0,
+                                                                            end=end_time)
+            if result:
+                ledger_entries.update(result)
+                end_time = self.__get_earliest_timestamp_from_transactions(result, end_time, 'time')
+            else:
+                break
+            time.sleep(1.5)
+        return ledger_entries
+
+    def __get_earliest_timestamp_from_transactions(self, result: dict, end_time: float, timestamp_name: str):
         for order_id in result.keys():
-            transaction_end_time = result[order_id]['closetm']
+            transaction_end_time = result[order_id][timestamp_name]
             if transaction_end_time < end_time:
                 end_time = transaction_end_time
         return end_time
@@ -158,5 +226,4 @@ class KrakenApi(ExchangeApi):
 
     def __is_successful_order(self, closed_transactions: dict, order_id: str) -> bool:
         return closed_transactions[order_id]['status'] == "closed" \
-               or closed_transactions[order_id]['status'] == "canceled" \
-               and closed_transactions[order_id]['reason'] == "Out of funds"
+               or closed_transactions[order_id]['status'] == "canceled" and closed_transactions[order_id]['reason'] == "Out of funds"

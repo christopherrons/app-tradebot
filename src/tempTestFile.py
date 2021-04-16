@@ -7,7 +7,7 @@ def main():
                              'xlm',
                              TradeBotUtils.get_kraken_api_key(),
                              TradeBotUtils.get_kraken_api_secret())
-    print(exchange_api.get_transactions())
+    print(exchange_api.get_card_payments())
 
 
 if __name__ == '__main__':

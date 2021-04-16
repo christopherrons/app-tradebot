@@ -46,8 +46,11 @@ class SwedishTaxService(TaxService):
                     total_overhead_value -= avg_overhead_value * transaction['quantity']
                     profit = transaction['net_trade_value'] - transaction['quantity'] * avg_overhead_value
                     total_profit += profit
+
                     if transaction["quantity"] >= math.pow(10, -5):
-                        k4_values.append([transaction['datetime'], crypto_currency, transaction["quantity"], transaction['net_trade_value'],
+                        k4_values.append([transaction['datetime'],
+                                          crypto_currency, transaction["quantity"],
+                                          transaction['net_trade_value'],
                                           transaction["quantity"] * avg_overhead_value])
 
                 overhead_value_calculations.append(
@@ -109,9 +112,10 @@ class SwedishTaxService(TaxService):
         PrinterUtils.console_log(message="Converting values to SEK")
         columns_to_convert = ['fee', "gross_trade_value", "net_trade_value"]
         for column in columns_to_convert:
-            transactions[column] = transactions.apply(lambda x: x[column]
-            if x['cash_currency'] == 'sek'
-            else self._currency_converter.convert_currency_from_api(value=x[column],
-                                                                    from_currency=x['cash_currency'],
-                                                                    to_currency='sek',
-                                                                    date=x['datetime'].strftime("%Y-%m-%d")), axis=1)
+            transactions[column] = transactions.apply(lambda x:
+                                                      x[column] if x['cash_currency'] == 'sek'
+                                                      else self._currency_converter.convert_currency_from_api(value=x[column],
+                                                                                                              from_currency=x['cash_currency'],
+                                                                                                              to_currency='sek',
+                                                                                                              date=x['datetime'].strftime(
+                                                                                                                  "%Y-%m-%d")), axis=1)

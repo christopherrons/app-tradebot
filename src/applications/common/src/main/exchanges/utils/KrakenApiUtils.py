@@ -133,3 +133,9 @@ class APIClosedOrders(APIAuthMixin):
 
     def _process_response(self, response):
         return response['result']['closed']
+
+class APIQueryLedger(APIAuthMixin):
+    url = '/0/private/Ledgers'
+
+    def _process_response(self, response):
+        return response['result']['ledger']

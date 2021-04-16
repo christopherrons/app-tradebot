@@ -70,7 +70,11 @@ class BitstampApi(ExchangeApi):
         return transaction['datetime']
 
     def is_transaction_buy(self, transaction: dict) -> bool:
-        return True if float(transaction['usd']) <= 0 or float(transaction['eur']) <= 0 else False
+        if float(transaction['usd']) < 0 or float(transaction['eur']) < 0:
+            return True
+        elif float(transaction['usd']) == 0 and float(transaction['eur']) == 0:
+            return True
+        return False
 
     def get_transaction_cash_currency(self, transaction: dict) -> str:
         return 'usd' if transaction['usd'] != 0 else 'eur'
