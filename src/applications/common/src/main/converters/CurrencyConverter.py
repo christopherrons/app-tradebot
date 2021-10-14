@@ -3,7 +3,7 @@ import requests
 
 class CurrencyConverter:
     def __init__(self):
-        self.__base_url = 'https://api.ratesapi.io/api/'
+        self.__base_url = 'https://api.frankfurter.app/'
         self.__base_currency = "?base=SEK"
 
     def convert_currency_from_api(self, value: float, from_currency: str, to_currency: str, date="latest") -> float:
